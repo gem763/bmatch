@@ -54,13 +54,14 @@ def brands(request):
     brands = Brand.objects.filter(pk__range=(0,50)) #all()
     return render(request, 'brands.html', {'brands':brands})
 
-def brand_detail2(request, name):
-    brand = Brand.objects.get(name=name)
-    return render(request, 'brand_detail.html', {'brand':brand})
+# def brand_detail2(request, name):
+#     brand = Brand.objects.get(name=name)
+#     return render(request, 'brand_detail.html', {'brand':brand})
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
-    return render(request, 'brand_detail.html', {'brand':brand})
+    idty = json.loads(brand.identity)
+    return render(request, 'brand_detail.html', {'brand':brand, 'idty':idty})
 
 
 def me(request):

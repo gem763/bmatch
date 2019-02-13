@@ -47,6 +47,8 @@
       // $('.ui.rating').rating();
       // $('#multi-select').dropdown();
 
+      // alert("{{idty}}");
+
       $.get('{% url "gtrend" brand.name %}', function(data){
         var ctx1 = $("#trend").get(0).getContext("2d");
         new Chart(ctx1, data.trend_data);
@@ -67,11 +69,14 @@
       });
 
       $.get('{% url "identities" brand.name %}', function(data){
-        alert(data.idty);
         data.idty.forEach(function(idty_data){
           append_table_row('#identities', idty_data);
         });
       })
+
+      // {{idty}}.forEach(function(idty_data){
+      //   append_table_row('#identities', idty_data);
+      // });
 
     });
   </script>
