@@ -67,6 +67,7 @@
       });
 
       $.get('{% url "identities" brand.name %}', function(data){
+        alert(data.idty);
         data.idty.forEach(function(idty_data){
           append_table_row('#identities', idty_data);
         });
