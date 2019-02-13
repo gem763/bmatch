@@ -1,0 +1,52 @@
+{% if user.is_authenticated and messages %}
+
+  {% for message in messages %}
+    <!-- "모든" 메시지 태그=success 인 경우에만 로그인 성공했다고 본다 -->
+    {% ifnotequal message.tags 'success' %}
+      {% with logged_in='false' %}
+      {% endwith %}
+    {% endifnotequal %}
+  {% endfor %}
+
+  <div class="ui welcome basic tiny modal">
+    {% ifequal logged_in 'false' %}
+      <div class="content" style="text-align:center">
+        <p>뭔가 잘못됐어요, 다시 시도하시길...</p>
+        <div class="ui retry red ok inverted button">
+          <i class="checkmark icon"></i>
+          다시 시도하기
+        </div>
+      </div>
+
+    {% else %}
+      <!-- <div class="header" style="text-align:center">
+      </div> -->
+
+      <div class="content" style="text-align:center">
+        <div>
+          <img class="ui centered circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:150px;height:150px;">
+        </div>
+        <br>
+
+        <p>
+          {{ user.socialaccount_set.all.0.extra_data.name }}({{ user.email }})님, 반가워요!
+          <br>
+          {{ user.socialaccount_set.all.0.get_provider_display }}로 접속하셨네요.
+        </p>
+
+        <div class="ui bmatch_start green ok inverted button">
+          <i class="checkmark icon"></i>
+          취향찾기 시작
+        </div>
+      </div>
+    {% endifequal %}
+
+    <!-- <div class="actions">
+      <div class="ui green ok inverted button">
+        <i class="checkmark icon"></i>
+        취향찾기 시작
+      </div>
+    </div> -->
+  </div>
+
+{% endif %}

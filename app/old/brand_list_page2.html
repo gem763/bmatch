@@ -1,0 +1,102 @@
+{% load el_pagination_tags %}
+{% lazy_paginate brand_list %}
+
+<!-- <div class="ui items"> -->
+{% for brand in brand_list %}
+
+  <div class="item">
+    <div class="image">
+      <img src="{{brand.logo_url}}" style="max-height:100px;max-width:40%;width:auto;">
+    </div>
+    <div class="content">
+      <a class="header">test</a>
+      <div class="meta">
+        <span>Description</span>
+      </div>
+      <div class="description">
+        <input class="rating-loading" id="input-id" name="input-name" type="number">
+      </div>
+      <div class="extra">
+        Additional Details
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+<!-- </div> -->
+<!-- {% show_more "moremore" "로딩중..." %} -->
+{% show_more %}
+<!-- {% show_pages %} -->
+
+
+<!-- <script>
+  $(document).ready(function(){
+    $(".rating-loading").rating({step:1, showCaption:false, showClear:false, theme:"krajee-svg"});
+  });
+</script> -->
+
+
+
+
+
+
+<!-- <div class="card-header border-bottom-0 bg-white text-right p-1">
+  <button class="btn btn-sm btn-light p-0" data-toggle="modal" data-target="#_{{brand.pk}}" style="border-radius:50%">
+    <i class="material-icons">
+      arrow_forward
+    </i>
+  </button>
+
+  <div class="modal fade" id="_{{brand.pk}}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title">{{brand.name}}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body text-center">
+          {% include "brand_detail_content.html" %}
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal"">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div> -->
+
+
+
+
+
+<!-- <script>
+    $("button.btn").click(function(){
+      $.get('{% url "interest_trend" brand.name %}', function(data) {
+        var ctx = $("#canvas_{{brand.pk}}").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+
+            options: {
+              elements: { point: { radius: 0 } },
+              scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {unit: 'month'}
+                }]
+              },
+              legend: {
+                  display: false,
+                  labels: {fontColor: 'rgb(255, 99, 132)'}
+              }
+            }
+
+        });
+      });
+  });
+</script> -->

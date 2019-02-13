@@ -1,0 +1,39 @@
+{% load socialaccount %}
+
+<div class="ui login mini modal">
+  <!-- <div class="ui header" style="text-align:center">
+    소셜 로그인
+  </div> -->
+
+  <div class="content">
+    <!-- <a href="{% url 'account_signup' %}">Sign up</a><br> -->
+    <!-- <a href="{% url 'account_login' %}">Log in</a><br> -->
+
+    <a class="fluid ui button" href="{% provider_login_url 'google' %}">
+      구글 아이디로 로그인
+    </a>
+    <br>
+
+    <a class="fluid ui green button" href="{% provider_login_url 'naver' %}">
+      네이버 아이디로 로그인(X)
+    </a>
+    <br>
+
+    <a class="fluid ui blue button" href="{% provider_login_url 'facebook' method='oauth2' %}">
+      페이스북 아이디로 로그인
+    </a>
+
+    <!-- <a class="ui large image basic label">
+      <img src="https://www.shareus.co.kr/upload/static/icon/social/naver-n-green.png">
+      네이버 아이디로 로그인
+    </a>
+    <br> -->
+
+    <!-- <div class="ui image button">
+      <img src="https://www.shareus.co.kr/upload/static/icon/social/naver-n-green.png" style="height:50px;float:left">
+      네이버 아이디로 로그인
+    </div> -->
+
+  </div>
+
+</div>

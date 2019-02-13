@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="text-center">
+  <img src="{{brand.logo_url}}" class="mx-auto d-block" style="max-height:400px;max-width:80%;width:auto;">
+  <input class="rating-loading" id="input-id" name="input-name" type="number">
+
+  <hr class="style1" width="50%">
+
+  <h4><b>{{brand.name}}</b></h4>
+  <div>{{brand.category}}</div>
+  <div>{{brand.price}}</div>
+  <div>{{brand.origin}}</div>
+  <div>{{brand.description}}</div>
+</div>
+
+<!-- <div class="card py-3 shadow">
+  <div class="card-body text-center">
+    <canvas id="myChart"></canvas>
+  </div>
+</div><br><br> -->
+
+<!-- <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/1644_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("RELATED_QUERIES", {"comparisonItem":[{"keyword":"adidas","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"q=adidas&geo=US&date=today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+<br><br> -->
+
+{% endblock content %}
+
+
+{% block js %}
+  {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $(".rating-loading").rating({step:1, showCaption:false, showClear:false, theme:"krajee-svg"});
+    });
+  </script>
+
+  <script type="text/javascript">
+    $.get('{% url "interest_trend" brand.name %}', function(data) {
+      var ctx = $("#myChart").get(0).getContext("2d");
+      new Chart(ctx, {
+          type: 'line', data: data
+      });
+    });
+  </script>
+{% endblock js %}

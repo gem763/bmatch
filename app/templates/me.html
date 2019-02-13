@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block menu_top %}
+  {% include "menu_top.html" with me_act="active" %}
+{% endblock menu_top %}
+
+{% block content %}
+<div class="ui center aligned text container">
+
+  <div class="ui centered circular blurring dimmable image" id="profile_image">
+    <div class="ui dimmer">
+      <div class="content">
+        <div class="center">
+          <div class="ui inverted button">바꾸기</div>
+        </div>
+      </div>
+    </div>
+    <img class="ui centered circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:150px;height:150px;">
+  </div>
+
+  <h2>{{ user.socialaccount_set.all.0.extra_data.name }}</h2>
+  <p>
+    {{ user.email }} <br>
+    {{ user.socialaccount_set.all.0.get_provider_display }} 아이디로 로그인
+  </p>
+
+  <div class="ui horizontal segments">
+    <div class="ui segment">
+      <div class="ui small statistic">
+        <div class="value">39</div>
+        <div class="label">브랜드</div>
+      </div>
+    </div>
+
+    <div class="ui segment">
+      <div class="ui small statistic">
+        <div class="value">10</div>
+        <div class="label">포스트</div>
+      </div>
+    </div>
+
+    <div class="ui segment">
+      <div class="ui small statistic">
+        <div class="value">3</div>
+        <div class="label">커뮤니티</div>
+      </div>
+    </div>
+  </div>
+
+  <a class="ui teal labeled icon button" href="{% url 'account_logout' %}">
+    <i class="sign-out icon"></i>
+    나가기
+  </a>
+  <!-- <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" width="100px"/> -->
+  <!-- <img src="{{ user.socialaccount_set.all.0.extra_data.picture }}" /> -->
+
+
+</div>
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script>
+    $('#profile_image').dimmer({
+      on: 'hover'
+    });
+  </script>
+{% endblock js %}
+
+<!-- <div class="card">
+  <div class="card-body text-center">
+    <h3 class="card-title">39</h3>
+    <p class="card-text">브랜드</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body text-center">
+    <h3 class="card-title">10</h3>
+    <p class="card-text">포스트</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body text-center">
+    <h3 class="card-title">3</h3>
+    <p class="card-text">커뮤니티</p>
+  </div>
+</div> -->

@@ -1,0 +1,182 @@
+<div style="position:fixed;top:50%;z-index:100">
+  <i class="green angle left huge icon link" onclick="window.history.back()"></i>
+</div>
+
+
+<div class="ui text container">
+
+  <p>임동석님과의 브랜드 매칭이 93%나 되네요!</p>
+  {{brand.description}}
+  
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">평가1안</div>
+      <div class="meta">장단점 코멘트</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+
+        <select name="brand_identity" class="ui fluid selection dropdown" multiple="" id="multi-select">
+          <option value="">States</option>
+          <option value="1">가성비좋은</option>
+          <option value="2">저렴한</option>
+          <option value="3">개성있는</option>
+          <option value="4">무난한</option>
+          <option value="5">스타일리쉬한</option>
+          <option value="6">새로운</option>
+        </select>
+
+        <br>
+
+        <div class="ui form">
+          <div class="field">
+            <label>장점</label>
+            <textarea rows="2"></textarea>
+          </div>
+          <div class="field">
+            <label>단점</label>
+            <textarea rows="2"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="ui fluid card">
+    <div class="content">
+      <div class="header">종합평가</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+        <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}}의 장단점</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}}에 대한 관심도 추이</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+        <canvas id="trend"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}} 관련 상위 검색어</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <table class="ui very basic fixed selectable unstackable very compact table">
+          <tbody id="query_top"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}} 관련 급등 검색어</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <table class="ui very basic fixed selectable unstackable very compact table">
+          <tbody id="query_rising"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}} 관련 검색어</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+        <div class="ui placeholder">
+          <canvas id="q_top"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}} 평가의 변동</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+        <canvas id="q_rising"></canvas>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">임동석님의 {{brand.name}} 평가이력</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}}의 브랜드 개성</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">{{brand.name}}와 함께 검색한 키워드</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <p>블라블라</p>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  {% include "brand_comment.html" %}
+
+</div>
+<br>

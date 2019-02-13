@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <title>B:match</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+
+
+  <style>
+    i {
+      vertical-align: middle;
+    }
+
+    h1.ui.header {
+      font-size: 3em;
+    }
+
+    .hidden.menu {
+      display: none;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- 사이드바 -->
+  {% include "sidebar.html" %}
+
+  <div class="pusher">
+    <!-- Following Menu -->
+    <div class="ui orange inverted top fixed hidden menu" id="top-fixed-hidden">
+      <div class="ui text container">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <div class="right menu">
+          <a class="search item">
+            <i class="search icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui masthead middle aligned center aligned grid" style="height:200px;background-color:#333">
+      <div class="column">
+        {% block header %}
+        <h1 class="ui inverted header">
+          B:match
+          <div class="inverted sub header">Discover your style with Brands</div>
+        </h1>
+        {% endblock header %}
+      </div>
+    </div>
+
+    <div class="ui top fixed secondary menu" id="top-fixed-shown">
+      <div class="ui text container">
+        <a class="toc item">
+          <i class="inverted sidebar icon"></i>
+        </a>
+        <div class="right menu">
+          <a class="search item">
+            <i class="inverted search icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% include "searcher.html" %}
+
+    <div class="ui text container">
+      <div class="glide">
+        <div class="glide__track" data-glide-el="track">
+          <ul class="glide__slides">
+            <li class="glide__slide">0</li>
+            <li class="glide__slide">1</li>
+            <li class="glide__slide">2</li>
+          </ul>
+        </div>
+        <div class="glide__bullets" data-glide-el="controls[nav]">
+          <button class="glide__bullet" data-glide-dir="=0"></button>
+          <button class="glide__bullet" data-glide-dir="=1"></button>
+          <button class="glide__bullet" data-glide-dir="=2"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="ui text container" style="margin-top:30px; margin-bottom:50px">
+      {% block content %}{% endblock content %}
+    </div>
+
+    <!-- Footer -->
+
+    <!-- <div class="ui text container"> -->
+      {% block footer %}{% endblock footer %}
+    <!-- </div> -->
+
+  </div>
+
+
+  {% block js %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script>
+  <script src="/static/semantic/semantic.min.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      // 사이드바
+      $('.ui.sidebar').sidebar('attach events', '.toc.item');
+
+      // 검색모달
+      $('.search.modal').modal('attach events', '.search.item', 'show');
+
+      new Glide('.glide').mount();
+
+      // 검색창
+      var content = [
+        { category:'Sports', title:'Adidas' },
+        { category:'Sports', title:'Nike' },
+        { category:'Luxury', title:'Prada' },
+        { category:'Luxury', title:'Asics' },
+        { category:'Streetwear', title:'Pepper' },
+      ];
+
+      $('.ui.search').search({
+        type: 'category',
+        source: content
+      });
+
+      // Hidden 메뉴 나타나기
+      $('.masthead').visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('#top-fixed-hidden').transition('fade in');
+            $('#top-fixed-shown').transition('fade out');
+          },
+          onBottomPassedReverse: function() {
+            $('#top-fixed-hidden').transition('fade out');
+            $('#top-fixed-shown').transition('fade in');
+          }
+        });
+    });
+  </script>
+  {% endblock js %}
+
+</body>
+</html>

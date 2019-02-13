@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block menu_top %}
+  {% include "menu_top.html" with rating_act="active" %}
+{% endblock menu_top %}
+
+{% block header %}
+  {% include "discover_header.html" %}
+{% endblock header%}
+
+{% block content %}
+  <div style="width:100%;">
+    <div class="ui unstackable divided items" style="max-width:330px;margin:auto">
+      {% include page_template %}
+    </div>
+  </div>
+
+  <!-- 더보기 모달 -->
+  <div class="ui more tiny modal">
+    <i class="close icon"></i>
+    <div class="header" id="brand_name"></div>
+    <div class="image content">
+      <img class="ui centered image" id='brand_logo_url'>
+    </div>
+    <div class="ui bottom attached fluid four item labeled icon menu">
+      <a class="item">
+        <i class="bookmark outline icon"></i>
+        북마크
+      </a>
+      <a class="item">
+        <i class="chart pie icon"></i>
+        상세평가
+      </a>
+      <a class="item">
+        <i class="comment alternate icon"></i>
+        한줄평
+      </a>
+      <a class="item" id="brand_href">
+        <i class="expand icon"></i>
+        브랜드 페이지
+      </a>
+    </div>
+  </div>
+{% endblock content %}
+
+
+{% load static %}
+{% block js %}
+  {{ block.super }}
+  <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $.endlessPaginate({
+        paginateOnScroll: true,
+        paginateOnScrollMargin: 100,
+      });
+
+      // 별점
+      $('.ui.rating').rating();
+
+      // 더보기 모달
+      $('div i.show_more').click(function(){
+        brand_name = $(this).attr('brand_name');
+        brand_logo_url = $(this).attr('brand_logo_url');
+        $('.ui.more.modal').find('#brand_name').text(brand_name);
+        $('.ui.more.modal').find('#brand_logo_url').attr('src', brand_logo_url);
+        $('.ui.more.modal').find('#brand_href').attr('href', '/brand/'+brand_name);
+        $('.ui.more.modal').modal('show');
+      });
+
+    });
+  </script>
+{% endblock js %}

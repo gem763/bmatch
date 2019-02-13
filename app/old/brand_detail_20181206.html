@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block header %}
+  {% include "brand_detail_header.html" %}
+{% endblock header %}
+
+{% block content %}
+  {% include "brand_detail_content.html" %}
+{% endblock content %}
+
+{% block footer %}
+  {% include "footer.html" with brand_act="active" %}
+{% endblock footer %}
+
+{% load static %}
+{% block js %}
+  {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('.ui.rating').rating();
+      $('#multi-select').dropdown();
+
+      $.get('{% url "gtrend" brand.name %}', function(data){
+        var ctx = $("#interest_trend").get(0).getContext("2d");
+        new Chart(ctx, data.data1)
+        // new Chart(ctx, {
+        //     type: 'line',
+        //     // data: data,
+        //     data: {
+        //       labels: data.labels,
+        //       datasets: [{
+        //         label: data.label, //'{{trend_data.label}}',
+        //         data: data.data,
+        //       }],
+        //     },
+        //
+        //     options: {
+        //       elements: { point: { radius: 0 } },
+        //       scales: {
+        //         xAxes: [{
+        //             type: 'time',
+        //             time: {unit: 'month'}
+        //         }]
+        //       },
+        //       legend: {
+        //           display: false,
+        //           labels: {fontColor: 'rgb(255, 99, 132)'}
+        //       }
+        //     }
+        // });
+
+      });
+
+
+      // $.get('{% url "interest_trend" brand.name %}', function(data) {
+      //   // alert(data.datasets[0].data);
+      //   // alert('{{trend_data.labels}}');
+      //   var ctx = $("#interest_trend").get(0).getContext("2d");
+      //   new Chart(ctx, {
+      //       type: 'line',
+      //       // data: {{trend_data}},
+      //       data: data,
+      //       // data: {
+      //       //   labels: {{trend_data.labels}},
+      //       //   datasets: [{
+      //       //     label: '{{trend_data.label}}',
+      //       //     data: {{trend_data.data}},
+      //       //   }],
+      //       // },
+      //
+      //       options: {
+      //         elements: { point: { radius: 0 } },
+      //         scales: {
+      //           xAxes: [{
+      //               type: 'time',
+      //               time: {unit: 'month'}
+      //           }]
+      //         },
+      //         legend: {
+      //             display: false,
+      //             labels: {fontColor: 'rgb(255, 99, 132)'}
+      //         }
+      //       }
+      //   });
+      //
+      // });
+
+
+
+    });
+  </script>
+{% endblock js %}

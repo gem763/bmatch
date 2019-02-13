@@ -1,0 +1,30 @@
+<div style="background-color:transparent;position:fixed;bottom:0;text-align:center;width:100%;z-index:100">
+  <div class="ui compact orange labeled icon mini menu">
+      <a class="item {{discover_act}}" href="/discover">
+        <i class="th icon"></i>
+        discover
+      </a>
+
+      <a class="item {{rating_act}}" href="/rating">
+        <i class="star icon"></i>
+        rating
+      </a>
+
+      <a class="item {{sharing_act}}" href="/sharing">
+        <i class="hashtag icon"></i>
+        sharing
+      </a>
+
+      <a class="item {{my_act}}" href="/my">
+
+        {% if user.is_authenticated %}
+          <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+          <!-- <img src="{{ user.socialaccount_set.all.0.extra_data.picture }}" /> -->
+        {% else %}
+          <i class="user circle outline icon"></i>
+        {% endif %}
+
+        my
+      </a>
+  </div>
+</div>

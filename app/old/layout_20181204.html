@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <title>B:match</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
+
+  <style>
+    /* h1.ui.header {
+      font-size: 3em;
+    } */
+  </style>
+</head>
+
+
+<body>
+  <div class="ui top fixed menu">
+    <!-- <div class="ui text container"> -->
+      <!-- <a class="browse item">
+        조건<i class="dropdown icon"></i>
+      </a> -->
+
+      <!-- <div class="ui flowing popup bottom left transition hidden">
+        <div class="ui four column relaxed divided grid">
+          <div class="column">
+            <h4 class="ui header">Fabrics</h4>
+            <div class="ui link list">
+              <a class="item">Cashmere</a>
+              <a class="item">Linen</a>
+              <a class="item">Cotton</a>
+              <a class="item">Viscose</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Size</h4>
+            <div class="ui link list">
+              <a class="item">Small</a>
+              <a class="item">Medium</a>
+              <a class="item">Large</a>
+              <a class="item">Plus Sizes</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Colors</h4>
+            <div class="ui link list">
+              <a class="item">Neutrals</a>
+              <a class="item">Brights</a>
+              <a class="item">Pastels</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Types</h4>
+            <div class="ui link list">
+              <a class="item">Knitwear</a>
+              <a class="item">Outerwear</a>
+              <a class="item">Pants</a>
+              <a class="item">Shoes</a>
+            </div>
+          </div>
+
+        </div>
+      </div> -->
+
+      <div class="item">
+        <div class="circular ui icon button">
+          <i class="bold icon"></i>
+        </div>
+      </div>
+
+      <div class="ui category search item" style="flex-grow:1;">
+        <div class="ui icon input">
+          <input class="prompt" type="text" placeholder="검색하기">
+          <i class="search link icon"></i>
+        </div>
+        <div class="results"></div>
+      </div>
+
+      <div class="item">
+        <div class="ui positive button">Sign Up</div>
+      </div>
+  </div>
+
+  <!-- 메인 컨테이너 -->
+  <!-- <div class="ui fluid container" style="margin-top:60px; margin-bottom:50px"> -->
+
+  <div style="margin-top:45px">
+    {% block header %}{% endblock header %}
+  </div>
+
+  <div style="margin-bottom:50px">
+    {% block content %}{% endblock content %}
+  </div>
+
+  <!-- Footer -->
+  {% block footer %}{% endblock footer %}
+
+
+  {% block js %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/static/semantic/semantic.min.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      // 사이드바
+      // $('.ui.sidebar').sidebar('attach events', '.toc.item');
+
+      // 검색모달
+      // $('.search.modal').modal('attach events', '.search.item', 'show');
+
+      // $('.ui.dropdown').dropdown();
+      // $('.browse').popup({
+      //   inline     : true,
+      //   hoverable  : true,
+      //   // popup: '.ui.popup',
+      //   position   : 'bottom left',
+      //   delay: {
+      //     show: 300,
+      //     hide: 800
+      //   }
+      // });
+
+
+      // 검색창
+      var content = [
+        { category:'Sports', title:'Adidas' },
+        { category:'Sports', title:'Nike' },
+        { category:'Luxury', title:'Prada' },
+        { category:'Luxury', title:'Asics' },
+        { category:'Streetwear', title:'Pepper' },
+      ];
+
+      $('.ui.search').search({
+        type: 'category',
+        source: content
+      });
+
+      // Hidden 메뉴 나타나기
+      // $('.masthead').visibility({
+      //     once: false,
+      //     onBottomPassed: function() {
+      //       $('#top-fixed-hidden').transition('fade in');
+      //       $('#top-fixed-shown').transition('fade out');
+      //     },
+      //     onBottomPassedReverse: function() {
+      //       $('#top-fixed-hidden').transition('fade out');
+      //       $('#top-fixed-shown').transition('fade in');
+      //     }
+      //   });
+
+    });
+  </script>
+  {% endblock js %}
+
+</body>
+</html>

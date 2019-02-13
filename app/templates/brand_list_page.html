@@ -1,0 +1,46 @@
+<!-- <div class="ui text container"> -->
+<!-- <div class="ui unstackable divided items"> -->
+
+{% load el_pagination_tags %}
+{% lazy_paginate brand_list %}
+{% for brand in brand_list %}
+<div class="item" style="background-color:white">
+
+  <a href="/brand/{{brand.name}}" class="ui small image">
+    <img src="{{brand.logo_url}}" style="padding:10px;max-height:100px;width:auto;">
+  </a>
+
+  <div class="middle aligned content"><!-- style="background-color:red">-->
+    <div class="header">
+      {{brand.name}}
+    </div>
+    <div class="description">
+      <div class="ui huge star rating" data-rating="3" data-max-rating="5"></div>
+    </div>
+  </div>
+
+  <div><!-- style="background-color:red">-->
+    <div><!-- data-tooltip="더보기" data-inverted="" data-position="left center">-->
+      <i class="show_more ellipsis vertical icon link" style="color:#d8d8d8" brand_name="{{brand.name}}" brand_logo_url="{{brand.logo_url}}"></i>
+    </div>
+  </div>
+
+</div>
+{% endfor %}
+<!-- </div> -->
+{% show_more %}
+<!-- </div> -->
+
+
+<script>
+  $('.ui.rating').rating();
+
+  $('div i.show_more').click(function(){
+    brand_name = $(this).attr('brand_name');
+    brand_logo_url = $(this).attr('brand_logo_url');
+    $('.ui.more.modal').find('#brand_name').text(brand_name);
+    $('.ui.more.modal').find('#brand_logo_url').attr('src', brand_logo_url);
+    $('.ui.more.modal').find('#brand_href').attr('href', '/brand/'+brand_name);
+    $('.ui.more.modal').modal('show');
+  });
+</script>

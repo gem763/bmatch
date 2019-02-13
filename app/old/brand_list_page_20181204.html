@@ -1,0 +1,80 @@
+{% load el_pagination_tags %}
+{% lazy_paginate brand_list %}
+
+<div class="ui middle aligned relaxed list"> <!--animated-->
+{% for brand in brand_list %}
+<div class="item" style="position:relative">
+
+  <div class="ui unstackable two steps">
+    <div class="step">
+      <a class="ui left corner label">
+        <i class="bookmark icon"></i>
+      </a>
+      <img class="ui image" src="{{brand.logo_url}}" style="max-height:50px;width:auto;">
+    </div>
+    <div class="step" style="padding:0">
+      <div class="ui segments" style="width:100%;border:0">
+
+        <div class="ui right aligned vertical segment" style="padding:5px;border:0">
+          <i class="popup grey heart outline icon link" data-content="꾸준히 사랑받는" data-position="top right"></i>
+          <i class="popup grey bolt icon link" data-content="최근에 출시된" data-position="top right"></i>
+          <i class="popup grey compass outline icon link" data-content="한국에서는 찾기 힘든" data-position="top right"></i>
+          <i class="popup grey rocket icon link" data-content="최근에 관심받는" data-position="top right"></i>
+          <span class="right floated">
+            <i class="popup more grey ellipsis vertical icon link" data-content="더보기" data-position="top right" brand_name="{{brand.name}}" brand_logo_url="{{brand.logo_url}}"></i>
+          </span>
+        </div>
+
+        <div class="ui center aligned vertical segment" style="padding:10px;border:0">
+          <div class="title">{{brand.name}}</div>
+          <div>Streetwear, Korea<i class="kr flag"></i></div>
+          <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
+        </div>
+
+        <div class="ui right aligned vertical segment" style="padding:5px;border:0">
+          <a class="ui mini label">무난한</a>
+          <a class="ui teal mini label">스타일리쉬한</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endfor %}
+</div>
+<!-- {% show_more "moremore" "로딩중..." %} -->
+{% show_more %}
+<!-- {% show_pages %} -->
+
+
+<!-- 더보기 모달 -->
+<div class="ui more modal">
+  <i class="close icon"></i>
+  <div class="header" id="brand_name">
+    <!-- brand_name 넣는곳 -->
+  </div>
+  <div class="image content">
+    <div class="image">
+      <img class="ui image" id='brand_logo_url'>
+    </div>
+  </div>
+  <div class="ui bottom attached fluid four item labeled icon menu">
+    <a class="item">
+      <i class="bookmark outline icon"></i>
+      북마크
+    </a>
+    <a class="item">
+      <i class="chart pie icon"></i>
+      상세평가
+    </a>
+    <a class="item">
+      <i class="comment alternate icon"></i>
+      한줄평
+    </a>
+    <a class="item" id="brand_href">
+      <i class="expand icon"></i>
+      브랜드 페이지
+    </a>
+  </div>
+</div>

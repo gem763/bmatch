@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <title>B:match</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
+  <style>
+    @media screen and (max-width: 800px) {
+      .hide-footer {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ui sidebar left inverted vertical menu" id="sidebar-bmatch">
+    {% include "sidebar.html" %}
+  </div>
+
+  <!-- <div class="ui top sidebar" style="background-color:white;height:100%" id="sidebar-search">
+    <div class="ui center aligned text container" style="padding:20px">
+
+    </div>
+  </div> -->
+
+  <div class="pusher">
+    <!-- <div style="width:100%;background-color:yellow;position:fixed;top:0px;z-index:100;display:none" id="searcher">
+    </div> -->
+
+    <!-- menu top -->
+    <div>
+      {% block menu_top %}{% endblock menu_top %}
+    </div>
+
+    <!-- header -->
+    <div style="margin-top:40px">
+      {% block header %}{% endblock header %}
+    </div>
+
+    <!-- content -->
+    <div style="margin-bottom:50px">
+      {% block content %}{% endblock content %}
+    </div>
+
+    <div class="ui text container">
+      <div class="ui orange circular icon massive button" style="position:fixed;bottom:10px;" id="search-btn">
+        <i class="search icon"></i>
+      </div>
+    </div>
+
+  </div>
+
+
+  {% block js %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/static/semantic/semantic.min.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      $('.ui.welcome.modal')
+        .modal('attach events', '.ui.bmatch_start.button', 'hide')
+        .modal('attach events', '.ui.retry.button', 'hide')
+        .modal('show');
+
+      $('.ui.login.modal')
+        .modal('attach events', '.login.item', 'show')
+        .modal('attach events', '.login.button', 'show');
+
+      $('#searcher')
+        .modal('setting', 'transition', 'fade down')
+        .modal('attach events', '#search-btn', 'show');
+
+      $('#sidebar-bmatch')
+        .sidebar('setting', 'transition', 'overlay')
+        .sidebar('attach events', '.bmatch.item');
+
+      // $('#sidebar-search')
+      //   .sidebar({
+      //     onVisible: function(){
+      //       $('#searcher').transition('fade out');
+      //     },
+      //     onHide: function(){
+      //       $('#searcher').transition('fade in');
+      //     }
+      //   })
+      //   .sidebar('attach events', '#searcher');
+      //
+      // $('input').focus(function() {
+      //    $('footer').addClass('hide-footer');
+      // });
+      //
+      // $('input').focusout(function() {
+      //    $('footer').removeClass('hide-footer');
+      // });
+
+      // 검색창
+      var content = [
+        { category:'Sports', title:'Adidas' },
+        { category:'Sports', title:'Nike' },
+        { category:'Luxury', title:'Prada' },
+        { category:'Luxury', title:'Asics' },
+        { category:'Streetwear', title:'Pepper' },
+      ];
+
+      $('.ui.search').search({
+        type: 'category',
+        source: content
+      });
+
+      // $('.circular.ui.icon.button').popup({
+      $('.signup').popup({
+        // inline     : true,
+        // hoverable  : true,
+        popup: '.ui.popup',
+        position: 'bottom right',
+        on: 'click',
+        delay: {
+          show: 300,
+          hide: 800
+        }
+      });
+
+      $('#top-shown').visibility({
+        once: false,
+        onBottomPassed: function() {
+          $('#top-hidden').transition('fade in');
+          // $('#top-shown').transition('fade out');
+        },
+        onBottomPassedReverse: function() {
+          $('#top-hidden').transition('fade out');
+          // $('#top-fixed-shown').transition('fade in');
+        }
+      });
+
+    });
+  </script>
+  {% endblock js %}
+
+</body>
+</html>
