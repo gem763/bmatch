@@ -47,17 +47,9 @@
       // $('.ui.rating').rating();
       // $('#multi-select').dropdown();
 
-      // alert("{{idty}}");
-
       $.get('{% url "gtrend" brand.name %}', function(data){
         var ctx1 = $("#trend").get(0).getContext("2d");
         new Chart(ctx1, data.trend_data);
-
-        // var ctx2 = $("#q_top").get(0).getContext("2d");
-        // new Chart(ctx2, data.q_top_data);
-        //
-        // var ctx3 = $("#q_rising").get(0).getContext("2d");
-        // new Chart(ctx3, data.q_rising_data);
 
         data.query_top_data.forEach(function(query_data){
           append_table_row('#query_top', query_data);
@@ -68,15 +60,11 @@
         });
       });
 
-      $.get('{% url "identities" brand.name %}', function(data){
-        data.idty.forEach(function(idty_data){
-          append_table_row('#identities', idty_data);
-        });
-      })
-
-      // {{idty}}.forEach(function(idty_data){
-      //   append_table_row('#identities', idty_data);
-      // });
+      // $.get('{% url "identities" brand.name %}', function(data){
+      //   data.idty.forEach(function(idty_data){
+      //     append_table_row('#identities', idty_data);
+      //   });
+      // })
 
     });
   </script>

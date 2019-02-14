@@ -59,7 +59,7 @@
     </div>
   </div> -->
 
-  <div class="ui fluid card">
+  <!-- <div class="ui fluid card">
     <div class="content">
       <div class="header">Brand identity</div>
       <div class="meta">2 days ago</div>
@@ -68,6 +68,29 @@
       <div class="ui small feed">
         <table class="ui very basic fixed selectable unstackable very compact table">
           <tbody id="identities"></tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">Brand identity</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <table class="ui very basic fixed selectable unstackable very compact table">
+          <tbody>
+            {% for idty in brand.identity %}
+              <tr>
+                <td class="right aligned eight wide">{{idty.key}}</td>
+                <td class="eight wide" style="padding:0 5% 0 0">
+                  <button class="ui green mini compact right aligned button" style="border-radius:0 20px 20px 0;width:{{idty.value}}%">{{idty.value}}</button>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
         </table>
       </div>
     </div>
@@ -157,18 +180,6 @@
   <div class="ui fluid card">
     <div class="content">
       <div class="header">임동석님의 {{brand.name}} 평가이력</div>
-      <div class="meta">2 days ago</div>
-    </div>
-    <div class="content">
-      <div class="ui small feed">
-        <p>블라블라</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="ui fluid card">
-    <div class="content">
-      <div class="header">{{brand.name}}의 브랜드 개성</div>
       <div class="meta">2 days ago</div>
     </div>
     <div class="content">
