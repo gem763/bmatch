@@ -58,7 +58,8 @@ def brands(request):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    return render(request, 'brand_detail.html', {'brand':brand})
+    simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
+    return render(request, 'brand_detail.html', {'brand':brand, 'simbrands':simbrands})
 
 
 def me(request):

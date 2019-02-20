@@ -13,6 +13,7 @@ class Brand(models.Model):
     #description = models.TextField()
     logo = models.ImageField(blank=True)
     identity = models.TextField(blank=True, null=True)
+    cluster = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.name
