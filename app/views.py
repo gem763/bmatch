@@ -58,6 +58,10 @@ def brands(request):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
+
+    for idty in brand.identity:
+        idty['key0'], idty['key1'] = idty['key'].split('-')
+    
     simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
     return render(request, 'brand_detail.html', {'brand':brand, 'simbrands':simbrands})
 
