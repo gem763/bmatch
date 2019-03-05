@@ -50,7 +50,7 @@ urlpatterns = [
     path('me/', me),
     path('sharing/', sharing),
 
-    path('wc/<bname>/', wc),
+    path('wc/<bname>/', wc, name='wordcloud'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

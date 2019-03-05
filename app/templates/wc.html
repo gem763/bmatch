@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="/static/js/d3.layout.cloud.js"></script>
-
-<head><title>Word Cloud Example</title></head>
 
 <style>
   text:hover {
@@ -12,9 +7,8 @@
     font-weight: bold;
   }
 </style>
-<body>
-</body>
 
+<div id="wordcloud"></div>
 
 <script>
     var wordfreq = {{ wordfreq | safe }}
@@ -33,7 +27,7 @@
             .start();
 
     function draw(words) {
-        d3.select("body").append("svg")
+        d3.select("#wordcloud").append("svg")
                 .attr("width", width)
                 .attr("height", height)
                 //.attr("class", "wordcloud")

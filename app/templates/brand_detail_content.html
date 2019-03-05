@@ -1,3 +1,10 @@
+<style>
+  text:hover {
+    fill: black !important;
+    font-weight: bold;
+  }
+</style>
+
 <div style="position:fixed;top:50%;z-index:100">
   <i class="green angle left huge icon link" onclick="window.history.back()"></i>
 </div>
@@ -156,9 +163,10 @@
       <div class="meta">2 days ago</div>
     </div>
     <div class="content">
-      <div class="ui small feed" style="background:transparent">
+      <div id="wordcloud" style="text-align:center"></div>
+      <!-- <div class="ui small feed" style="background:transparent">
         <img src="{{brand.wordcloud.url}}" alt="{{brand.name}}" class="ui centered image" style="width:400px;height:400px;">
-      </div>
+      </div> -->
     </div>
   </div>
 

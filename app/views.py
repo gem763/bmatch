@@ -58,6 +58,7 @@ def brands(request):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
+    brand.wordfreq = json.loads(brand.wordfreq)
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
