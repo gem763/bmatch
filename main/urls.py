@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, brands, identities
+from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, brands, identities, wc
 
 
 urlpatterns = [
@@ -49,6 +49,8 @@ urlpatterns = [
     path('analysis/', analysis),
     path('me/', me),
     path('sharing/', sharing),
+
+    path('wc/<bname>/', wc),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

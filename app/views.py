@@ -61,7 +61,7 @@ def brand_detail(request, bname):
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
-    
+
     simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
     return render(request, 'brand_detail.html', {'brand':brand, 'simbrands':simbrands})
 
@@ -75,6 +75,11 @@ def sharing(request):
 def analysis(request):
     return render(request, 'analysis.html')
 
+
+def wc(request, bname):
+    brand = Brand.objects.get(name=bname)
+    wordfreq = json.loads(brand.wordfreq)
+    return render(request, 'wc.html', {'wordfreq':wordfreq})
 
 class BrandListView(AjaxListView):
     context_object_name = 'brand_list'
