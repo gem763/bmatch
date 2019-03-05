@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, brands, identities, wc
+from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, brands, wc
 
 
 urlpatterns = [
@@ -44,7 +44,7 @@ urlpatterns = [
     path('brands/<bname>/', brand_detail),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
     path('brands/<brand_name>/gtrend/', gtrend, name='gtrend'),
-    path('brands/<bname>/identities/', identities, name='identities'),
+    #path('brands/<bname>/identities/', identities, name='identities'),
 
     path('analysis/', analysis),
     path('me/', me),

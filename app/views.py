@@ -14,7 +14,7 @@ import glob
 import os
 import pandas as pd
 from django.contrib.staticfiles.storage import staticfiles_storage
-from sklearn import preprocessing
+# from sklearn import preprocessing
 
 # Create your views here.
 
@@ -100,18 +100,18 @@ class BrandListView(AjaxListView):
         return qs
 
 
-def identities(request, bname):
-    df = pd.read_pickle('id_dict.pkl')
-    min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0.1, 1))
-    X_train_minmax = min_max_scaler.fit_transform(df)
-    df[:] = X_train_minmax
-
-    _df = df[[bname]].reset_index().rename(columns={'index':'key', bname:'value'})
-    #df.value[:] = X_train_minmax
-
-    _df.value = (_df.value*100).astype(int)
-    idty = _df.to_dict('record')
-    return JsonResponse({'idty':idty})
+# def identities(request, bname):
+#     df = pd.read_pickle('id_dict.pkl')
+#     min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0.1, 1))
+#     X_train_minmax = min_max_scaler.fit_transform(df)
+#     df[:] = X_train_minmax
+#
+#     _df = df[[bname]].reset_index().rename(columns={'index':'key', bname:'value'})
+#     #df.value[:] = X_train_minmax
+#
+#     _df.value = (_df.value*100).astype(int)
+#     idty = _df.to_dict('record')
+#     return JsonResponse({'idty':idty})
 
 
 def gtrend(request, brand_name):

@@ -12,8 +12,9 @@
 {% load static %}
 {% block js %}
   {{ block.super }}
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="/static/js/d3.layout.cloud.js"></script>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
   <!-- chartjs 바차트의 rounded bar를 만들어주는 플러그인
@@ -62,10 +63,18 @@
         });
       });
 
-
-
       var wordfreq = {{ brand.wordfreq | safe }}
       var fill = d3.scale.category20();
+
+      var tooltip = d3.select("#wordcloud")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
 
       var weight = 1.5,
           width = $("#wordcloud").width(),
@@ -84,7 +93,7 @@
           .append("svg")
           .attr("width", width)
           .attr("height", height)
-          //.attr("class", "wordcloud")
+            //.attr("class", "wordcloud")
           .append("g")
           // without the transform, words words would get cutoff to the left and top, they would
           // appear outside of the SVG area
@@ -105,13 +114,23 @@
           .on({
             "mouseover": function(d) {
               d3.select(this).style("font-size", function(d) { return weight * d.freq + 5 + "px" });
+              tooltip.style("opacity", 1);
             },
             "mouseout": function(d) {
               d3.select(this).style("font-size", function(d) { return weight * d.freq - 5 + "px" });
+              tooltip.style("opacity", 0);
             },
-            "click": function(d) {
-              window.open("https://www.google.com/search?q=" + d.text);
+            "mousemove": function(d) {
+              d3.select(this).style("font-size", function(d) { return weight * d.freq - 5 + "px" });
+              tooltip.html("The exact value of<br>this cell is: " + d.text)
+                     .style("left", (d3.mouse(this)[0]+10) + "px")
+                     .style("top", (d3.mouse(this)[1]) + "px");
             }
+            // ,
+            // "click": function(d) {
+              // window.open("https://www.google.com/search?q=" + d.text);
+              //alert($(this).text())
+            // }
           });
       };
     });
