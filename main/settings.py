@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'debug_toolbar',
-    'sslserver',
+    #'sslserver',
     'el_pagination',
     'chartjs',
     # 'social_django',
