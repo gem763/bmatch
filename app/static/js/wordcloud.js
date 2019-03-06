@@ -70,51 +70,24 @@ function WordCloud(options) {
            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
          })
          .text(function(d) { return d.key; })
-         .on("click", handleClick)
-         //.on('mouseover', handleMouseOver)
-         //.on('mouseout', handleMouseOut);
+         //.on("click", handleClick)
+         .on('mouseover', handleMouseOver)
   };
 
 
-  function handleClick(d) {
-    d3.select('#story-titles').remove();
-
-    var item = d.key
-    var group = focus.append('g').attr('id', 'story-titles');
-    var base = d.y - d.size;
-
-    group.selectAll('text')
-         .data(["검색"])
-         .enter().append('text')
-         .attr('x', d.x)
-         .attr('y', function(title, i) {
-           return (base - i*14);
-         })
-         .attr('text-anchor', 'middle')
-         .style('fill', 'white')
-         .text(function(title) { return title; })
-         .on('click', function(d) { window.open("https://www.google.com/search?q=" + item); });
-
-    var bbox = group.node().getBBox();
-    var bboxPadding = 10;
-
-    // place a white background to see text more clearly
-    var rect = group.insert('div', ':first-child')
-                    .attr('class', 'ui button')
-                    .text('test')
-
-    // var rect = group.insert('rect', ':first-child')
-    //               .attr('x', bbox.x - bboxPadding)
-    //               .attr('y', bbox.y - bboxPadding)
-    //               .attr('width', bbox.width + 2*bboxPadding)
-    //               .attr('height', bbox.height + 2*bboxPadding)
-    //               .attr('rx', 30)
-    //               .attr('ry', 30)
-    //               .attr('class', 'label-background-strong')
-    //               ;
-  };
-
-  function handleMouseOut(d) {
-    d3.select('#story-titles').remove();
+  function handleMouseOver(d) {
+    tippy(this, {
+      content: "<a target='_blank' href='https://www.google.com/search?q=" + d.key + "'><strong>" + d.key + "</strong> 검색하기</a>",
+      arrow: true,
+      arrowType: 'round',
+      theme: 'light',
+      interactive: true,
+      placement: 'top',
+      size: 'large',
+      distance: 20,
+      followCursor: 'initial',
+      //followCursor: true,
+      trigger: 'click',
+    })
   };
 }
