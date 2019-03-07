@@ -8,13 +8,19 @@
 {% block content %}
 <div class="ui text container">
 
-  <div class="ui fluid large category search">
-    <div class="ui fluid icon input">
+<div class="ui search button">
+  Follow
+</div>
+
+<form class="ui form">
+  <div class="ui fluid large search">
+    <div class="ui fluid left icon input">
       <input class="prompt" type="text" placeholder="Search...">
-      <i class="search icon"></i>
+      <i class="search link icon"></i>
     </div>
     <div class="results"></div>
   </div>
+</form>
 
   <br>
 
@@ -39,6 +45,26 @@
       $('.brandlist.cards .image').dimmer({
         on: 'hover'
       });
+
+      var content = [
+        { category:'Sports', title:'Adidas' },
+        { category:'Sports', title:'Nike' },
+        { category:'Luxury', title:'Prada' },
+        { category:'Luxury', title:'Asics' },
+        { category:'Streetwear', title:'Pepper' },
+      ];
+
+      // $('.ui.search').search({
+      //   //type: 'category',
+      //   source: content,
+      //   //apiSettings: { url: '/sharing' },
+      //   //onSelect(result, response){ window.location.href = result.url; }
+      // });
+
+      $('.ui.input input').on('keydown', function(e){
+        if(e.which === 13) //enter
+          window.location.href = "http://127.0.0.1:8000/sharing/";
+       });
 
     });
   </script>
