@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing
+from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, DiscoverView
 
 
 urlpatterns = [
@@ -33,8 +33,9 @@ urlpatterns = [
     # path('auth/', include('social_django.urls', namespace='social')),
 
 
-    path('', discover, name='home'),
-    path('discover/', discover),
+    path('', DiscoverView.as_view(), name='home'),
+    path('discover/', DiscoverView.as_view()),
+    # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', BrandListView.as_view()),
     #path('rating/', rating),

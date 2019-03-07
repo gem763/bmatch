@@ -1,0 +1,19 @@
+{% load el_pagination_tags %}
+{% lazy_paginate 30 brands %}
+
+{% for brand in brands %}
+  <a class="card" style="padding:5px" href="/brands/{{brand.name}}">
+    <div class="blurring dimmable image" style="background:transparent;margin:auto;">
+      <div class="ui inverted dimmer">
+        <div class="content">
+          <div class="center">
+            <div style="color:black">{{ brand.name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:110px;height:110px;margin:auto;border-radius:0 !important;">
+    </div>
+  </a>
+{% endfor %}
+{% show_more %}

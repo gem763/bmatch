@@ -75,6 +75,15 @@ def analysis(request):
     return render(request, 'analysis.html')
 
 
+class DiscoverView(AjaxListView):
+    context_object_name = 'brands'
+    template_name = 'discover.html'
+    page_template = 'discover_page.html'
+
+    def get_queryset(self):
+        return Brand.objects.all()
+
+
 class BrandListView(AjaxListView):
     context_object_name = 'brand_list'
     template_name = 'brand_list.html'
