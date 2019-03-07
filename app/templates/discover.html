@@ -4,155 +4,42 @@
   {% include "menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
 
-{% block header %}
-  {% include "discover_header.html" %}
-{% endblock header %}
-
 {% block content %}
-  {% include "discover_content.html" %}
+<div class="ui text container">
+
+  <div class="ui five doubling brandlist cards">
+    {% for brand in brands %}
+
+      <a class="card" style="padding:5px" href="/brands/{{brand.name}}">
+        <div class="blurring dimmable image" style="background:transparent;margin:auto;">
+          <div class="ui inverted dimmer">
+            <div class="content">
+              <div class="center">
+                <div style="color:black">{{ brand.name }}</div>
+              </div>
+            </div>
+          </div>
+
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:110px;height:110px;margin:auto;border-radius:0 !important;">
+        </div>
+      </a>
+
+    {% endfor %}
+  </div>
+
+  <!-- <div class="ui divider"></div> -->
+
+</div>
 {% endblock content %}
 
 
+<br>
+
 {% block js %}
   {{ block.super }}
-  <!-- <script async defer src="//assets.pinterest.com/js/pinit.js"></script> -->
-
   <script>
-    window.pAsyncInit = function() {
-      PDK.init({
-          appId: "5004580763270673089",
-          cookie: true
-      });
-    };
-
-    (function(d, s, id){
-        var js, pjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "/static/js/pinterest_sdk.js";
-        pjs.parentNode.insertBefore(js, pjs);
-    }(document, 'script', 'pinterest-jssdk'));
-
-
-    function make_post(){
-      // alert(1234);  ca84ea009a23a2af
-      $.post("https://api.pinterest.com/v1/oauth/token?", {grant_type:"authorization_code",client_id:"5004580763270673089",client_secret:"c44e52bf4e95300a42463f4f29747b5f7cb853ae88b46b24c5fbbb523f65eca7",code:"ca84ea009a23a2af"}, function(result){
-        alert(result);
-      });
-
-      var url = "https://api.pinterest.com/oauth/?response_type=" + encodeURIComponent("code") +
-                "&redirect_uri=" + encodeURIComponent("https://bmatch.pythonanywhere.com/") +
-                "&client_id=" + encodeURIComponent("5004580763270673089") +
-                "&scope=" + encodeURIComponent("read_public") +
-                "&state=" + encodeURIComponent("768uyFys");
-
-      // $.get(url, function(data){
-      //   alert(1234);
-      //   // alert(data);
-      // });
-    };
-
-    function pinterest2(){
-      [{image:{original:{url:1}}, note:11}, {image:{original:{url:2}}, note:22}, {image:{original:{url:3}}, note:33}].forEach(function(data){
-        make_pint_card("#pinterested", data);
-      });
-    };
-
-    function pinterest(){
-      //login
-
-      // auth_token = "AgPSZGbicZupGW19WRwZLjVrbZHNFXOd26MjQlVFc9ewVIBywQhTADAAAdxjRXTrrP9Ad5cAAAAA";
-      // PDK.setSession({
-      //   accessToken: auth_token,
-      //   scope: "read_public"
-      // });
-      //
-      // PDK.request('/boards/nike/shoe-love/pins/', {fields:'id,note,image,creator,created_at,metadata'}, function (response) {
-      //   if (!response || response.error) {
-      //     alert('Error occurred2');
-      //   } else {
-      //     // console.log(JSON.stringify(response));
-      //     response.data.forEach(function(data){
-      //       make_pint_card("#pinterested", data);
-      //     });
-      //     PDK.logout();
-      //   };
-      // });
-
-
-      PDK.login({scope:'read_public'}, function(session){
-        if (!session || session.error) {
-           alert('Error occurred');
-           alert(JSON.stringify(session));
-
-        } else {
-           alert(JSON.stringify(session));
-        };
-
-
-        // PDK.request('/users/nike/boards/', {fields:'id,username,bio,image'}, function (response) {
-        PDK.request('/boards/nike/shoe-love/pins/', {fields:'id,note,image,creator,created_at,metadata'}, function (response) {
-          if (!response || response.error) {
-            alert('Error occurred2');
-          } else {
-            // console.log(JSON.stringify(response));
-              //  alert('success');
-            // console.log(PDK.getSession().accessToken);
-
-            // var yahoo = $( "#result" ).load( "https://api.pinterest.com/v1/me/?access_token="+PDK.getSession().accessToken+"&fields=counts" );
-            // console.log(yahoo);
-
-            // $("#pinterested").text(JSON.stringify(response));
-
-            response.data.forEach(function(data){
-              make_pint_card("#pinterested", data);
-            });
-
-            // alert(PDK.getSession().accessToken);
-            // PDK.logout();
-          };
-        });
-
-      });
-      //end login
-      PDK.logout();
-    };
-
-
-    // data: {image:{original:{url:__ ..}}, note:__, ...}
-    function make_pint_card(id, data){
-      var img_src = document.createElement('img');
-      img_src.src = data.image.original.url;
-
-      var image = document.createElement('div');
-      image.className = "image";
-      image.append(img_src);
-
-      var description = document.createElement('div');
-      description.className = "description";
-      description.append(data.note);
-
-      var content = document.createElement('div');
-      content.className = "content";
-      content.append(description);
-
-      var creator = document.createElement('span');
-      creator.append(data.creator.first_name);
-
-      var created_at = document.createElement('span');
-      created_at.className = "right floated";
-      created_at.append(data.created_at.split('T')[0]);
-
-      var extra_content = document.createElement('div');
-      extra_content.className = "extra content";
-      extra_content.append(creator, created_at);
-
-      var card = document.createElement('div');
-      card.className = "ui centered raised card";
-      card.append(image, content, extra_content);
-
-      $(id).append(card);
-    };
+    $('.brandlist.cards .image').dimmer({
+      on: 'hover'
+    });
   </script>
-
 {% endblock js %}

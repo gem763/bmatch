@@ -21,12 +21,6 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 def intro(request):
     return render(request, 'intro.html')
 
-def discover(request):
-    # if request.user.is_authenticated:
-    #     messages.info(request, "Welcome")
-
-    return render(request, 'discover.html')
-
 def searched(request):
     search = request.GET.get('search', '')
 
@@ -50,16 +44,19 @@ def db_update(request, category):
     #brands = Brand.objects.exclude(logo_url='')
     return HttpResponse('updated') #render(request, 'rating.html', {'brands':brands})
 
-def brands(request):
+def discover(request):
+    # if request.user.is_authenticated:
+    #     messages.info(request, "Welcome")
+
     brands = Brand.objects.all()#filter(pk__range=(0,50)) #all()
-    return render(request, 'brands.html', {'brands':brands})
+    return render(request, 'discover.html', {'brands':brands})
 
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    # brand.wordfreq = json.loads(brand.wordfreq)
-    brand.wordfreq = dict(sorted(json.loads(brand.wordfreq).items(), key=lambda x: x[1])[-100:])
+    brand.wordfreq = json.loads(brand.wordfreq)
+    # brand.wordfreq = dict(sorted(json.loads(brand.wordfreq).items(), key=lambda x: x[1])[-100:])
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
@@ -78,11 +75,6 @@ def analysis(request):
     return render(request, 'analysis.html')
 
 
-def wc(request, bname):
-    brand = Brand.objects.get(name=bname)
-    wordfreq = json.loads(brand.wordfreq)
-    return render(request, 'wc.html', {'wordfreq':wordfreq})
-
 class BrandListView(AjaxListView):
     context_object_name = 'brand_list'
     template_name = 'brand_list.html'
@@ -99,20 +91,6 @@ class BrandListView(AjaxListView):
             qs = qs.filter(q_objects)
 
         return qs
-
-
-# def identities(request, bname):
-#     df = pd.read_pickle('id_dict.pkl')
-#     min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0.1, 1))
-#     X_train_minmax = min_max_scaler.fit_transform(df)
-#     df[:] = X_train_minmax
-#
-#     _df = df[[bname]].reset_index().rename(columns={'index':'key', bname:'value'})
-#     #df.value[:] = X_train_minmax
-#
-#     _df.value = (_df.value*100).astype(int)
-#     idty = _df.to_dict('record')
-#     return JsonResponse({'idty':idty})
 
 
 def gtrend(request, brand_name):
