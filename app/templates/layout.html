@@ -44,11 +44,11 @@
       {% block content %}{% endblock content %}
     </div>
 
-    <div class="ui text container">
+    <!-- <div class="ui text container">
       <div class="ui orange circular icon massive button" style="position:fixed;bottom:10px;" id="search-btn">
         <i class="search icon"></i>
       </div>
-    </div>
+    </div> -->
 
   </div>
 
@@ -68,9 +68,9 @@
         .modal('attach events', '.login.item', 'show')
         .modal('attach events', '.login.button', 'show');
 
-      $('#searcher')
-        .modal('setting', 'transition', 'fade down')
-        .modal('attach events', '#search-btn', 'show');
+      // $('#searcher')
+      //   .modal('setting', 'transition', 'fade down')
+      //   .modal('attach events', '#search-btn', 'show');
 
       $('#sidebar-bmatch')
         .sidebar('setting', 'transition', 'overlay')

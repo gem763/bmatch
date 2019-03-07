@@ -4,8 +4,20 @@
   {% include "menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
 
+
 {% block content %}
 <div class="ui text container">
+
+  <div class="ui fluid large category search">
+    <div class="ui fluid icon input">
+      <input class="prompt" type="text" placeholder="Search...">
+      <i class="search icon"></i>
+    </div>
+    <div class="results"></div>
+  </div>
+
+  <br>
+
   <div class="ui five doubling brandlist cards">
     {% include page_template %}
   </div>
