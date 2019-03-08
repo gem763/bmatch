@@ -19,7 +19,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 # Create your views here.
 
 def intro(request):
-    return render(request, 'intro.html')
+    return render(request, 'app/intro.html')
 
 def searched(request):
     search = request.GET.get('search', '')
@@ -44,12 +44,13 @@ def db_update(request, category):
     #brands = Brand.objects.exclude(logo_url='')
     return HttpResponse('updated') #render(request, 'rating.html', {'brands':brands})
 
-def discover(request):
-    # if request.user.is_authenticated:
-    #     messages.info(request, "Welcome")
-
-    brands = Brand.objects.all()#filter(pk__range=(0,50)) #all()
-    return render(request, 'discover.html', {'brands':brands})
+# def discover(request):
+#     # if request.user.is_authenticated:
+#     #     messages.info(request, "Welcome")
+#
+#     #brands = Brand.objects.all()#filter(pk__range=(0,50)) #all()
+#     brands = Brand.objects.order_by('-name')
+#     return render(request, 'discover.html', {'brands':brands})
 
 
 def brand_detail(request, bname):
@@ -62,32 +63,32 @@ def brand_detail(request, bname):
         idty['key0'], idty['key1'] = idty['key'].split('-')
 
     simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
-    return render(request, 'brand_detail.html', {'brand':brand, 'simbrands':simbrands})
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands':simbrands})
 
 
 def me(request):
-    return render(request, 'me.html')
+    return render(request, 'app/me.html')
 
 def sharing(request):
-    return render(request, 'sharing.html')
+    return render(request, 'app/sharing.html')
 
 def analysis(request):
-    return render(request, 'analysis.html')
+    return render(request, 'app/analysis.html')
 
 
 class DiscoverView(AjaxListView):
     context_object_name = 'brands'
-    template_name = 'discover.html'
-    page_template = 'discover_page.html'
+    template_name = 'app/discover.html'
+    page_template = 'app/discover_page.html'
 
     def get_queryset(self):
-        return Brand.objects.all()
+        return Brand.objects.order_by('name')
 
 
 class BrandListView(AjaxListView):
     context_object_name = 'brand_list'
-    template_name = 'brand_list.html'
-    page_template = 'brand_list_page.html'
+    template_name = 'app/brand_list.html'
+    page_template = 'app/brand_list_page.html'
 
     def get_queryset(self):
         qs = Brand.objects.exclude(logo_url='')
@@ -100,6 +101,11 @@ class BrandListView(AjaxListView):
             qs = qs.filter(q_objects)
 
         return qs
+
+
+def bnames(request):
+    brands = Brand.objects.all()
+    return JsonResponse([{'title':brand.name} for brand in brands], safe=False)
 
 
 def gtrend(request, brand_name):

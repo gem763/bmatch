@@ -2,7 +2,8 @@
 {% lazy_paginate 30 brands %}
 
 {% for brand in brands %}
-  <a class="card" style="padding:5px" href="/brands/{{brand.name}}">
+  <!-- <a class="card" style="padding:5px" href="/brands/{{brand.name}}"> -->
+  <a class="card" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
     <div class="blurring dimmable image" style="background:transparent;margin:auto;">
       <div class="ui inverted dimmer">
         <div class="content">

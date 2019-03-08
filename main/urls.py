@@ -18,37 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import intro, discover, searched, brand_detail, analysis, me, BrandListView, db_update, gtrend, sharing, DiscoverView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # path('users/', include('users.urls')),
-    path('accounts/', include('allauth.urls')),
-    # path('users/', include('django.contrib.auth.urls')),
-
-    # path('login/', login, name='login'),
-    # path('logout/', logout, name='logout'),
-    # path('auth/', include('social_django.urls', namespace='social')),
-
-
-    path('', DiscoverView.as_view(), name='home'),
-    path('discover/', DiscoverView.as_view()),
-    # path('discover/', discover),
-    #path('searched/', searched),
-    path('searched/', BrandListView.as_view()),
-    #path('rating/', rating),
-    path('db_update/<category>/', db_update),
-    path('rating/', BrandListView.as_view()),
-    path('brands/<bname>/', brand_detail),
-    # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
-    path('brands/<brand_name>/gtrend/', gtrend, name='gtrend'),
-    #path('brands/<bname>/identities/', identities, name='identities'),
-
-    path('analysis/', analysis),
-    path('me/', me),
-    path('sharing/', sharing),
+    path('', include('app.urls')), 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

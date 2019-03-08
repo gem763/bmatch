@@ -1,18 +1,15 @@
-{% extends "layout.html" %}
+{% extends "app/layout.html" %}
 
 {% block menu_top %}
-  {% include "menu_top.html" with discover_act="active" %}
+  {% include "app/menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
 
 
 {% block content %}
 <div class="ui text container">
 
-<div class="ui search button">
-  Follow
-</div>
-
-<form class="ui form">
+<form class="ui form" action="sharing">
+  {% csrf_token %}
   <div class="ui fluid large search">
     <div class="ui fluid left icon input">
       <input class="prompt" type="text" placeholder="Search...">
@@ -46,25 +43,14 @@
         on: 'hover'
       });
 
-      var content = [
-        { category:'Sports', title:'Adidas' },
-        { category:'Sports', title:'Nike' },
-        { category:'Luxury', title:'Prada' },
-        { category:'Luxury', title:'Asics' },
-        { category:'Streetwear', title:'Pepper' },
-      ];
-
-      // $('.ui.search').search({
-      //   //type: 'category',
-      //   source: content,
-      //   //apiSettings: { url: '/sharing' },
-      //   //onSelect(result, response){ window.location.href = result.url; }
-      // });
-
-      $('.ui.input input').on('keydown', function(e){
-        if(e.which === 13) //enter
-          window.location.href = "http://127.0.0.1:8000/sharing/";
-       });
+      // 브랜드명 리스트를 받아오면($.get) 서치 source를 채워라
+      // source = [{title:nike}, {title:adidas}, ...]
+      $.get('{% url "bnames" %}', function(data) {
+        $('.ui.search').search({
+          //type: 'category',
+          source: data,
+        });
+      });
 
     });
   </script>
