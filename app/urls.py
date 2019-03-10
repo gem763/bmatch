@@ -31,7 +31,7 @@ urlpatterns = [
 
 
     path('', v.DiscoverView.as_view(), name='home'),
-    path('discover/', v.DiscoverView.as_view()),
+    path('discover/', v.DiscoverView.as_view(), name='discover'),
     # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),

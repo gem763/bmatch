@@ -91,21 +91,23 @@
       <div class="meta">2 days ago</div>
     </div>
     <div class="content">
-      <div class="ui small feed">
-        <table class="ui very basic fixed selectable unstackable very compact table">
-          <tbody>
-            {% for idty in brand.identity %}
-              <tr>
-                <td class="right aligned four wide">{{idty.key1}}</td>
-                <td class="eight wide" style="background:#eaeded;padding:0 10% 0 10%">
-                  <button class="ui green icon button" style="margin-left:{{idty.value}}%"></button>
-                </td>
-                <td class="left aligned four wide">{{idty.key0}}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      {% if brand.identity %}
+        <div class="ui small feed">
+          <table class="ui very basic fixed selectable unstackable very compact table">
+            <tbody>
+              {% for idty in brand.identity %}
+                <tr>
+                  <td class="right aligned four wide">{{idty.key1}}</td>
+                  <td class="eight wide" style="background:#eaeded;padding:0 10% 0 10%">
+                    <button class="ui green icon button" style="margin-left:{{idty.value}}%"></button>
+                  </td>
+                  <td class="left aligned four wide">{{idty.key0}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
     </div>
   </div>
 
@@ -143,7 +145,7 @@
 
         <div class="ui five doubling brandlist cards">
           {% for sbrand in simbrands %}
-            <a class="card" style="padding:5px" href="/brands/{{sbrand.name}}">
+            <a class="card" data-tooltip="{{ sbrand.name }}" style="padding:5px" href="/brands/{{sbrand.name}}">
               <div class="blurring dimmable image" style="background:transparent;margin:auto;">
                 <div class="ui inverted dimmer">
                   <div class="content">

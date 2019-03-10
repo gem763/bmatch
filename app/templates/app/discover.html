@@ -6,24 +6,61 @@
 
 
 {% block content %}
+<style>
+  img.brand {
+    object-fit: contain;
+    width: 110px;
+    height: 110px;
+    margin: auto;
+    border-radius: 0 !important;
+  }
+</style>
+
 <div class="ui text container">
 
-<form class="ui form" action="sharing">
-  {% csrf_token %}
-  <div class="ui fluid large search">
-    <div class="ui fluid left icon input">
-      <input class="prompt" type="text" placeholder="Search...">
-      <i class="search link icon"></i>
+  <form class="ui form" action="{% url 'discover' %}" method="get">
+    <!-- {% csrf_token %} -->
+    <div class="ui fluid search">
+      <div class="ui large fluid left icon input">
+        <input class="prompt" type="text" placeholder="Search..." name="q">
+        <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
     </div>
-    <div class="results"></div>
-  </div>
-</form>
+  </form>
 
   <br>
 
-  <div class="ui five doubling brandlist cards">
-    {% include page_template %}
-  </div>
+
+  {% if brands.exact %}
+    <h3 class="ui header">Exact</h3>
+    <div class="ui five doubling cards">
+      <a class="card" data-tooltip="{{ brands.exact.name }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
+        <img class="brand" src="{{ brands.exact.logo.url }}" alt="{{ brands.exact.name }}">
+      </a>
+    </div>
+  {% endif %}
+
+
+  {% if brands.similar %}
+    <div class="ui section divider"></div>
+    <h3 class="ui header">Similar</h3>
+    <div class="ui five doubling cards">
+      {% for brand in brands.similar %}
+        <a class="brand card" data-tooltip="{{ brand.name }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  {% if brands.all %}
+    <div class="ui five doubling cards">
+      {% include page_template %}
+    </div>
+  {% endif %}
+
 </div>
 {% endblock content %}
 
@@ -39,18 +76,84 @@
         paginateOnScrollMargin: 100,
       });
 
-      $('.brandlist.cards .image').dimmer({
-        on: 'hover'
-      });
+      // $('.brandlist.cards .image').dimmer({
+      //   on: 'hover'
+      // });
+
+      $('.ui.search').search({
+          //type: 'category',
+          apiSettings: {
+            // action: 'search',
+            // url: '/search/{query111}',
+            // urlData: {
+            //   query: 'nike'
+            // }
+            // action: 'search',
+            // data: {},
+            // beforeSend: function(settings) {
+            //   console.log(1);
+            //   settings.urlData = {value: $('.ui.search input').val()};
+            //   // console.log(settings.data);
+            //   return settings;
+            // },
+            url: '//api.github.com/search/repositories?q={query}',
+            onResponse: data => {
+            	console.log(data);
+            	// if(data.items.length > 3) {
+              // 	data['action'] = {text: "Too many results", url: "#"}
+      				// }
+              return data;
+      			}
+          },
+          source: {{ brands.searcher | safe }},
+          fullTextSearch: true,
+          maxResults: 5,
+          searchFields: ['title', 'description'],
+          templates: {
+            standard: function(response){
+              htmls = $.map(response.results, function(item) {
+                        var html = '<a class="result" style="height:100px">';
+                        html += '<div class="image" style="height:80px;width:80px;">'
+                              + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
+                              + '</div>';
+                        html += '<div class="content">';
+                        html += '<div class="title">' + item.title + '</div>';
+                        html += '<div class="description">' + item.description + '</div>';
+                        html += '</div>';
+                        html += '</a>';
+                        return html
+                      });
+
+              return htmls
+            },
+          },
+        });
+
+      // $.fn.search.settings.templates = {
+      //   standard: function(response) {
+      //    // Create the DOM as as it normally should be
+      //    return response;
+      //   }
+      // };
+
 
       // 브랜드명 리스트를 받아오면($.get) 서치 source를 채워라
       // source = [{title:nike}, {title:adidas}, ...]
-      $.get('{% url "bnames" %}', function(data) {
-        $('.ui.search').search({
-          //type: 'category',
-          source: data,
-        });
-      });
+      // $.get('{% url "bnames" %}', function(data) {
+      //   $('.ui.search').search({
+      //     //type: 'category',
+      //     source: data,
+      //     fullTextSearch: true
+      //   });
+      // });
+
+      // $('.ui.dropdown').dropdown({
+      //     // values: data,
+      //     clearable: true,
+      //     allowAdditions: true,
+      //     fullTextSearch: true
+      //     // maxSelections: 3
+      // });
 
     });
   </script>

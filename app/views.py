@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.urls import reverse
 from django.views.generic.list import ListView
 from django.db.models import Q
+from django.conf import settings
 # from django.contrib import messages
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
@@ -80,9 +82,34 @@ class DiscoverView(AjaxListView):
     context_object_name = 'brands'
     template_name = 'app/discover.html'
     page_template = 'app/discover_page.html'
+    qry = None
 
     def get_queryset(self):
-        return Brand.objects.order_by('name')
+        brands = Brand.objects
+        imgurl = lambda brand: os.path.join(settings.MEDIA_URL, str(brand.logo))
+        searcher = [{'title':brand.name, 'image':imgurl(brand), 'description':'여기엔 뭘 넣을까요'} for brand in brands.all()]
+        # searcher = [{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands.all()]
+
+        if self.qry is None:
+            exact = None
+            similar = None
+            all = brands.order_by('name')
+
+        else:
+            exact = brands.get(name=self.qry)
+            similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
+            all = None
+
+        return {'exact':exact, 'similar':similar, 'all':all, 'searcher':searcher}
+
+
+    def get(self, request):
+        q = request.GET.get('q', None)
+        if q is not None:
+            self.qry = q
+
+        return super().get(request)
+        # return HttpResponse(q)
 
 
 class BrandListView(AjaxListView):
@@ -105,7 +132,8 @@ class BrandListView(AjaxListView):
 
 def bnames(request):
     brands = Brand.objects.all()
-    return JsonResponse([{'title':brand.name} for brand in brands], safe=False)
+    return JsonResponse([{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands], safe=False)
+    #return JsonResponse([{'title':brand.name} for brand in brands], safe=False)
 
 
 def gtrend(request, brand_name):
