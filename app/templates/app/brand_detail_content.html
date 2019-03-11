@@ -17,10 +17,30 @@
 
 <div class="ui text container">
 
-  <img src="{{brand.logo.url}}" alt="{{brand.name}}" class="ui centered image" style="padding:10px;height:300px">
+  <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="padding:10px;height:300px">
   <br>
   <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
   <div class="sub header">{{brand.name}}</div>
+
+
+  <table class="ui selectable celled unstackable very compact small definition table">
+    <tbody>
+      <tr>
+        <td class="right aligned three wide">Origin</td>
+        <td class="left aligend thirteen wide">{{ brand.origin }}</td>
+      </tr>
+
+      <tr>
+        <td class="right aligned">Website</td>
+        <td class="left aligned selectable">
+          <a href="//{{ brand.website }}">
+            {{ brand.website }}
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
 
   <!-- <div class="ui fluid card">
     <div class="content">

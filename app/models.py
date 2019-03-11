@@ -5,16 +5,14 @@ from django.conf import settings
 
 class Brand(models.Model):
     name = models.CharField(max_length=120)
-    #category = models.CharField(max_length=120)
-    #price = models.IntegerField(default=1)
-    #origin = models.CharField(max_length=120)
-    #logo = models.ImageField(blank=True)
-    #logo_url = models.CharField(max_length=120)
-    #description = models.TextField()
+    fullname_kr = models.CharField(max_length=120, blank=True, null=True)
+    fullname_en = models.CharField(max_length=120, blank=True, null=True)
+    website = models.CharField(max_length=200, blank=True, null=True)
+    origin = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(default='')
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
     identity = models.TextField(default='{}')
     cluster = models.CharField(max_length=50, blank=True, null=True)
-    #wordcloud = models.ImageField(blank=True)
     wordfreq = models.TextField(blank=True, null=True)
 
     def __str__(self):
