@@ -35,7 +35,7 @@
   {% if brands.exact %}
     <h3 class="ui header">Exact</h3>
     <div class="ui five doubling cards">
-      <a class="card" data-tooltip="{{ brands.exact.name }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
+      <a class="card" data-tooltip="{{ brands.exact.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
         <img class="brand" src="{{ brands.exact.logo.url }}" alt="{{ brands.exact.name }}">
       </a>
     </div>
@@ -47,7 +47,7 @@
     <h3 class="ui header">Similar</h3>
     <div class="ui five doubling cards">
       {% for brand in brands.similar %}
-        <a class="brand card" data-tooltip="{{ brand.name }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+        <a class="brand card" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
           <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
         </a>
       {% endfor %}
@@ -81,7 +81,6 @@
       // });
 
       $('.ui.search').search({
-          //type: 'category',
           apiSettings: {
             // action: 'search',
             // url: '/search/{query111}',
@@ -96,14 +95,11 @@
             //   // console.log(settings.data);
             //   return settings;
             // },
-            url: '//api.github.com/search/repositories?q={query}',
-            onResponse: data => {
-            	console.log(data);
-            	// if(data.items.length > 3) {
-              // 	data['action'] = {text: "Too many results", url: "#"}
-      				// }
-              return data;
-      			}
+            // url: '//api.github.com/search/repositories?q={query}',
+            // onResponse: data => {
+            // 	console.log(data);
+            //   return data;
+      			// }
           },
           source: {{ brands.searcher | safe }},
           fullTextSearch: true,
@@ -128,13 +124,6 @@
             },
           },
         });
-
-      // $.fn.search.settings.templates = {
-      //   standard: function(response) {
-      //    // Create the DOM as as it normally should be
-      //    return response;
-      //   }
-      // };
 
 
       // 브랜드명 리스트를 받아오면($.get) 서치 source를 채워라

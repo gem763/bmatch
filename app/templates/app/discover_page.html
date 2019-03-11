@@ -2,7 +2,7 @@
 {% lazy_paginate 30 brands.all as allbrands %}
 
 {% for brand in allbrands %}
-  <a class="brand card" data-tooltip="{{ brand.name }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+  <a class="brand card" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
     <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
   </a>
 {% endfor %}

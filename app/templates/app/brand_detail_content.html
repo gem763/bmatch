@@ -20,14 +20,28 @@
   <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="padding:10px;height:300px">
   <br>
   <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
-  <div class="sub header">{{brand.name}}</div>
 
 
   <table class="ui selectable celled unstackable very compact small definition table">
     <tbody>
       <tr>
-        <td class="right aligned three wide">Origin</td>
-        <td class="left aligend thirteen wide">{{ brand.origin }}</td>
+        <td class="right aligned three wide">Name</td>
+        <td class="left aligend thirteen wide">{{ brand.fullname_en }} ({{ brand.fullname_kr }})</td>
+      </tr>
+
+      <tr>
+        <td class="right aligned">Origin</td>
+        <td class="left aligend">{{ brand.origin }}</td>
+      </tr>
+
+      <tr>
+        <td class="right aligned">Description</td>
+        <td class="left aligend">{{ brand.description }}</td>
+      </tr>
+
+      <tr>
+        <td class="right aligned">History</td>
+        <td class="left aligend">{{ brand.history }}</td>
       </tr>
 
       <tr>
@@ -78,33 +92,6 @@
   </div> -->
 
 
-  <!-- <div class="ui fluid card">
-    <div class="content">
-      <div class="header">종합평가</div>
-      <div class="meta">2 days ago</div>
-    </div>
-    <div class="content">
-      <div class="ui small feed">
-        <p>블라블라</p>
-        <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- <div class="ui fluid card">
-    <div class="content">
-      <div class="header">Brand identity</div>
-      <div class="meta">2 days ago</div>
-    </div>
-    <div class="content">
-      <div class="ui small feed">
-        <table class="ui very basic fixed selectable unstackable very compact table">
-          <tbody id="identities"></tbody>
-        </table>
-      </div>
-    </div>
-  </div> -->
-
   <div class="ui fluid card">
     <div class="content">
       <div class="header">Brand identity</div>
@@ -132,29 +119,6 @@
   </div>
 
 
-  <!-- <div class="ui fluid card">
-    <div class="content">
-      <div class="header">Brand identity</div>
-      <div class="meta">2 days ago</div>
-    </div>
-    <div class="content">
-      <div class="ui small feed">
-        <table class="ui very basic fixed selectable unstackable very compact table">
-          <tbody>
-            {% for idty in brand.identity %}
-              <tr>
-                <td class="right aligned eight wide">{{idty.key}}</td>
-                <td class="eight wide" style="padding:0 5% 0 0">
-                  <button class="ui green mini compact right aligned button" style="border-radius:0 20px 20px 0;width:{{idty.value}}%">{{idty.value}}</button>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div> -->
-
   <div class="ui fluid card">
     <div class="content">
       <div class="header">느낌이 비슷한 브랜드들</div>
@@ -165,7 +129,7 @@
 
         <div class="ui five doubling brandlist cards">
           {% for sbrand in simbrands %}
-            <a class="card" data-tooltip="{{ sbrand.name }}" style="padding:5px" href="/brands/{{sbrand.name}}">
+            <a class="card" data-tooltip="{{ sbrand.fullname_en }}" style="padding:5px" href="/brands/{{sbrand.name}}">
               <div class="blurring dimmable image" style="background:transparent;margin:auto;">
                 <div class="ui inverted dimmer">
                   <div class="content">

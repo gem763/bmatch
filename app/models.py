@@ -10,6 +10,7 @@ class Brand(models.Model):
     website = models.CharField(max_length=200, blank=True, null=True)
     origin = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(default='')
+    history = models.TextField(default='')
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
     identity = models.TextField(default='{}')
     cluster = models.CharField(max_length=50, blank=True, null=True)

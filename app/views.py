@@ -87,7 +87,7 @@ class DiscoverView(AjaxListView):
     def get_queryset(self):
         brands = Brand.objects
         imgurl = lambda brand: os.path.join(settings.MEDIA_URL, str(brand.logo))
-        searcher = [{'title':brand.name, 'image':imgurl(brand), 'description':'여기엔 뭘 넣을까요'} for brand in brands.all()]
+        searcher = [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'image':imgurl(brand)} for brand in brands.all()]
         # searcher = [{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands.all()]
 
         if self.qry is None:
@@ -96,8 +96,8 @@ class DiscoverView(AjaxListView):
             all = brands.order_by('name')
 
         else:
-            exact = brands.get(name=self.qry)
-            similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
+            exact = brands.get(fullname_en=self.qry)
+            similar = brands.filter(cluster=exact.cluster).exclude(fullname_en=exact.fullname_en).order_by('name')
             all = None
 
         return {'exact':exact, 'similar':similar, 'all':all, 'searcher':searcher}
