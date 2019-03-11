@@ -35,7 +35,7 @@
   {% if brands.exact %}
     <h3 class="ui header">Exact</h3>
     <div class="ui five doubling cards">
-      <a class="card" data-tooltip="{{ brands.exact.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
+      <a class="card" data-inverted="" data-tooltip="{{ brands.exact.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
         <img class="brand" src="{{ brands.exact.logo.url }}" alt="{{ brands.exact.name }}">
       </a>
     </div>
@@ -47,7 +47,7 @@
     <h3 class="ui header">Similar</h3>
     <div class="ui five doubling cards">
       {% for brand in brands.similar %}
-        <a class="brand card" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
           <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
         </a>
       {% endfor %}
@@ -81,26 +81,7 @@
       // });
 
       $('.ui.search').search({
-          apiSettings: {
-            // action: 'search',
-            // url: '/search/{query111}',
-            // urlData: {
-            //   query: 'nike'
-            // }
-            // action: 'search',
-            // data: {},
-            // beforeSend: function(settings) {
-            //   console.log(1);
-            //   settings.urlData = {value: $('.ui.search input').val()};
-            //   // console.log(settings.data);
-            //   return settings;
-            // },
-            // url: '//api.github.com/search/repositories?q={query}',
-            // onResponse: data => {
-            // 	console.log(data);
-            //   return data;
-      			// }
-          },
+          // apiSettings: {},
           source: {{ brands.searcher | safe }},
           fullTextSearch: true,
           maxResults: 5,
@@ -108,13 +89,16 @@
           templates: {
             standard: function(response){
               htmls = $.map(response.results, function(item) {
-                        var html = '<a class="result" style="height:100px">';
+                        var whereto = "{% url 'discover' %}?q=" + item.title;
+                        var html = '<a class="result" style="height:100px" href="' + whereto + '">';
                         html += '<div class="image" style="height:80px;width:80px;">'
                               + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
                               + '</div>';
                         html += '<div class="content">';
-                        html += '<div class="title">' + item.title + '</div>';
-                        html += '<div class="description">' + item.description + '</div>';
+                        html += '<div class="ui header">' + item.title + '</div>';
+                        // html += '<div class="title">' + item.title + '</div>';
+                        html += '<div class="sub header">' + item.description + '</div>';
+                        // html += '<div class="description">' + item.description + '</div>';
                         html += '</div>';
                         html += '</a>';
                         return html
@@ -135,6 +119,10 @@
       //     fullTextSearch: true
       //   });
       // });
+
+      $.get('{% url "search" "섹시 청바지" %}', function(data) {
+        console.log(data);
+      });
 
       // $('.ui.dropdown').dropdown({
       //     // values: data,

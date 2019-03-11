@@ -15,6 +15,7 @@ import math
 import glob
 import os
 import pandas as pd
+import requests
 from django.contrib.staticfiles.storage import staticfiles_storage
 # from sklearn import preprocessing
 
@@ -76,6 +77,15 @@ def sharing(request):
 
 def analysis(request):
     return render(request, 'app/analysis.html')
+
+def search(request, qry):
+    bnames = ' '.join([brand.name for brand in Brand.objects.all()])
+    url_base = 'http://127.0.0.5:8000/api/search/?'
+    url = url_base + 'q=' + qry + '&b=' + bnames
+    req = requests.get(url)
+    res = json.loads(req.text)
+    res = dict(sorted(res.items(), key=lambda x: x[1])[:20])
+    return JsonResponse(res)
 
 
 class DiscoverView(AjaxListView):
