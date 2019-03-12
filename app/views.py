@@ -20,6 +20,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 
 api = 'http://127.0.0.1:8080/api'
+# api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
 def intro(request):
@@ -60,8 +61,7 @@ def db_update(request, category):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    brand.wordfreq = json.loads(brand.wordfreq)
-    # brand.wordfreq = dict(sorted(json.loads(brand.wordfreq).items(), key=lambda x: x[1])[-100:])
+    brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')]) #json.loads(brand.wordfreq)
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
@@ -88,6 +88,13 @@ def search(request, qry):
     res = json.loads(req.text)
     # res = dict(sorted(res.items(), key=lambda x: x[1])[:20])
     return JsonResponse({k:v for k,v in res.items() if v>0.5})
+
+
+def _simwords_to_brand(words):
+    baseurl = api + '/simwords/?b={b}'
+    url = baseurl.format(b=' '.join(words))
+    req = requests.get(url)
+    return json.loads(req.text)
 
 
 def _brandscore_to_qry(qry, bnames):
@@ -136,7 +143,8 @@ class DiscoverView(AjaxListView):
         else:
             bnames = _brands_by_field(brands, 'name')
             scores = _brandscore_to_qry(self.qry, bnames)
-            candidates = [k for k,v in scores.items() if v>0.5]
+            # print(scores)
+            candidates = [k for k,v in scores.items() if v>0.4]
             similar = brands.filter(name__in=candidates).order_by('name')
 
         return {'exact':exact, 'similar':similar, 'all':all, 'search_helper':search_helper}
