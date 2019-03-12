@@ -82,7 +82,7 @@
 
       $('.ui.search').search({
           // apiSettings: {},
-          source: {{ brands.searcher | safe }},
+          source: {{ brands.search_helper | safe }},
           fullTextSearch: true,
           maxResults: 5,
           searchFields: ['title', 'description'],
@@ -110,19 +110,9 @@
         });
 
 
-      // 브랜드명 리스트를 받아오면($.get) 서치 source를 채워라
-      // source = [{title:nike}, {title:adidas}, ...]
-      // $.get('{% url "bnames" %}', function(data) {
-      //   $('.ui.search').search({
-      //     //type: 'category',
-      //     source: data,
-      //     fullTextSearch: true
-      //   });
+      // $.get('{% url "search" "비오는날 어울리는 명품 신발" %}', function(data) {
+      //   console.log(data);
       // });
-
-      $.get('{% url "search" "섹시 청바지" %}', function(data) {
-        console.log(data);
-      });
 
       // $('.ui.dropdown').dropdown({
       //     // values: data,

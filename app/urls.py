@@ -41,7 +41,7 @@ urlpatterns = [
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
     path('brands/<brand_name>/gtrend/', v.gtrend, name='gtrend'),
-    path('bnames/', v.bnames, name='bnames'),
+    # path('bnames/', v.bnames, name='bnames'),
     #path('brands/<bname>/identities/', identities, name='identities'),
 
     path('analysis/', v.analysis),

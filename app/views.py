@@ -17,9 +17,10 @@ import os
 import pandas as pd
 import requests
 from django.contrib.staticfiles.storage import staticfiles_storage
-# from sklearn import preprocessing
 
-# Create your views here.
+
+api = 'http://127.0.0.1:8080/api'
+
 
 def intro(request):
     return render(request, 'app/intro.html')
@@ -78,14 +79,34 @@ def sharing(request):
 def analysis(request):
     return render(request, 'app/analysis.html')
 
+
 def search(request, qry):
     bnames = ' '.join([brand.name for brand in Brand.objects.all()])
-    url_base = 'http://127.0.0.5:8000/api/search/?'
+    url_base = 'http://127.0.0.1:8080/api/search/?'
     url = url_base + 'q=' + qry + '&b=' + bnames
     req = requests.get(url)
     res = json.loads(req.text)
-    res = dict(sorted(res.items(), key=lambda x: x[1])[:20])
-    return JsonResponse(res)
+    # res = dict(sorted(res.items(), key=lambda x: x[1])[:20])
+    return JsonResponse({k:v for k,v in res.items() if v>0.5})
+
+
+def _brandscore_to_qry(qry, bnames):
+    baseurl = api + '/search/?q={q}&b={b}'
+    url = baseurl.format(q=qry, b=' '.join(bnames))
+    #url_base = 'http://127.0.0.1:8080/api/search/?'
+    #url = url_base + 'q=' + qry + '&b=' + ' '.join(bnames)
+    req = requests.get(url)
+    return json.loads(req.text)
+
+
+# 주어진 Brand 객체의 로고 이미지 주소
+def _imgurl(brand):
+    return os.path.join(settings.MEDIA_URL, str(brand.logo))
+
+
+# 주어진 Brands <QuerySet>에 대하혀, 특정 필드 출력
+def _brands_by_field(brands, f):
+    return [getattr(brand, f) for brand in brands.all()]
 
 
 class DiscoverView(AjaxListView):
@@ -96,21 +117,29 @@ class DiscoverView(AjaxListView):
 
     def get_queryset(self):
         brands = Brand.objects
-        imgurl = lambda brand: os.path.join(settings.MEDIA_URL, str(brand.logo))
-        searcher = [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'image':imgurl(brand)} for brand in brands.all()]
-        # searcher = [{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands.all()]
+        search_helper = [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'image':_imgurl(brand)} for brand in brands.all()]
 
+        all = None
+        exact = None
+        similar = None
+
+        # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
-            exact = None
-            similar = None
             all = brands.order_by('name')
 
-        else:
+        # 브랜드명(fullname_en)이 입력된 경우
+        elif self.qry in _brands_by_field(brands, 'fullname_en'):
             exact = brands.get(fullname_en=self.qry)
             similar = brands.filter(cluster=exact.cluster).exclude(fullname_en=exact.fullname_en).order_by('name')
-            all = None
 
-        return {'exact':exact, 'similar':similar, 'all':all, 'searcher':searcher}
+        # 여러가지 키워드들이 입력된 경우
+        else:
+            bnames = _brands_by_field(brands, 'name')
+            scores = _brandscore_to_qry(self.qry, bnames)
+            candidates = [k for k,v in scores.items() if v>0.5]
+            similar = brands.filter(name__in=candidates).order_by('name')
+
+        return {'exact':exact, 'similar':similar, 'all':all, 'search_helper':search_helper}
 
 
     def get(self, request):
@@ -119,7 +148,6 @@ class DiscoverView(AjaxListView):
             self.qry = q
 
         return super().get(request)
-        # return HttpResponse(q)
 
 
 class BrandListView(AjaxListView):
@@ -140,9 +168,9 @@ class BrandListView(AjaxListView):
         return qs
 
 
-def bnames(request):
-    brands = Brand.objects.all()
-    return JsonResponse([{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands], safe=False)
+# def bnames(request):
+#     brands = Brand.objects.all()
+#     return JsonResponse([{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands], safe=False)
     #return JsonResponse([{'title':brand.name} for brand in brands], safe=False)
 
 
