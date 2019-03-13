@@ -36,8 +36,19 @@
 
   <br>
 
-
   {% if brands.all %}
+    <div style="text-align:center">
+      <div class="ui pagination mini menu">
+        <a class="item" id="0" onclick="paginate(this)">All</a>
+        <a class="item" id="1" onclick="paginate(this)">0-9</a>
+        <a class="item" id="2" onclick="paginate(this)">A B C D E F G</a>
+        <a class="item" id="3" onclick="paginate(this)">H I J K L M N</a>
+        <a class="item" id="4" onclick="paginate(this)">O P Q R S T U</a>
+        <a class="item" id="5" onclick="paginate(this)">V W X Y Z</a>
+      </div>
+    </div>
+    <br>
+
     <div class="ui five doubling cards">
       {% include page_template %}
     </div>
@@ -112,6 +123,11 @@
   {{ block.super }}
   <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
   <script>
+    function paginate(btn) {
+      url = "{% url 'discover' %}?p=" + btn.text
+      window.location.replace(url);
+    };
+
     $(document).ready(function(){
       $.endlessPaginate({
         paginateOnScroll: true,
@@ -123,7 +139,6 @@
       // });
 
       $('.ui.search').search({
-          // apiSettings: {},
           source: {{ brands.search_helper | safe }},
           fullTextSearch: true,
           maxResults: 5,
@@ -155,15 +170,6 @@
       // $.get('{% url "search" "비오는날 어울리는 명품 신발" %}', function(data) {
       //   console.log(data);
       // });
-
-      // $('.ui.dropdown').dropdown({
-      //     // values: data,
-      //     clearable: true,
-      //     allowAdditions: true,
-      //     fullTextSearch: true
-      //     // maxSelections: 3
-      // });
-
     });
   </script>
 {% endblock js %}

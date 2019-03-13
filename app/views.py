@@ -115,14 +115,21 @@ def _brands_by_field(brands, f):
     return [getattr(brand, f) for brand in brands.all()]
 
 
+def _indexer(bnames):
+    return sorted(list({bname[0] for bname in bnames}))
+
+
 class DiscoverView(AjaxListView):
     context_object_name = 'brands'
     template_name = 'app/discover.html'
     page_template = 'app/discover_page.html'
     qry = None
+    page = None
 
     def get_queryset(self):
         brands = Brand.objects
+        bnames = _brands_by_field(brands, 'name')
+        indexer = _indexer(bnames)
         search_helper = [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'image':_imgurl(brand)} for brand in brands.all()]
 
         all = None
@@ -133,7 +140,11 @@ class DiscoverView(AjaxListView):
 
         # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
-            all = brands.order_by('name')
+            if (self.page is None) | (self.page=='all'):
+                all = brands.order_by('name')
+            else:
+                _regex = r'^[' + self.page.replace(' ', '') + ']'
+                all = brands.filter(fullname_en__iregex=_regex).order_by('name')
 
         # 브랜드명(fullname_en)이 입력된 경우
         elif self.qry in _brands_by_field(brands, 'fullname_en'):
@@ -142,7 +153,6 @@ class DiscoverView(AjaxListView):
 
         # 여러가지 키워드들이 입력된 경우
         else:
-            bnames = _brands_by_field(brands, 'name')
             scores = _brandscore_to_qry(self.qry, bnames)
             _recommend = [k for k,v in scores.items() if v>0.4]
             _not_recommend = [k for k,v in scores.items() if v<0]
@@ -150,13 +160,17 @@ class DiscoverView(AjaxListView):
             recommend = brands.filter(name__in=_recommend).order_by('name')
             not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
 
-        return {'qry':self.qry, 'search_helper':search_helper, 'all':all, 'exact':exact, 'similar':similar, 'recommend':recommend, 'not_recommend':not_recommend}
+        return {'qry':self.qry, 'indexer':indexer, 'search_helper':search_helper, 'all':all, 'exact':exact, 'similar':similar, 'recommend':recommend, 'not_recommend':not_recommend}
 
 
     def get(self, request):
         q = request.GET.get('q', None)
         if q is not None:
             self.qry = q
+
+        p = request.GET.get('p', None)
+        if p is not None:
+            self.page = p.lower()
 
         return super().get(request)
 
