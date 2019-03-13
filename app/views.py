@@ -160,7 +160,16 @@ class DiscoverView(AjaxListView):
             recommend = brands.filter(name__in=_recommend).order_by('name')
             not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
 
-        return {'qry':self.qry, 'indexer':indexer, 'search_helper':search_helper, 'all':all, 'exact':exact, 'similar':similar, 'recommend':recommend, 'not_recommend':not_recommend}
+        return {
+            'qry':self.qry,
+            'indexer':indexer,
+            'search_helper':search_helper,
+            'all':all,
+            'exact':exact,
+            'similar':similar,
+            'recommend':recommend,
+            'not_recommend':not_recommend
+            }
 
 
     def get(self, request):

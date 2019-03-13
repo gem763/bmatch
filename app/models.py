@@ -7,6 +7,7 @@ class Brand(models.Model):
     name = models.CharField(max_length=120)
     fullname_kr = models.CharField(max_length=120, blank=True, null=True)
     fullname_en = models.CharField(max_length=120, blank=True, null=True)
+    keywords = models.TextField(default='')
     website = models.CharField(max_length=200, blank=True, null=True)
     origin = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(default='')
