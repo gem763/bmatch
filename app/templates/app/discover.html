@@ -21,9 +21,14 @@
   <form class="ui form" action="{% url 'discover' %}" method="get">
     <!-- {% csrf_token %} -->
     <div class="ui fluid search">
-      <div class="ui large fluid left icon input">
-        <input class="prompt" type="text" placeholder="Search..." name="q">
+      <div class="ui large fluid left icon action input">
+        {% if brands.qry %}
+          <input class="prompt" type="text" value="{{ brands.qry }}" name="q">
+        {% else %}
+          <input class="prompt" type="text" placeholder="예: adidas, 섹시 청바지, 가성비 끝판왕... " name="q">
+        {% endif %}
         <i class="search icon"></i>
+        <button class="ui button">Search</button>
       </div>
       <div class="results"></div>
     </div>
@@ -32,8 +37,18 @@
   <br>
 
 
+  {% if brands.all %}
+    <div class="ui five doubling cards">
+      {% include page_template %}
+    </div>
+  {% endif %}
+
+
   {% if brands.exact %}
-    <h3 class="ui header">Exact</h3>
+    <h3 class="ui header">
+      <i class='paperclip icon'></i>
+      <div class='content'>Exact</div>
+    </h3>
     <div class="ui five doubling cards">
       <a class="card" data-inverted="" data-tooltip="{{ brands.exact.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
         <img class="brand" src="{{ brands.exact.logo.url }}" alt="{{ brands.exact.name }}">
@@ -44,7 +59,10 @@
 
   {% if brands.similar %}
     <div class="ui section divider"></div>
-    <h3 class="ui header">Similar</h3>
+    <h3 class="ui header">
+      <i class='paperclip icon'></i>
+      <div class='content'>Similar</div>
+    </h3>
     <div class="ui five doubling cards">
       {% for brand in brands.similar %}
         <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
@@ -55,11 +73,35 @@
   {% endif %}
 
 
-  {% if brands.all %}
+  {% if brands.recommend %}
+    <h3 class="ui header">
+      <i class='paperclip icon'></i>
+      <div class='content'>Recommend</div>
+    </h3>
     <div class="ui five doubling cards">
-      {% include page_template %}
+      {% for brand in brands.recommend %}
+        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+        </a>
+      {% endfor %}
     </div>
   {% endif %}
+
+  {% if brands.not_recommend %}
+    <div class="ui section divider"></div>
+    <h3 class="ui header">
+      <i class='exclamation triangle icon'></i>
+      <div class='content'>Not Recommend</div>
+    </h3>
+    <div class="ui five doubling cards">
+      {% for brand in brands.not_recommend %}
+        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
+          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
 
 </div>
 {% endblock content %}
@@ -95,11 +137,11 @@
                               + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
                               + '</div>';
                         html += '<div class="content">';
-                        html += '<div class="ui header">' + item.title + '</div>';
+                        html += '<div class="ui header">' + item.title;
                         // html += '<div class="title">' + item.title + '</div>';
                         html += '<div class="sub header">' + item.description + '</div>';
                         // html += '<div class="description">' + item.description + '</div>';
-                        html += '</div>';
+                        html += '</div></div>';
                         html += '</a>';
                         return html
                       });

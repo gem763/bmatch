@@ -17,6 +17,7 @@ function WordCloud(options) {
 
   // seeded random number generator
   var arng = new alea('hello.');
+
   var word_entries = d3.entries(options.data);
 
   xScale.domain(d3.extent(word_entries, function(d) { return d.value; }));

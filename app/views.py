@@ -61,7 +61,7 @@ def db_update(request, category):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')]) #json.loads(brand.wordfreq)
+    brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')], amp=10)
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
@@ -90,18 +90,17 @@ def search(request, qry):
     return JsonResponse({k:v for k,v in res.items() if v>0.5})
 
 
-def _simwords_to_brand(words):
+def _simwords_to_brand(words, amp=None):
     baseurl = api + '/simwords/?b={b}'
     url = baseurl.format(b=' '.join(words))
     req = requests.get(url)
-    return json.loads(req.text)
+    res = json.loads(req.text)
+    return {k:v**amp for k,v in res.items()}
 
 
 def _brandscore_to_qry(qry, bnames):
     baseurl = api + '/search/?q={q}&b={b}'
     url = baseurl.format(q=qry, b=' '.join(bnames))
-    #url_base = 'http://127.0.0.1:8080/api/search/?'
-    #url = url_base + 'q=' + qry + '&b=' + ' '.join(bnames)
     req = requests.get(url)
     return json.loads(req.text)
 
@@ -129,6 +128,8 @@ class DiscoverView(AjaxListView):
         all = None
         exact = None
         similar = None
+        recommend = None
+        not_recommend = None
 
         # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
@@ -143,11 +144,13 @@ class DiscoverView(AjaxListView):
         else:
             bnames = _brands_by_field(brands, 'name')
             scores = _brandscore_to_qry(self.qry, bnames)
-            # print(scores)
-            candidates = [k for k,v in scores.items() if v>0.4]
-            similar = brands.filter(name__in=candidates).order_by('name')
+            _recommend = [k for k,v in scores.items() if v>0.4]
+            _not_recommend = [k for k,v in scores.items() if v<0]
 
-        return {'exact':exact, 'similar':similar, 'all':all, 'search_helper':search_helper}
+            recommend = brands.filter(name__in=_recommend).order_by('name')
+            not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
+
+        return {'qry':self.qry, 'search_helper':search_helper, 'all':all, 'exact':exact, 'similar':similar, 'recommend':recommend, 'not_recommend':not_recommend}
 
 
     def get(self, request):
