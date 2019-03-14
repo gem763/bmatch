@@ -17,6 +17,7 @@ import os
 import pandas as pd
 import requests
 from django.contrib.staticfiles.storage import staticfiles_storage
+# from django.views.decorators.csrf import csrf_exempt
 
 
 api = 'http://127.0.0.1:8080/api'
@@ -57,17 +58,29 @@ def db_update(request, category):
 #     brands = Brand.objects.order_by('-name')
 #     return render(request, 'discover.html', {'brands':brands})
 
-
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')], amp=10)
+    keywords = [kw.strip() for kw in brand.keywords.split(',')]
+    brand.wordfreq = _simwords(keywords, amp=10)
+    # brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')], amp=10)
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
 
     simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
-    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands':simbrands})
+
+    keywords_dict = _keywords_dict(Brand.objects)
+    simbrands_score = _simbrands(bname, keywords_dict)
+
+    for simbrand in simbrands:
+        try:
+            simbrand.score = round(simbrands_score[simbrand.name]*100)
+        except:
+            simbrand.score = -100
+
+    simbrands = sorted(simbrands, key=lambda x:-x.score)
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands':simbrands, 'simbrands_score':simbrands_score})
 
 
 def me(request):
@@ -90,19 +103,41 @@ def search(request, qry):
     return JsonResponse({k:v for k,v in res.items() if v>0.5})
 
 
-def _simwords_to_brand(words, amp=None):
-    baseurl = api + '/simwords/?b={b}'
-    url = baseurl.format(b=' '.join(words))
-    req = requests.get(url)
-    res = json.loads(req.text)
+def _simbrands(mybname, keywords_dict):
+    # baseurl = api + '/simbrands/?my={my}&brands={brands}'
+    # url = baseurl.format(my=mybname, brands=json.dumps(keywords_dict))
+    # req = requests.get(url)
+
+    url = 'http://127.0.0.1:8080/api' + '/simbrands'
+    data = {'my':mybname, 'brands':json.dumps(keywords_dict)}
+    req = requests.post(url, data=data)
+    # return json.loads(req.text)
+    return req.json()
+
+# @csrf_exempt
+def _simwords(words, amp=None):
+    # baseurl = api + '/simwords/?w={w}'
+    # url = baseurl.format(w=' '.join(words))
+    # req = requests.get(url)
+
+    url = 'http://127.0.0.1:8080/api' + '/simwords'
+    data = {'w': ' '.join(words)}
+    req = requests.post(url, data=data)
+    res = req.json() #json.loads(req.text)
     return {k:v**amp for k,v in res.items()}
 
 
-def _brandscore_to_qry(qry, bnames):
-    baseurl = api + '/search/?q={q}&b={b}'
-    url = baseurl.format(q=qry, b=' '.join(bnames))
-    req = requests.get(url)
-    return json.loads(req.text)
+def _brandscore_to_qry(qry, keywords_dict):
+    # baseurl = api + '/search/?qry={qry}&brands={brands}'
+    # url = baseurl.format(qry=qry, brands=json.dumps(keywords_dict))
+    # req = requests.get(url)
+
+    url = 'http://127.0.0.1:8080/api' + '/search'
+    data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
+    req = requests.post(url, data=data)
+    # print('----------------------------', req.text)
+    # return json.loads(req.text)
+    return req.json()
 
 
 # 주어진 Brand 객체의 로고 이미지 주소
@@ -111,12 +146,24 @@ def _imgurl(brand):
 
 
 # 주어진 Brands <QuerySet>에 대하혀, 특정 필드 출력
-def _brands_by_field(brands, f):
-    return [getattr(brand, f) for brand in brands.all()]
+# def _brands_by_field(brands, f):
+#     return [getattr(brand, f) for brand in brands.all()]
+
+def _indexer(brands):
+    return sorted(list({brand.name[0] for brand in brands.all()}))
 
 
-def _indexer(bnames):
-    return sorted(list({bname[0] for bname in bnames}))
+def _search_helper(brands):
+    return [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)} for brand in brands.all()]
+
+
+def _bnames_set(brands):
+    _bnames = [[brand.name, brand.fullname_en, brand.fullname_kr] + [kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()]
+    return set(sum(_bnames, []))
+
+
+def _keywords_dict(brands):
+    return {brand.name:[kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()}
 
 
 class DiscoverView(AjaxListView):
@@ -128,9 +175,8 @@ class DiscoverView(AjaxListView):
 
     def get_queryset(self):
         brands = Brand.objects
-        bnames = _brands_by_field(brands, 'name')
-        indexer = _indexer(bnames)
-        search_helper = [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'image':_imgurl(brand)} for brand in brands.all()]
+        indexer = _indexer(brands)
+        search_helper = _search_helper(brands)
 
         all = None
         exact = None
@@ -146,14 +192,15 @@ class DiscoverView(AjaxListView):
                 _regex = r'^[' + self.page.replace(' ', '') + ']'
                 all = brands.filter(fullname_en__iregex=_regex).order_by('name')
 
-        # 브랜드명(fullname_en)이 입력된 경우
-        elif self.qry in _brands_by_field(brands, 'fullname_en'):
-            exact = brands.get(fullname_en=self.qry)
-            similar = brands.filter(cluster=exact.cluster).exclude(fullname_en=exact.fullname_en).order_by('name')
+        # 브랜드명(name, fullname_en, fullname_kr, keywords)이 입력된 경우
+        elif self.qry in _bnames_set(brands):
+            exact = brands.get(Q(name=self.qry) | Q(fullname_en=self.qry) | Q(fullname_kr=self.qry) | Q(keywords__icontains=self.qry))
+            similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
 
         # 여러가지 키워드들이 입력된 경우
         else:
-            scores = _brandscore_to_qry(self.qry, bnames)
+            keywords_dict = _keywords_dict(brands)
+            scores = _brandscore_to_qry(self.qry, keywords_dict)
             _recommend = [k for k,v in scores.items() if v>0.4]
             _not_recommend = [k for k,v in scores.items() if v<0]
 
@@ -169,13 +216,13 @@ class DiscoverView(AjaxListView):
             'similar':similar,
             'recommend':recommend,
             'not_recommend':not_recommend
-            }
+        }
 
 
     def get(self, request):
         q = request.GET.get('q', None)
         if q is not None:
-            self.qry = q
+            self.qry = q.strip()
 
         p = request.GET.get('p', None)
         if p is not None:

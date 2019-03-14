@@ -66,13 +66,17 @@
           append_table_row('#query_rising', query_data);
         });
       });
-      
+
       WordCloud({
         container: "#wordcloud",
         data: {{ brand.wordfreq | safe }},
         width: $("#wordcloud").width(),
-        height: 300
+        height: 600
       });
+
+      $('a.card').popup();
+
+      console.log({{ simbrands_score | safe }})
     });
   </script>
 {% endblock js %}

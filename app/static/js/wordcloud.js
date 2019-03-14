@@ -1,7 +1,7 @@
 function WordCloud(options) {
   var margin = {top: 0, right: 0, bottom: 0, left: 0},
            w = options.width - margin.left - margin.right,
-           h = options.height - margin.top - margin.bottom;
+           h = 0.5*options.width - margin.top - margin.bottom;
 
   // create the svg
   var svg = d3.select(options.container).append("svg")
@@ -9,7 +9,7 @@ function WordCloud(options) {
               .attr('width', w + margin.left + margin.right)
 
   // set the ranges for the scales
-  var xScale = d3.scaleLinear().range([10, 100]);
+  var xScale = d3.scaleLinear().range([0.01*w, 0.11*w]); // [.., 100] 으로 하면, 너무 큰 텍스트는 안보이게 된다
 
   var focus = svg.append('g').attr("transform", "translate(" + [w/2, h/2] + ")")
   // var colorMap = ['red', '#a38b07'];
@@ -29,7 +29,9 @@ function WordCloud(options) {
              .timeInterval(20)
              .words(word_entries)
              .rotate(0)
-             .fontSize(function(d) { return xScale(+d.value); })
+             .fontSize(function(d) {
+               return xScale(+d.value);
+             })
              .text(function(d) { return d.key; })
              .font("Impact")
              .random(arng)
@@ -53,7 +55,9 @@ function WordCloud(options) {
     focus.selectAll("text")
          .data(words)
          .enter().append("text")
-         .style("font-size", function(d) { return xScale(d.value) + "px"; })
+         .style("font-size", function(d) {
+           return xScale(d.value) + "px";
+         })
          .style("font-family", "Impact")
          .style("fill", function(d, i) { return fill(i); })
          .attr("text-anchor", "middle")

@@ -124,8 +124,7 @@
   <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
   <script>
     function paginate(btn) {
-      jsn = {'a':['k',2,3], 'b':[4,5,6]}
-      url = "{% url 'discover' %}?p=" + btn.text; 
+      url = "{% url 'discover' %}?p=" + btn.text;
       window.location.replace(url);
     };
 
@@ -143,7 +142,7 @@
           source: {{ brands.search_helper | safe }},
           fullTextSearch: true,
           maxResults: 5,
-          searchFields: ['title', 'description'],
+          searchFields: ['title', 'description', 'categories'],
           templates: {
             standard: function(response){
               htmls = $.map(response.results, function(item) {

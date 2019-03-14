@@ -129,7 +129,9 @@
 
         <div class="ui five doubling brandlist cards">
           {% for sbrand in simbrands %}
-            <a class="card" data-inverted="" data-tooltip="{{ sbrand.fullname_en }}" style="padding:5px" href="/brands/{{sbrand.name}}">
+            <!-- <a class="card" data-inverted="" data-tooltip="{{ sbrand.fullname_en }}" style="padding:5px" href="/brands/{{sbrand.name}}"> -->
+            <!-- <a class="card" data-inverted="" data-tooltip="{{ sbrand.score }}" style="padding:5px" href="/brands/{{sbrand.name}}"> -->
+            <a class="card" data-inverted="" data-html="<div style='text-align:center'><div class='ui header'>{{ sbrand.fullname_en }}<div class='sub header'>{{ sbrand.fullname_kr }}</div></div><div class='ui statistic'><div class='label'>유사도</div><div class='value'>{{ sbrand.score }}</div></div></div>" style="padding:5px" href="/brands/{{sbrand.name}}">
               <div class="blurring dimmable image" style="background:transparent;margin:auto;">
                 <div class="ui inverted dimmer">
                   <div class="content">
