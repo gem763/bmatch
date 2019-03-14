@@ -10,12 +10,12 @@ class Brand(models.Model):
     keywords = models.TextField(default='')
     website = models.CharField(max_length=200, blank=True, null=True)
     origin = models.CharField(max_length=50, blank=True, null=True)
-    description = models.TextField(default='')
-    history = models.TextField(default='')
+    description = models.TextField(default='', blank=True, null=True)
+    history = models.TextField(default='', blank=True, null=True)
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
-    identity = models.TextField(default='{}')
+    identity = models.TextField(default='{}', blank=True, null=True)
     cluster = models.CharField(max_length=50, blank=True, null=True)
-    wordfreq = models.TextField(blank=True, null=True)
+    # wordfreq = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name

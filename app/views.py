@@ -68,16 +68,19 @@ def brand_detail(request, bname):
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
 
-    simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
-
     keywords_dict = _keywords_dict(Brand.objects)
-    simbrands_score = _simbrands(bname, keywords_dict)
+    simbrands_score = {k:round(100*v) for k,v in _simbrands(bname, keywords_dict).items() if v>0.5}
 
+    simbrands = Brand.objects.filter(name__in=simbrands_score.keys())
     for simbrand in simbrands:
-        try:
-            simbrand.score = round(simbrands_score[simbrand.name]*100)
-        except:
-            simbrand.score = -100
+        simbrand.score = simbrands_score[simbrand.name]
+
+    # simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
+    # for simbrand in simbrands:
+    #     try:
+    #         simbrand.score = round(simbrands_score[simbrand.name]*100)
+    #     except:
+    #         simbrand.score = -100
 
     simbrands = sorted(simbrands, key=lambda x:-x.score)
     return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands':simbrands, 'simbrands_score':simbrands_score})
