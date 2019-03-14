@@ -20,8 +20,8 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 # from django.views.decorators.csrf import csrf_exempt
 
 
-api = 'http://127.0.0.1:8080/api'
-# api = 'http://bmatchsupport.pythonanywhere.com/api'
+# api = 'http://127.0.0.1:8080/api'
+api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
 def intro(request):
@@ -108,7 +108,7 @@ def _simbrands(mybname, keywords_dict):
     # url = baseurl.format(my=mybname, brands=json.dumps(keywords_dict))
     # req = requests.get(url)
 
-    url = 'http://127.0.0.1:8080/api' + '/simbrands'
+    url = api + '/simbrands'
     data = {'my':mybname, 'brands':json.dumps(keywords_dict)}
     req = requests.post(url, data=data)
     # return json.loads(req.text)
@@ -120,7 +120,7 @@ def _simwords(words, amp=None):
     # url = baseurl.format(w=' '.join(words))
     # req = requests.get(url)
 
-    url = 'http://127.0.0.1:8080/api' + '/simwords'
+    url = api + '/simwords'
     data = {'w': ' '.join(words)}
     req = requests.post(url, data=data)
     res = req.json() #json.loads(req.text)
@@ -132,7 +132,7 @@ def _brandscore_to_qry(qry, keywords_dict):
     # url = baseurl.format(qry=qry, brands=json.dumps(keywords_dict))
     # req = requests.get(url)
 
-    url = 'http://127.0.0.1:8080/api' + '/search'
+    url = api + '/search'
     data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
     req = requests.post(url, data=data)
     # print('----------------------------', req.text)
