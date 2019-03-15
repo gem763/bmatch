@@ -20,8 +20,8 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 # from django.views.decorators.csrf import csrf_exempt
 
 
-# api = 'http://127.0.0.1:8080/api'
-api = 'http://bmatchsupport.pythonanywhere.com/api'
+api = 'http://127.0.0.1:8080/api'
+# api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
 def intro(request):
@@ -47,43 +47,19 @@ def db_update(request, category):
             description=v['desc'],
         )
 
-    #brands = Brand.objects.exclude(logo_url='')
-    return HttpResponse('updated') #render(request, 'rating.html', {'brands':brands})
+    return HttpResponse('updated')
 
-# def discover(request):
-#     # if request.user.is_authenticated:
-#     #     messages.info(request, "Welcome")
-#
-#     #brands = Brand.objects.all()#filter(pk__range=(0,50)) #all()
-#     brands = Brand.objects.order_by('-name')
-#     return render(request, 'discover.html', {'brands':brands})
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.identity = json.loads(brand.identity)
-    keywords = [kw.strip() for kw in brand.keywords.split(',')]
-    brand.wordfreq = _simwords(keywords, amp=10)
-    # brand.wordfreq = _simwords_to_brand([bname, brand.fullname_kr.replace(' ','')], amp=10)
 
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
 
-    keywords_dict = _keywords_dict(Brand.objects)
-    simbrands_score = {k:round(100*v) for k,v in _simbrands(bname, keywords_dict).items() if v>0.5}
-
-    simbrands = Brand.objects.filter(name__in=simbrands_score.keys())
-    for simbrand in simbrands:
-        simbrand.score = simbrands_score[simbrand.name]
-
-    # simbrands = Brand.objects.filter(cluster=brand.cluster).exclude(name=brand.name)
-    # for simbrand in simbrands:
-    #     try:
-    #         simbrand.score = round(simbrands_score[simbrand.name]*100)
-    #     except:
-    #         simbrand.score = -100
-
-    simbrands = sorted(simbrands, key=lambda x:-x.score)
-    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands':simbrands, 'simbrands_score':simbrands_score})
+    simbrands_top, simbrands_bottom = _simbrands(bname, top_min=0.5, bottom_max=0)
+    simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands_top':simbrands_top, 'simbrands_bottom':simbrands_bottom, 'simwords':simwords})
 
 
 def me(request):
@@ -96,37 +72,42 @@ def analysis(request):
     return render(request, 'app/analysis.html')
 
 
-def search(request, qry):
-    bnames = ' '.join([brand.name for brand in Brand.objects.all()])
-    url_base = 'http://127.0.0.1:8080/api/search/?'
-    url = url_base + 'q=' + qry + '&b=' + bnames
-    req = requests.get(url)
-    res = json.loads(req.text)
-    # res = dict(sorted(res.items(), key=lambda x: x[1])[:20])
-    return JsonResponse({k:v for k,v in res.items() if v>0.5})
-
-
-def _simbrands(mybname, keywords_dict):
-    # baseurl = api + '/simbrands/?my={my}&brands={brands}'
-    # url = baseurl.format(my=mybname, brands=json.dumps(keywords_dict))
-    # req = requests.get(url)
+def _simbrands(mybname, top_min=0.5, bottom_max=0):
+    brands = Brand.objects
+    keywords_dict = _keywords_dict(brands)
 
     url = api + '/simbrands'
     data = {'my':mybname, 'brands':json.dumps(keywords_dict)}
-    req = requests.post(url, data=data)
-    # return json.loads(req.text)
-    return req.json()
+    res = requests.post(url, data=data).json()
 
-# @csrf_exempt
-def _simwords(words, amp=None):
-    # baseurl = api + '/simwords/?w={w}'
-    # url = baseurl.format(w=' '.join(words))
-    # req = requests.get(url)
+    def _put_scores(scores):
+        simbrands = brands.filter(name__in=scores.keys())
 
+        for simbrand in simbrands:
+            simbrand.score = scores[simbrand.name]
+
+        return sorted(simbrands, key=lambda x:-x.score)
+
+    _top = None
+    _bottom = None
+
+    if top_min is not None:
+        _scores = {k:round(100*v) for k,v in res.items() if v > top_min}
+        _top = _put_scores(_scores)
+
+    if bottom_max is not None:
+        _scores = {k:round(100*v) for k,v in res.items() if v < bottom_max}
+        _bottom = _put_scores(_scores)
+
+    return _top, _bottom
+
+
+def _simwords(keywords, amp=10, min=0, topn=10):
     url = api + '/simwords'
-    data = {'w': ' '.join(words)}
+    words = ' '.join([kw.strip() for kw in keywords.split(',')])
+    data = {'w': words, 'min':min, 'topn':topn}
     req = requests.post(url, data=data)
-    res = req.json() #json.loads(req.text)
+    res = req.json()
     return {k:v**amp for k,v in res.items()}
 
 
@@ -138,7 +119,6 @@ def _brandscore_to_qry(qry, keywords_dict):
     url = api + '/search'
     data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
     req = requests.post(url, data=data)
-    # print('----------------------------', req.text)
     # return json.loads(req.text)
     return req.json()
 
@@ -147,10 +127,6 @@ def _brandscore_to_qry(qry, keywords_dict):
 def _imgurl(brand):
     return os.path.join(settings.MEDIA_URL, str(brand.logo))
 
-
-# 주어진 Brands <QuerySet>에 대하혀, 특정 필드 출력
-# def _brands_by_field(brands, f):
-#     return [getattr(brand, f) for brand in brands.all()]
 
 def _indexer(brands):
     return sorted(list({brand.name[0] for brand in brands.all()}))
@@ -182,8 +158,8 @@ class DiscoverView(AjaxListView):
         search_helper = _search_helper(brands)
 
         all = None
-        exact = None
-        similar = None
+        #exact = None
+        #similar = None
         recommend = None
         not_recommend = None
 
@@ -198,7 +174,11 @@ class DiscoverView(AjaxListView):
         # 브랜드명(name, fullname_en, fullname_kr, keywords)이 입력된 경우
         elif self.qry in _bnames_set(brands):
             exact = brands.get(Q(name=self.qry) | Q(fullname_en=self.qry) | Q(fullname_kr=self.qry) | Q(keywords__icontains=self.qry))
-            similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
+            # similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
+
+            simbrands_top, simbrands_bottom = _simbrands(exact.name, top_min=0.5, bottom_max=0)
+            recommend = [exact] + list(simbrands_top)
+            not_recommend = simbrands_bottom
 
         # 여러가지 키워드들이 입력된 경우
         else:
@@ -215,8 +195,8 @@ class DiscoverView(AjaxListView):
             'indexer':indexer,
             'search_helper':search_helper,
             'all':all,
-            'exact':exact,
-            'similar':similar,
+            #'exact':exact,
+            #'similar':similar,
             'recommend':recommend,
             'not_recommend':not_recommend
         }
@@ -251,11 +231,6 @@ class BrandListView(AjaxListView):
 
         return qs
 
-
-# def bnames(request):
-#     brands = Brand.objects.all()
-#     return JsonResponse([{'name':brand.name, 'value':brand.name, 'logo':brand.logo} for brand in brands], safe=False)
-    #return JsonResponse([{'title':brand.name} for brand in brands], safe=False)
 
 
 def gtrend(request, brand_name):

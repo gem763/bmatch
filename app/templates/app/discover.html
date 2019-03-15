@@ -55,60 +55,20 @@
   {% endif %}
 
 
-  {% if brands.exact %}
-    <h3 class="ui header">
-      <i class='paperclip icon'></i>
-      <div class='content'>Exact</div>
-    </h3>
-    <div class="ui five doubling cards">
-      <a class="card" data-inverted="" data-tooltip="{{ brands.exact.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brands.exact.name %}">
-        <img class="brand" src="{{ brands.exact.logo.url }}" alt="{{ brands.exact.name }}">
-      </a>
-    </div>
-  {% endif %}
-
-
-  {% if brands.similar %}
-    <div class="ui section divider"></div>
-    <h3 class="ui header">
-      <i class='paperclip icon'></i>
-      <div class='content'>Similar</div>
-    </h3>
-    <div class="ui five doubling cards">
-      {% for brand in brands.similar %}
-        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
-          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
-        </a>
-      {% endfor %}
-    </div>
-  {% endif %}
-
-
   {% if brands.recommend %}
-    <h3 class="ui header">
-      <i class='paperclip icon'></i>
-      <div class='content'>Recommend</div>
-    </h3>
     <div class="ui five doubling cards">
       {% for brand in brands.recommend %}
-        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
-          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
-        </a>
+        {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
     </div>
   {% endif %}
 
   {% if brands.not_recommend %}
-    <div class="ui section divider"></div>
-    <h3 class="ui header">
-      <i class='exclamation triangle icon'></i>
-      <div class='content'>Not Recommend</div>
-    </h3>
+    <br>
+    <div class="ui horizontal divider header">Not Recommend</div>
     <div class="ui five doubling cards">
       {% for brand in brands.not_recommend %}
-        <a class="brand card" data-inverted="" data-tooltip="{{ brand.fullname_en }}" style="padding:5px" href="{% url 'brand_detail' brand.name %}">
-          <img class="brand" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
-        </a>
+        {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
     </div>
   {% endif %}
@@ -165,11 +125,6 @@
             },
           },
         });
-
-
-      // $.get('{% url "search" "비오는날 어울리는 명품 신발" %}', function(data) {
-      //   console.log(data);
-      // });
     });
   </script>
 {% endblock js %}

@@ -128,21 +128,26 @@
       <div class="ui small feed">
 
         <div class="ui five doubling brandlist cards">
-          {% for sbrand in simbrands %}
-            <!-- <a class="card" data-inverted="" data-tooltip="{{ sbrand.fullname_en }}" style="padding:5px" href="/brands/{{sbrand.name}}"> -->
-            <!-- <a class="card" data-inverted="" data-tooltip="{{ sbrand.score }}" style="padding:5px" href="/brands/{{sbrand.name}}"> -->
-            <a class="card" data-inverted="" data-html="<div style='text-align:center'><div class='ui header'>{{ sbrand.fullname_en }}<div class='sub header'>{{ sbrand.fullname_kr }}</div></div><div class='ui statistic'><div class='label'>유사도</div><div class='value'>{{ sbrand.score }}</div></div></div>" style="padding:5px" href="/brands/{{sbrand.name}}">
-              <div class="blurring dimmable image" style="background:transparent;margin:auto;">
-                <div class="ui inverted dimmer">
-                  <div class="content">
-                    <div class="center">
-                      <div style="color:black">{{ sbrand.name }}</div>
-                    </div>
-                  </div>
-                </div>
-                <img src="{{ sbrand.logo.url }}" alt="{{ sbrand.name }}" style="object-fit:contain;width:110px;height:110px;margin:auto;border-radius:0 !important;">
-              </div>
-            </a>
+          {% for sbrand in simbrands_top %}
+            {% include "app/brand_card.html" with brand=sbrand %}
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">느낌이 다른 브랜드들</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+
+        <div class="ui five doubling brandlist cards">
+          {% for sbrand in simbrands_bottom %}
+            {% include "app/brand_card.html" with brand=sbrand %}
           {% endfor %}
         </div>
 

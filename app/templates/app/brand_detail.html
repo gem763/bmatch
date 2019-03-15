@@ -69,14 +69,11 @@
 
       WordCloud({
         container: "#wordcloud",
-        data: {{ brand.wordfreq | safe }},
+        data: {{ simwords | safe }},
         width: $("#wordcloud").width(),
         height: 600
       });
 
-      $('a.card').popup();
-
-      console.log({{ simbrands_score | safe }})
     });
   </script>
 {% endblock js %}
