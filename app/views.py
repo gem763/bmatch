@@ -57,9 +57,9 @@ def brand_detail(request, bname):
     for idty in brand.identity:
         idty['key0'], idty['key1'] = idty['key'].split('-')
 
-    simbrands_top, simbrands_bottom = _simbrands(bname, top_min=0.5, bottom_max=0)
+    simbrands_top, simbrands_bottom = _simbrands(mybname=bname, top_min=0.5, bottom_max=0)
     simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
-    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands_top':simbrands_top, 'simbrands_bottom':simbrands_bottom, 'simwords':simwords})
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands_top':simbrands_top[1:], 'simbrands_bottom':simbrands_bottom, 'simwords':simwords})
 
 
 def me(request):
@@ -72,12 +72,24 @@ def analysis(request):
     return render(request, 'app/analysis.html')
 
 
-def _simbrands(mybname, top_min=0.5, bottom_max=0):
+def _simbrands(qry=None, mybname=None, top_min=0.5, bottom_max=0):
+    _top = None
+    _bottom = None
     brands = Brand.objects
     keywords_dict = _keywords_dict(brands)
 
     url = api + '/simbrands'
-    data = {'my':mybname, 'brands':json.dumps(keywords_dict)}
+    data = {'brands':json.dumps(keywords_dict)}
+
+    if (qry is None) & (mybname is not None):
+        data['mybname'] = mybname
+
+    elif (qry is not None) & (mybname is None):
+        data['qry'] = qry
+
+    else:
+        return _top, _bottom
+
     res = requests.post(url, data=data).json()
 
     def _put_scores(scores):
@@ -88,8 +100,6 @@ def _simbrands(mybname, top_min=0.5, bottom_max=0):
 
         return sorted(simbrands, key=lambda x:-x.score)
 
-    _top = None
-    _bottom = None
 
     if top_min is not None:
         _scores = {k:round(100*v) for k,v in res.items() if v > top_min}
@@ -111,16 +121,11 @@ def _simwords(keywords, amp=10, min=0, topn=10):
     return {k:v**amp for k,v in res.items()}
 
 
-def _brandscore_to_qry(qry, keywords_dict):
-    # baseurl = api + '/search/?qry={qry}&brands={brands}'
-    # url = baseurl.format(qry=qry, brands=json.dumps(keywords_dict))
-    # req = requests.get(url)
-
-    url = api + '/search'
-    data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
-    req = requests.post(url, data=data)
-    # return json.loads(req.text)
-    return req.json()
+# def _brandscore_to_qry(qry, keywords_dict):
+#     url = api + '/search'
+#     data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
+#     req = requests.post(url, data=data)
+#     return req.json()
 
 
 # 주어진 Brand 객체의 로고 이미지 주소
@@ -136,13 +141,22 @@ def _search_helper(brands):
     return [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)} for brand in brands.all()]
 
 
-def _bnames_set(brands):
-    _bnames = [[brand.name, brand.fullname_en, brand.fullname_kr] + [kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()]
-    return set(sum(_bnames, []))
+# def _bnames_set(brands):
+#     _bnames = [[brand.name, brand.fullname_en, brand.fullname_kr] + [kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()]
+#     return set(sum(_bnames, []))
 
 
 def _keywords_dict(brands):
     return {brand.name:[kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()}
+
+
+def _in_bnames(qry, brands):
+    for brand in brands.all():
+        _candidates = {brand.name, brand.fullname_en, brand.fullname_kr} | {kw.strip() for kw in brand.keywords.split(',')}
+        if qry in _candidates:
+            return brand.name
+
+    return None
 
 
 class DiscoverView(AjaxListView):
@@ -158,8 +172,6 @@ class DiscoverView(AjaxListView):
         search_helper = _search_helper(brands)
 
         all = None
-        #exact = None
-        #similar = None
         recommend = None
         not_recommend = None
 
@@ -171,32 +183,29 @@ class DiscoverView(AjaxListView):
                 _regex = r'^[' + self.page.replace(' ', '') + ']'
                 all = brands.filter(fullname_en__iregex=_regex).order_by('name')
 
-        # 브랜드명(name, fullname_en, fullname_kr, keywords)이 입력된 경우
-        elif self.qry in _bnames_set(brands):
-            exact = brands.get(Q(name=self.qry) | Q(fullname_en=self.qry) | Q(fullname_kr=self.qry) | Q(keywords__icontains=self.qry))
-            # similar = brands.filter(cluster=exact.cluster).exclude(name=exact.name).order_by('name')
-
-            simbrands_top, simbrands_bottom = _simbrands(exact.name, top_min=0.5, bottom_max=0)
-            recommend = [exact] + list(simbrands_top)
-            not_recommend = simbrands_bottom
-
-        # 여러가지 키워드들이 입력된 경우
         else:
-            keywords_dict = _keywords_dict(brands)
-            scores = _brandscore_to_qry(self.qry, keywords_dict)
-            _recommend = [k for k,v in scores.items() if v>0.4]
-            _not_recommend = [k for k,v in scores.items() if v<0]
+            bname = _in_bnames(self.qry, brands)
+            # exact = brands.get(Q(name=self.qry) | Q(fullname_en=self.qry) | Q(fullname_kr=self.qry) | Q(keywords__icontains=self.qry))
 
-            recommend = brands.filter(name__in=_recommend).order_by('name')
-            not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
+            # 브랜드명(name, fullname_en, fullname_kr, keywords)이 입력된 경우
+            if bname is not None:
+                recommend, not_recommend = _simbrands(mybname=bname, top_min=0.5, bottom_max=0)
+
+            else:
+                recommend, not_recommend = _simbrands(qry=self.qry, top_min=0.5, bottom_max=0)
+                # keywords_dict = _keywords_dict(brands)
+                # scores = _brandscore_to_qry(self.qry, keywords_dict)
+                # _recommend = [k for k,v in scores.items() if v>0.4]
+                # _not_recommend = [k for k,v in scores.items() if v<0]
+                #
+                # recommend = brands.filter(name__in=_recommend).order_by('name')
+                # not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
 
         return {
             'qry':self.qry,
             'indexer':indexer,
             'search_helper':search_helper,
             'all':all,
-            #'exact':exact,
-            #'similar':similar,
             'recommend':recommend,
             'not_recommend':not_recommend
         }

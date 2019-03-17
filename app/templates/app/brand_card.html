@@ -1,22 +1,52 @@
-<!-- <a class="card" data-inverted="" data-tooltip="{{ sbrand.fullname_en }}" style="padding:5px" href="/brands/{{sbrand.name}}"> -->
+<style>
+  .brand.card {
+    /* width: 8vw !important; */
+    /* height:8vw; */
+    width:120px !important;
+    height:120px !important;
+  }
+</style>
+
 <div class="brand card">
-  <div class="blurring dimmable image" style="background:transparent;margin:auto;">
-    <div class="ui inverted dimmer">
+  <div class="dimmable image" style="background:white">
+    <div class="ui dimmer">
       <div class="content">
         <div class="center">
-          <div style="color:black">{{ brand.name }}</div>
+          {% if brand.score %}
+            <div class='ui purple small inverted statistic'>
+              <div class='value'>{{ brand.score }}</div>
+              <div class='label' style="font-size:12px">MATCHING %</div>
+            </div>
+          {% endif %}
+
+          <!-- <i class="zoom-in link icon"></i>
+          <i class="balance scale link icon"></i>
+          <i class="heart link icon"></i> -->
+          <!-- <div class="ui two mini inverted buttons">
+            <a class="ui inverted button" href="{% url 'brand_detail' brand.name %}" style="font-size:8px !important">DETAIL</a>
+            <div class="ui inverted button" style="font-size:8px !important">COMPARE</div>
+          </div> -->
+
+          <div class="ui small mini inverted compact icon buttons">
+            <a class="ui inverted button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a>
+            <a class="ui inverted button" href="#"><i class="heart outline icon"></i></a>
+            <a class="ui inverted button" href="#"><i class="exchange icon"></i></a>
+          </div>
         </div>
       </div>
     </div>
-    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:110px;height:110px;margin:auto;border-radius:0 !important;">
+
+
+    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:120px;height:120px;margin:auto;border-radius:4px !important;">
+
   </div>
 </div>
 
 
-<div class="ui mini inverted popup" style="text-align:center;width:150px">
+<!-- <div class="ui mini inverted popup" style="text-align:center;width:150px">
   <div class="column">
 
-    <h4 class='ui header'>
+    <h4 class='ui yellow header'>
       {{ brand.fullname_en }}
       <div class='sub header'>{{ brand.fullname_kr }}</div>
     </h4>
@@ -36,4 +66,4 @@
     </div>
 
   </div>
-</div>
+</div> -->

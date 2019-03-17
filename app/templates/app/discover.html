@@ -46,17 +46,17 @@
         <a class="item" id="4" onclick="paginate(this)">O P Q R S T U</a>
         <a class="item" id="5" onclick="paginate(this)">V W X Y Z</a>
       </div>
-    </div>
-    <br>
 
-    <div class="ui five doubling cards">
-      {% include page_template %}
+      <br><br>
+      <div class="ui five doubling cards">
+        {% include page_template %}
+      </div>
     </div>
   {% endif %}
 
 
   {% if brands.recommend %}
-    <div class="ui five doubling cards">
+    <div class="ui four doubling centerd cards">
       {% for brand in brands.recommend %}
         {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
@@ -66,7 +66,7 @@
   {% if brands.not_recommend %}
     <br>
     <div class="ui horizontal divider header">Not Recommend</div>
-    <div class="ui five doubling cards">
+    <div class="ui four doubling centered cards">
       {% for brand in brands.not_recommend %}
         {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
@@ -94,13 +94,11 @@
         paginateOnScrollMargin: 100,
       });
 
-      // $('.brandlist.cards .image').dimmer({
-      //   on: 'hover'
-      // });
 
       $('.ui.search').search({
           source: {{ brands.search_helper | safe }},
           fullTextSearch: true,
+          showNoResults: false,
           maxResults: 5,
           searchFields: ['title', 'description', 'categories'],
           templates: {
