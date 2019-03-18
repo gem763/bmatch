@@ -37,7 +37,7 @@ urlpatterns = [
     path('searched/', v.BrandListView.as_view()),
     #path('rating/', rating),
     path('db_update/<category>/', v.db_update),
-    path('rating/', v.BrandListView.as_view()),
+    path('rating/', v.rating),
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
     path('brands/<brand_name>/gtrend/', v.gtrend, name='gtrend'),

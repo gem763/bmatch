@@ -16,6 +16,8 @@ import glob
 import os
 import pandas as pd
 import requests
+import random
+from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
 # from django.views.decorators.csrf import csrf_exempt
 
@@ -61,6 +63,13 @@ def brand_detail(request, bname):
     simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
     return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands_top':simbrands_top[1:], 'simbrands_bottom':simbrands_bottom, 'simwords':simwords})
 
+
+def rating(request):
+    howmany = 10
+    bnames = list(Brand.objects.values_list('name', flat=True))
+    comb = list(combinations(bnames, 2))  #[set(_comb) for _comb in combinations(bnames, 2)]
+    pairs = random.sample(comb, howmany)
+    return render(request, 'app/rating.html', {'pairs':pairs})
 
 def me(request):
     return render(request, 'app/me.html')

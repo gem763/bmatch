@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
+
   <style>
     @media screen and (max-width: 800px) {
       .hide-footer {
@@ -56,9 +57,9 @@
   {% block js %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/static/semantic/semantic.min.js"></script>
+
   <script>
     $(document).ready(function(){
-
       $('.ui.welcome.modal')
         .modal('attach events', '.ui.bmatch_start.button', 'hide')
         .modal('attach events', '.ui.retry.button', 'hide')
@@ -131,7 +132,6 @@
       $('.brand.card .image').dimmer({
         on: 'hover'
       });
-
 
     });
   </script>
