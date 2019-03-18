@@ -6,13 +6,22 @@
 
 
 {% block content %}
+<style>
+  .ui.segment:hover {
+    opacity:0.5;
+  }
+</style>
+
   {% load ctags %}
   <div class="ui text container">
     {% for pair in pairs %}
-      {% for brand in pair|of_name %}
-        {{ brand.name }}
-      {% endfor %}
-      <br>
+      <div class="ui horizontal segments">
+        {% for brand in pair|of_name %}
+          <a class="ui center aligned segment" href="#">
+            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:120px;height:120px;margin:auto;border-radius:4px !important;">
+          </a>
+        {% endfor %}
+      </div>
     {% endfor %}
   </div>
 {% endblock content %}
