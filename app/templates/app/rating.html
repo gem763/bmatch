@@ -7,8 +7,35 @@
 
 {% block content %}
 <style>
-  .ui.segment:hover {
+  .ui.segments {
+    width:360px;
+    height:180px;
+    margin:auto !important;
+  }
+
+  .check.icon {
+    position:absolute;
+    transform:translate(-50%, -50%);
+    top:20%;
+    left:50%;
+    opacity:0;
+    color:orange;
+    -moz-text-stroke:1px #000;
+    -webkit-text-stroke:1px #000;
+  }
+
+  .ui.segment img {
     opacity:0.5;
+    transition: 0.5s ease;
+    object-fit:contain;
+    width:150px;
+    height:150px;
+    margin:auto;
+    border-radius:4px !important;
+  }
+
+  .ui.segment:hover > img {
+    opacity:1;
   }
 </style>
 
@@ -17,17 +44,42 @@
     {% for pair in pairs %}
       <div class="ui horizontal segments">
         {% for brand in pair|of_name %}
-          <a class="ui center aligned segment" href="#">
-            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:120px;height:120px;margin:auto;border-radius:4px !important;">
-          </a>
+          <div class="ui center aligned segment" bname="{{ brand.name }}" onclick="likemore(this)">
+            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+            <i class="huge check icon"></i>
+          </div>
         {% endfor %}
-      </div>
+      </div><br>
     {% endfor %}
   </div>
 {% endblock content %}
 
 
-{% load static %}
 {% block js %}
   {{ block.super }}
+  <script>
+    function likemore(obj) {
+      var more = $(obj);
+      more.children("img").css("opacity", 1);
+      more.children("i").css("opacity", 1);
+
+      var less = $(obj).siblings();
+      less.children("img").css("opacity", 0.5);
+      less.children("i").css("opacity", 0);
+
+      $.ajax({
+        url: {% url 'likemore' %},
+        async: true,
+        type: 'GET',
+        data: {
+          more: more.attr("bname"),
+          less: less.attr("bname")
+        },
+        dataType: 'text',
+        success: function(jqXHR) {
+          alert(jqXHR);
+        }
+      });
+    }
+  </script>
 {% endblock js %}

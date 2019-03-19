@@ -4,9 +4,9 @@ from django.urls import reverse
 from django.views.generic.list import ListView
 from django.db.models import Q
 from django.conf import settings
-# from django.contrib import messages
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
+from django.views.generic import View
 from app.models import Brand
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 import time
@@ -19,7 +19,6 @@ import requests
 import random
 from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
-# from django.views.decorators.csrf import csrf_exempt
 
 
 # api = 'http://127.0.0.1:8080/api'
@@ -166,6 +165,13 @@ def _in_bnames(qry, brands):
             return brand.name
 
     return None
+
+
+class LikemoreView(View):
+    def get(self, request):
+        more = request.GET.get('more', None)
+        less = request.GET.get('less', None)
+        return JsonResponse({'more':more, 'less':less})
 
 
 class DiscoverView(AjaxListView):

@@ -48,6 +48,8 @@ urlpatterns = [
     path('me/', v.me),
     path('sharing/', v.sharing, name='sharing'),
 
+    path('likemore/', v.LikemoreView.as_view(), name='likemore'),
+
     # path('search/<qry>/', v.search, name='search'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
