@@ -16,7 +16,7 @@
   }
 </style>
 
-<div class="ui text container">
+<div class="ui text container" style="text-align:center">
 
   <form class="ui form" action="{% url 'discover' %}" method="get">
     <!-- {% csrf_token %} -->
@@ -37,7 +37,7 @@
   <br>
 
   {% if brands.all %}
-    <div style="text-align:center">
+    <div>
       <div class="ui pagination mini menu">
         <a class="item" id="0" onclick="paginate(this)">All</a>
         <a class="item" id="1" onclick="paginate(this)">0-9</a>
@@ -56,7 +56,7 @@
 
 
   {% if brands.recommend %}
-    <div class="ui four doubling centerd cards">
+    <div class="ui five doubling cards">
       {% for brand in brands.recommend %}
         {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
@@ -66,7 +66,7 @@
   {% if brands.not_recommend %}
     <br>
     <div class="ui horizontal divider header">Not Recommend</div>
-    <div class="ui four doubling centered cards">
+    <div class="ui five doubling cards">
       {% for brand in brands.not_recommend %}
         {% include "app/brand_card.html" with brand=brand %}
       {% endfor %}
