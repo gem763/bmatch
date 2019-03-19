@@ -22,8 +22,8 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 # from django.views.decorators.csrf import csrf_exempt
 
 
-api = 'http://127.0.0.1:8080/api'
-# api = 'http://bmatchsupport.pythonanywhere.com/api'
+# api = 'http://127.0.0.1:8080/api'
+api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
 def intro(request):
