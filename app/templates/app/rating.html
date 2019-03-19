@@ -34,9 +34,10 @@
     border-radius:4px !important;
   }
 
-  .ui.segment:hover > img {
+  /* .ui.segment:hover > img {
     opacity:1;
-  }
+    background:yellow;
+  } */
 </style>
 
   {% load ctags %}
@@ -44,7 +45,8 @@
     {% for pair in pairs %}
       <div class="ui horizontal segments">
         {% for brand in pair|of_name %}
-          <div class="ui center aligned segment" bname="{{ brand.name }}" onclick="likemore(this)">
+          <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0">
+             <!-- onclick="likemore(this)"> -->
             <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
             <i class="huge check icon"></i>
           </div>
@@ -58,12 +60,12 @@
 {% block js %}
   {{ block.super }}
   <script>
-    function likemore(obj) {
-      var more = $(obj);
+    $("div.ui.segment").click(function(){
+      var more = $(this);
       more.children("img").css("opacity", 1);
       more.children("i").css("opacity", 1);
 
-      var less = $(obj).siblings();
+      var less = $(this).siblings();
       less.children("img").css("opacity", 0.5);
       less.children("i").css("opacity", 0);
 
@@ -80,6 +82,15 @@
           alert(jqXHR);
         }
       });
-    }
+    });
+
+    $("div.ui.segment").hover(function(){
+      $(this).children("img").css("opacity", 1);
+    }, function(){
+      if ($(this).children("i").css("opacity")!=1) {
+        $(this).children("img").css("opacity", 0.5);
+      }
+    });
+
   </script>
 {% endblock js %}

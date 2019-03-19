@@ -84,7 +84,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 # AUTH_USER_MODEL = 'users.CustomUser'
-AUTH_USER_MODEL = 'custom_user.EmailUser'
+AUTH_USER_MODEL = 'app.MyUser' #'custom_user.EmailUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

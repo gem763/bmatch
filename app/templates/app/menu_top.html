@@ -41,7 +41,8 @@
 
     {% if user.is_authenticated %}
     <a class="item {{ me_act }}" href="/me">
-      <i class="user outline icon"></i>
+      <!-- <i class="user outline icon"></i> -->
+      <img class="ui centered circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:30px;height:30px;">
       me
     </a>
 
