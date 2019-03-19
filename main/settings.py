@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'profiling' #'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Application definition
@@ -84,7 +84,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 # AUTH_USER_MODEL = 'users.CustomUser'
-AUTH_USER_MODEL = 'app.MyUser' #'custom_user.EmailUser'
+AUTH_USER_MODEL = 'custom_user.EmailUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,13 +170,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us' #'ko' #
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 # SECURE_SSL_REDIRECT = True

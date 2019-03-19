@@ -7,7 +7,7 @@ from django.conf import settings
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
 from django.views.generic import View
-from app.models import Brand
+from app.models import Brand, Profile
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 import time
 import json
@@ -69,6 +69,20 @@ def rating(request):
     comb = list(combinations(bnames, 2))  #[set(_comb) for _comb in combinations(bnames, 2)]
     pairs = random.sample(comb, howmany)
     return render(request, 'app/rating.html', {'pairs':pairs})
+
+
+def profiling(request):
+    try:
+        profile = Profile.objects.get(user__email=request.user.email)
+        return HttpResponse(profile.user.last_login)
+        # return HttpResponseRedirect(reverse('home'))
+    except:
+        profile = Profile()
+        profile.user = request.user
+        profile.phone = "test"
+        profile.save()
+        return HttpResponse(profile.user.email)
+
 
 def me(request):
     return render(request, 'app/me.html')

@@ -45,9 +45,10 @@ urlpatterns = [
     #path('brands/<bname>/identities/', identities, name='identities'),
 
     path('analysis/', v.analysis),
-    path('me/', v.me),
+    path('me/', v.me, name='me'),
     path('sharing/', v.sharing, name='sharing'),
 
+    path('profiling/', v.profiling, name='profiling'),
     path('likemore/', v.LikemoreView.as_view(), name='likemore'),
 
     # path('search/<qry>/', v.search, name='search'),

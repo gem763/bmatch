@@ -1,19 +1,20 @@
 from django.contrib import admin
-from app.models import Brand
-from custom_user.admin import EmailUserAdmin
-from .models import MyUser
+from app.models import Brand, Profile
+# from custom_user.admin import EmailUserAdmin
+# from .models import MyUser
 
 # Register your models here.
 
-class MyUserAdmin(EmailUserAdmin):
-    """
-    You can customize the interface of your model here.
-    """
-    # model = MyUser
-    # list_display = ['email','is_staff', 'date_of_birth']
-    pass
-
-admin.site.register(MyUser, MyUserAdmin)
+# class MyUserAdmin(EmailUserAdmin):
+#     """
+#     You can customize the interface of your model here.
+#     """
+#     # model = MyUser
+#     # list_display = ['email','is_staff', 'date_of_birth']
+#     pass
+#
+# admin.site.register(MyUser, MyUserAdmin)
 # Register your models here.
 
 admin.site.register(Brand)
+admin.site.register(Profile)
