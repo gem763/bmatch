@@ -186,13 +186,7 @@ class SaveLikesView(View):
         try:
             like = request.GET.get('like', None)
             profile = Profile.objects.get(user__email=request.user.email)
-            likes = profile.likes
-
-            if likes is not None:
-                likes_list = [w.strip() for w in likes.split(',')] + [like]
-            else:
-                likes_list = [like]
-
+            likes_list = profile.get_likes() + [like]
             profile.likes = ','.join(set(likes_list))
             profile.save()
             return JsonResponse({'success':True})
@@ -238,6 +232,11 @@ class DiscoverView(AjaxListView):
         if self.qry is None:
             if (self.page is None) | (self.page=='all'):
                 all = brands.order_by('name')
+
+            elif self.page=='like':
+                profile = Profile.objects.get(user__email=self.request.user.email)
+                all = brands.filter(name__in=profile.get_likes()).order_by('name')
+
             else:
                 _regex = r'^[' + self.page.replace(' ', '') + ']'
                 all = brands.filter(fullname_en__iregex=_regex).order_by('name')

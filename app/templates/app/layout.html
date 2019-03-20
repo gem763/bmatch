@@ -45,12 +45,6 @@
       {% block content %}{% endblock content %}
     </div>
 
-    <!-- <div class="ui text container">
-      <div class="ui orange circular icon massive button" style="position:fixed;bottom:10px;" id="search-btn">
-        <i class="search icon"></i>
-      </div>
-    </div> -->
-
   </div>
 
 
@@ -112,11 +106,9 @@
         once: false,
         onBottomPassed: function() {
           $('#top-hidden').transition('fade in');
-          // $('#top-shown').transition('fade out');
         },
         onBottomPassedReverse: function() {
           $('#top-hidden').transition('fade out');
-          // $('#top-fixed-shown').transition('fade in');
         }
       });
 

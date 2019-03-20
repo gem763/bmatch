@@ -27,3 +27,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+
+    def get_likes(self):
+        return [] if self.likes is None else [w.strip() for w in self.likes.split(',')]

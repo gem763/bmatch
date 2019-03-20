@@ -39,12 +39,15 @@
   {% if brands.all %}
     <div>
       <div class="ui pagination mini menu">
-        <a class="item" id="0" onclick="paginate(this)">All</a>
-        <a class="item" id="1" onclick="paginate(this)">0-9</a>
-        <a class="item" id="2" onclick="paginate(this)">A B C D E F G</a>
-        <a class="item" id="3" onclick="paginate(this)">H I J K L M N</a>
-        <a class="item" id="4" onclick="paginate(this)">O P Q R S T U</a>
-        <a class="item" id="5" onclick="paginate(this)">V W X Y Z</a>
+        <a class="item" id="0" page="All" onclick="paginate(this)">All</a>
+        <a class="item" id="1" page="0-9" onclick="paginate(this)">0-9</a>
+        <a class="item" id="2" page="A B C D E F G" onclick="paginate(this)">A B C D E F G</a>
+        <a class="item" id="3" page="H I J K L M N" onclick="paginate(this)">H I J K L M N</a>
+        <a class="item" id="4" page="O P Q R S T U" onclick="paginate(this)">O P Q R S T U</a>
+        <a class="item" id="5" page="V W X Y Z" onclick="paginate(this)">V W X Y Z</a>
+        {% if user.is_authenticated %}
+        <a class="item" id="6" page="like" onclick="paginate(this)"><i class="yellow heart icon"></i></a>
+        {% endif %}
       </div>
 
       <br><br>
@@ -82,78 +85,45 @@
 {% block js %}
   {{ block.super }}
   <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+
   <script>
     $.endlessPaginate({
       paginateOnScroll: true,
       paginateOnScrollMargin: 100,
     });
-  </script>
 
-  <script>
     function paginate(btn) {
-      url = "{% url 'discover' %}?p=" + btn.text;
+      url = "{% url 'discover' %}?p=" + $(btn).attr("page");
       window.location.replace(url);
     };
 
-    $(document).ready(function(){
-      $('.brand.card .image').dimmer({
-        on: 'hover'
-      });
+    $('.ui.search').search({
+        source: {{ brands.search_helper | safe }},
+        fullTextSearch: true,
+        showNoResults: false,
+        maxResults: 5,
+        searchFields: ['title', 'description', 'categories'],
+        templates: {
+          standard: function(response){
+            htmls = $.map(response.results, function(item) {
+                      var whereto = "{% url 'discover' %}?q=" + item.title;
+                      var html = '<a class="result" style="height:100px" href="' + whereto + '">';
+                      html += '<div class="image" style="height:80px;width:80px;">'
+                            + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
+                            + '</div>';
+                      html += '<div class="content">';
+                      html += '<div class="ui header">' + item.title;
+                      // html += '<div class="title">' + item.title + '</div>';
+                      html += '<div class="sub header">' + item.description + '</div>';
+                      // html += '<div class="description">' + item.description + '</div>';
+                      html += '</div></div>';
+                      html += '</a>';
+                      return html
+                    });
 
-      $(window).resize(function(){
-        var width = $(".brand.card").width(); //.css("width");
-        $(".brand.card").css("height", width+"px");
-        $(".brand.card img").css({"width":width+"px", "height":width+"px"});
-        $(".brand.card .like.icon").css("font-size", width*0.15);
-      });
-
-      $(window).trigger('resize');
-
-      $(".like.button").click(function() {
-        $(this).parents(".image").children(".like.icon").css({"opacity":1});
-
-        $.ajax({
-          url: {% url 'save_likes' %},
-          async: true,
-          type: 'GET',
-          data: {
-            like: $(this).parents(".brand.card").attr("bname")
+            return htmls
           },
-          dataType: 'text',
-          success: function(jqXHR) {
-            alert(1);//jqXHR);
-          }
-        });
+        },
       });
-
-      $('.ui.search').search({
-          source: {{ brands.search_helper | safe }},
-          fullTextSearch: true,
-          showNoResults: false,
-          maxResults: 5,
-          searchFields: ['title', 'description', 'categories'],
-          templates: {
-            standard: function(response){
-              htmls = $.map(response.results, function(item) {
-                        var whereto = "{% url 'discover' %}?q=" + item.title;
-                        var html = '<a class="result" style="height:100px" href="' + whereto + '">';
-                        html += '<div class="image" style="height:80px;width:80px;">'
-                              + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
-                              + '</div>';
-                        html += '<div class="content">';
-                        html += '<div class="ui header">' + item.title;
-                        // html += '<div class="title">' + item.title + '</div>';
-                        html += '<div class="sub header">' + item.description + '</div>';
-                        // html += '<div class="description">' + item.description + '</div>';
-                        html += '</div></div>';
-                        html += '</a>';
-                        return html
-                      });
-
-              return htmls
-            },
-          },
-        });
-    });
   </script>
 {% endblock js %}
