@@ -32,6 +32,8 @@
           {{ user.socialaccount_set.all.0.extra_data.name }}({{ user.email }})님, 반가워요!
           <br>
           {{ user.socialaccount_set.all.0.get_provider_display }}로 접속하셨네요.
+          <br>
+          최근접속: {{ user.last_login }}
         </p>
 
         <div class="ui bmatch_start green ok inverted button">

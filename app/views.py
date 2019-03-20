@@ -74,14 +74,14 @@ def rating(request):
 def profiling(request):
     try:
         profile = Profile.objects.get(user__email=request.user.email)
-        return HttpResponse(profile.user.last_login)
-        # return HttpResponseRedirect(reverse('home'))
+        # return HttpResponse(profile.user.last_login)
+        return HttpResponseRedirect(reverse('home'))
     except:
         profile = Profile()
         profile.user = request.user
-        profile.phone = "test"
         profile.save()
-        return HttpResponse(profile.user.email)
+        # return HttpResponse(profile.user.email)
+        return HttpResponseRedirect(reverse('home'))
 
 
 def me(request):
@@ -181,11 +181,41 @@ def _in_bnames(qry, brands):
     return None
 
 
-class LikemoreView(View):
+class SaveLikesView(View):
     def get(self, request):
-        more = request.GET.get('more', None)
-        less = request.GET.get('less', None)
-        return JsonResponse({'more':more, 'less':less})
+        try:
+            like = request.GET.get('like', None)
+            profile = Profile.objects.get(user__email=request.user.email)
+            likes = profile.likes
+
+            if likes is not None:
+                likes_list = [w.strip() for w in likes.split(',')] + [like]
+            else:
+                likes_list = [like]
+
+            profile.likes = ','.join(set(likes_list))
+            profile.save()
+            return JsonResponse({'success':True})
+
+        except:
+            return JsonResponse({'success':False})
+
+
+class SaveWorldcupView(View):
+    def get(self, request):
+        try:
+            more = request.GET.get('more', None)
+            less = request.GET.get('less', None)
+            profile = Profile.objects.get(user__email=request.user.email)
+            worldcup = json.loads(profile.worldcup)
+            key = '-'.join(sorted([more, less]))
+            worldcup[key] = more
+            profile.worldcup = json.dumps(worldcup)
+            profile.save()
+            return JsonResponse({'success':True})
+
+        except:
+            return JsonResponse({'success':False})
 
 
 class DiscoverView(AjaxListView):
@@ -222,13 +252,6 @@ class DiscoverView(AjaxListView):
 
             else:
                 recommend, not_recommend = _simbrands(qry=self.qry, top_min=0.5, bottom_max=0)
-                # keywords_dict = _keywords_dict(brands)
-                # scores = _brandscore_to_qry(self.qry, keywords_dict)
-                # _recommend = [k for k,v in scores.items() if v>0.4]
-                # _not_recommend = [k for k,v in scores.items() if v<0]
-                #
-                # recommend = brands.filter(name__in=_recommend).order_by('name')
-                # not_recommend = brands.filter(name__in=_not_recommend).order_by('name')
 
         return {
             'qry':self.qry,
@@ -288,7 +311,7 @@ def gtrend(request, brand_name):
             'datasets': [{
                 'label': brand_name,
                 'data': list(trend[brand_name]),
-                'borderColor': '#21BA45', #'#2ecc40', #
+                'borderColor': '#21BA45',
             }],
         },
 

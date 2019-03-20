@@ -1,17 +1,25 @@
 <!-- <style>
-  .brand.card {
-    /* width: 8vw !important; */
-    /* height:8vw; */
-    width:120px !important;
-    height:120px !important;
+  .brand.card img {
+    object-fit:contain;
+    margin:auto;
+    border-radius:4px !important;
+  }
+
+  .like.icon {
+    position:absolute;
+    transform:translate(-50%, -50%);
+    top:7%;
+    left:90%;
+    opacity:0;
   }
 </style> -->
 
-<div class="brand card" style="width:120px !important;height:120px !important">
+<div class="brand card" bname="{{ brand.name }}">
   <div class="dimmable image" style="background:white">
     <div class="ui dimmer">
       <div class="content">
         <div class="center">
+
           {% if brand.score %}
             <div class='ui purple small inverted statistic'>
               <div class='value'>{{ brand.score }}</div>
@@ -19,26 +27,19 @@
             </div>
           {% endif %}
 
-          <!-- <i class="zoom-in link icon"></i>
-          <i class="balance scale link icon"></i>
-          <i class="heart link icon"></i> -->
-          <!-- <div class="ui two mini inverted buttons">
-            <a class="ui inverted button" href="{% url 'brand_detail' brand.name %}" style="font-size:8px !important">DETAIL</a>
-            <div class="ui inverted button" style="font-size:8px !important">COMPARE</div>
-          </div> -->
-
           <div class="ui small mini inverted compact icon buttons">
-            <a class="ui inverted button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a>
-            <a class="ui inverted button" href="#"><i class="heart outline icon"></i></a>
-            <a class="ui inverted button" href="#"><i class="exchange icon"></i></a>
+            <a class="ui inverted detail button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a>
+            {% if user.is_authenticated %}
+            <a class="ui inverted like button"><i class="heart outline icon"></i></a>
+            {% endif %}
+            <a class="ui inverted compare button"><i class="exchange icon"></i></a>
           </div>
         </div>
       </div>
     </div>
 
-
-    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;width:120px;height:120px;margin:auto;border-radius:4px !important;">
-
+    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;margin:auto;border-radius:4px !important;">
+    <i class="yellow like heart icon" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:0;"></i>
   </div>
 </div>
 

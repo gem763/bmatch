@@ -1,19 +1,40 @@
 {% load el_pagination_tags %}
-{% lazy_paginate 30 brands.all as allbrands %}
+{% lazy_paginate 40,10 brands.all as allbrands %}
 
 {% for brand in allbrands %}
   {% include "app/brand_card.html" with brand=brand %}
 {% endfor %}
 {% show_more %}
 
-<script>
-  $('.brand.card').popup({
-    inline: true,
-    hoverable: true,
-    position: 'top center',
-  });
 
+<!-- <script>
   $('.brand.card .image').dimmer({
     on: 'hover'
   });
-</script>
+
+  $(window).resize(function(){
+    var width = $(".brand.card").width();
+    $(".brand.card").css("height", width+"px");
+    $(".brand.card img").css({"width":width+"px", "height":width+"px"});
+    $(".brand.card .like.icon").css("font-size", width*0.15);
+  });
+
+  $(window).trigger('resize');
+
+  $(".like.button").click(function() {
+    $(this).parents(".image").children(".like.icon").css({"opacity":1});
+
+    $.ajax({
+      url: {% url 'save_likes' %},
+      async: true,
+      type: 'GET',
+      data: {
+        like: $(this).parents(".brand.card").attr("bname")
+      },
+      dataType: 'text',
+      success: function(jqXHR) {
+        alert(2);//jqXHR);
+      }
+    });
+  });
+</script> -->

@@ -65,13 +65,13 @@
         .modal('attach events', '.ui.retry.button', 'hide')
         .modal('show');
 
+      {% if user.is_authenticated %}
+      {% else %}
       $('.ui.login.modal')
         .modal('attach events', '.login.item', 'show')
         .modal('attach events', '.login.button', 'show');
+      {% endif %}
 
-      // $('#searcher')
-      //   .modal('setting', 'transition', 'fade down')
-      //   .modal('attach events', '#search-btn', 'show');
 
       $('#sidebar-bmatch')
         .sidebar('setting', 'transition', 'overlay')
@@ -99,8 +99,6 @@
 
       // $('.circular.ui.icon.button').popup({
       $('.signup').popup({
-        // inline     : true,
-        // hoverable  : true,
         popup: '.ui.popup',
         position: 'bottom right',
         on: 'click',
@@ -120,17 +118,6 @@
           $('#top-hidden').transition('fade out');
           // $('#top-fixed-shown').transition('fade in');
         }
-      });
-
-
-      // $('.brand.card').popup({
-      //   inline: true,
-      //   hoverable: true,
-      //   position: 'top center',
-      // });
-
-      $('.brand.card .image').dimmer({
-        on: 'hover'
       });
 
     });

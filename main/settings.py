@@ -189,3 +189,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 MEDIA_URL = '/files/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+#Q60jbPX1POJFmqb0dgGl:5RnWiWQnmln
+#1070422112021-th03c2jjibfvdmvt9ab5cbt0m8em0pjo.apps.googleusercontent.com:fbXaoEl90xvwaj4EI6m0bnZug
+#

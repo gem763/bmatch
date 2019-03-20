@@ -54,6 +54,23 @@
       </div><br>
     {% endfor %}
   </div>
+
+  <div class="ui mini need-login modal">
+    <i class="close icon"></i>
+    <div class="header">
+      ALERT
+    </div>
+    <div class="content">
+      <p>로그인이 필요한 기능입니다</p>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">Cancel</div>
+      <div class="ui positive right labeled icon button">
+        Login
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
 
 
@@ -61,27 +78,32 @@
   {{ block.super }}
   <script>
     $("div.ui.segment").click(function(){
-      var more = $(this);
-      more.children("img").css("opacity", 1);
-      more.children("i").css("opacity", 1);
+      {% if user.is_authenticated %}
+        var more = $(this);
+        more.children("img").css("opacity", 1);
+        more.children("i").css("opacity", 1);
 
-      var less = $(this).siblings();
-      less.children("img").css("opacity", 0.5);
-      less.children("i").css("opacity", 0);
+        var less = $(this).siblings();
+        less.children("img").css("opacity", 0.5);
+        less.children("i").css("opacity", 0);
 
-      $.ajax({
-        url: {% url 'likemore' %},
-        async: true,
-        type: 'GET',
-        data: {
-          more: more.attr("bname"),
-          less: less.attr("bname")
-        },
-        dataType: 'text',
-        success: function(jqXHR) {
-          alert(jqXHR);
-        }
-      });
+        $.ajax({
+          url: {% url 'save_worldcup' %},
+          async: true,
+          type: 'GET',
+          data: {
+            more: more.attr("bname"),
+            less: less.attr("bname")
+          },
+          dataType: 'text',
+          success: function(jqXHR) {
+            alert(jqXHR);
+          }
+        });
+      {% else %}
+        // alert(1);
+        $(".need-login.modal").modal("show");
+      {% endif %}
     });
 
     $("div.ui.segment").hover(function(){

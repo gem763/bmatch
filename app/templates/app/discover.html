@@ -83,17 +83,48 @@
   {{ block.super }}
   <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
   <script>
+    $.endlessPaginate({
+      paginateOnScroll: true,
+      paginateOnScrollMargin: 100,
+    });
+  </script>
+
+  <script>
     function paginate(btn) {
       url = "{% url 'discover' %}?p=" + btn.text;
       window.location.replace(url);
     };
 
     $(document).ready(function(){
-      $.endlessPaginate({
-        paginateOnScroll: true,
-        paginateOnScrollMargin: 100,
+      $('.brand.card .image').dimmer({
+        on: 'hover'
       });
 
+      $(window).resize(function(){
+        var width = $(".brand.card").width(); //.css("width");
+        $(".brand.card").css("height", width+"px");
+        $(".brand.card img").css({"width":width+"px", "height":width+"px"});
+        $(".brand.card .like.icon").css("font-size", width*0.15);
+      });
+
+      $(window).trigger('resize');
+
+      $(".like.button").click(function() {
+        $(this).parents(".image").children(".like.icon").css({"opacity":1});
+
+        $.ajax({
+          url: {% url 'save_likes' %},
+          async: true,
+          type: 'GET',
+          data: {
+            like: $(this).parents(".brand.card").attr("bname")
+          },
+          dataType: 'text',
+          success: function(jqXHR) {
+            alert(1);//jqXHR);
+          }
+        });
+      });
 
       $('.ui.search').search({
           source: {{ brands.search_helper | safe }},
