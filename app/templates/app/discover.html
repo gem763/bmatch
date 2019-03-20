@@ -33,49 +33,26 @@
       <div class="results"></div>
     </div>
   </form>
-
   <br>
 
-  {% if brands.all %}
-    <div>
-      <div class="ui pagination mini menu">
-        <a class="item" id="0" page="All" onclick="paginate(this)">All</a>
-        <a class="item" id="1" page="0-9" onclick="paginate(this)">0-9</a>
-        <a class="item" id="2" page="A B C D E F G" onclick="paginate(this)">A B C D E F G</a>
-        <a class="item" id="3" page="H I J K L M N" onclick="paginate(this)">H I J K L M N</a>
-        <a class="item" id="4" page="O P Q R S T U" onclick="paginate(this)">O P Q R S T U</a>
-        <a class="item" id="5" page="V W X Y Z" onclick="paginate(this)">V W X Y Z</a>
-        {% if user.is_authenticated %}
-        <a class="item" id="6" page="like" onclick="paginate(this)"><i class="yellow heart icon"></i></a>
-        {% endif %}
-      </div>
-
-      <br><br>
-      <div class="ui five doubling cards">
-        {% include page_template %}
-      </div>
+  <div>
+    <div class="ui pagination mini menu">
+      <a class="item" id="0" page="All" onclick="paginate(this)">All</a>
+      <a class="item" id="1" page="0-9" onclick="paginate(this)">0-9</a>
+      <a class="item" id="2" page="A B C D E F G" onclick="paginate(this)">A B C D E F G</a>
+      <a class="item" id="3" page="H I J K L M N" onclick="paginate(this)">H I J K L M N</a>
+      <a class="item" id="4" page="O P Q R S T U" onclick="paginate(this)">O P Q R S T U</a>
+      <a class="item" id="5" page="V W X Y Z" onclick="paginate(this)">V W X Y Z</a>
+      {% if user.is_authenticated %}
+      <a class="item" id="6" page="like" onclick="paginate(this)"><i class="yellow heart icon"></i></a>
+      {% endif %}
     </div>
-  {% endif %}
 
-
-  {% if brands.recommend %}
-    <div class="ui five doubling cards">
-      {% for brand in brands.recommend %}
-        {% include "app/brand_card.html" with brand=brand %}
-      {% endfor %}
+    <br><br>
+    <div class="ui pager five doubling cards">
+      {% include page_template %}
     </div>
-  {% endif %}
-
-  {% if brands.not_recommend %}
-    <br>
-    <div class="ui horizontal divider header">Not Recommend</div>
-    <div class="ui five doubling cards">
-      {% for brand in brands.not_recommend %}
-        {% include "app/brand_card.html" with brand=brand %}
-      {% endfor %}
-    </div>
-  {% endif %}
-
+  </div>
 
 </div>
 {% endblock content %}
@@ -93,6 +70,7 @@
     });
 
     function paginate(btn) {
+      $(".pager.cards").html()
       url = "{% url 'discover' %}?p=" + $(btn).attr("page");
       window.location.replace(url);
     };

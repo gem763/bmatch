@@ -1,11 +1,29 @@
 {% load el_pagination_tags %}
-{% lazy_paginate 40,10 brands.all as allbrands %}
 
-{% for brand in allbrands %}
-  {% include "app/brand_card.html" with brand=brand %}
-{% endfor %}
-{% show_more %}
+{% if brands.all %}
+  {% lazy_paginate 40,10 brands.all as all %}
+  {% for brand in all %}
+    {% include "app/brand_card.html" with brand=brand %}
+  {% endfor %}
+  {% show_more %}
+{% endif %}
 
+{% if brands.recommend %}
+  {% lazy_paginate brands.recommend as recommend %}
+  {% for brand in recommend %}
+    {% include "app/brand_card.html" with brand=brand %}
+  {% endfor %}
+  {% show_more %}
+{% endif %}
+
+{% if brands.not_recommend %}
+  <div class="ui horizontal divider header">Not Recommend</div>
+  {% lazy_paginate brands.not_recommend as not_recommend %}
+  {% for brand in not_recommend %}
+    {% include "app/brand_card.html" with brand=brand %}
+  {% endfor %}
+  {% show_more %}
+{% endif %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="/static/semantic/semantic.min.js"></script>

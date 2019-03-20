@@ -340,3 +340,25 @@ def gtrend(request, brand_name):
         'query_top_data':query_top_data,
         'query_rising_data':query_rising_data
     })
+
+
+
+
+
+  # <!-- {% if brands.recommend %}
+  #   <div class="ui five doubling cards">
+  #     {% for brand in brands.recommend %}
+  #       {% include "app/brand_card.html" with brand=brand %}
+  #     {% endfor %}
+  #   </div>
+  # {% endif %}
+  #
+  # {% if brands.not_recommend %}
+  #   <br>
+  #   <div class="ui horizontal divider header">Not Recommend</div>
+  #   <div class="ui five doubling cards">
+  #     {% for brand in brands.not_recommend %}
+  #       {% include "app/brand_card.html" with brand=brand %}
+  #     {% endfor %}
+  #   </div>
+  # {% endif %} -->
