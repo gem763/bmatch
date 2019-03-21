@@ -1,0 +1,111 @@
+<style>
+  .ui.segments {
+    width:360px;
+    height:180px;
+    margin:auto !important;
+  }
+
+  .check.icon {
+    position:absolute;
+    transform:translate(-50%, -50%);
+    top:20%;
+    left:50%;
+    opacity:0;
+    color:orange;
+    -moz-text-stroke:1px #000;
+    -webkit-text-stroke:1px #000;
+  }
+
+  .ui.segment img {
+    opacity:0.5;
+    transition: 0.5s ease;
+    object-fit:contain;
+    width:150px;
+    height:150px;
+    margin:auto;
+    border-radius:4px !important;
+  }
+</style>
+
+{% load ctags %}
+{% load el_pagination_tags %}
+{% lazy_paginate 10,5 pairs %}
+{% for pair in pairs %}
+  <div class="ui horizontal segments">
+    {% for brand in pair|of_name %}
+      <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0" onclick="like_this_more(this)" onmouseover="worldcup_mouseover(this)" onmouseout="worldcup_mouseout(this)">
+        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+        <i class="huge check icon"></i>
+      </div>
+    {% endfor %}
+  </div><br>
+{% endfor %}
+{% show_more %}
+
+<div class="ui mini need-login modal">
+  <i class="close icon"></i>
+  <div class="header">
+    ALERT
+  </div>
+  <div class="content">
+    <p>로그인이 필요한 기능입니다</p>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">Cancel</div>
+    <div class="ui positive right labeled icon button">
+      Login
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/static/semantic/semantic.min.js"></script>
+
+<script>
+  function like_this_more(obj) {
+    // 중요! ======================
+    // 여기에서는 jquery를 쓰면 안된다
+    // $("div.ui.segment").click(function(){ 식으로 쓰는 경우,
+    // el-pagination이 새로운 내용을 paging 할때마다, page 갯수만큼 해당 jquery 함수가 호출된다.
+    {% if user.is_authenticated %}
+      var more = $(obj);
+      more.children("img").css("opacity", 1);
+      more.children("i").css("opacity", 1);
+
+      var less = more.siblings();
+      less.children("img").css("opacity", 0.5);
+      less.children("i").css("opacity", 0);
+
+      $.ajax({
+        url: {% url 'save_worldcup' %},
+        async: true,
+        type: 'GET',
+        data: {
+          more: more.attr("bname"),
+          less: less.attr("bname")
+        },
+        dataType: 'json',
+        success: function(jqXHR) {
+          if (!jqXHR.success) {
+            alert("데이터를 처리하는데 문제가 발생하였습니다.");
+          };
+        }
+      });
+
+    {% else %}
+      $(".need-login.modal").modal("show");
+    {% endif %}
+  };
+
+  function worldcup_mouseover(obj) {
+    $(obj).children("img").css("opacity", 1);
+  };
+
+  function worldcup_mouseout(obj) {
+    if ($(obj).children("i").css("opacity")!=1) {
+      $(obj).children("img").css("opacity", 0.5);
+    }
+  };
+</script>

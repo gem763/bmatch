@@ -24,6 +24,29 @@
     {{ user.socialaccount_set.all.0.get_provider_display }} 아이디로 로그인
   </p>
 
+
+
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">나의 아이덴티티</div>
+    </div>
+    <div class="content">
+      <div class="ui small feed">
+        <table class="ui very basic fixed selectable unstackable very compact table">
+          <tbody>
+            {% for myid,value in myidentity.items %}
+            <tr>
+              <td>{{ myid }}</td>
+              <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
   <div class="ui horizontal segments">
     <div class="ui segment">
       <div class="ui small statistic">

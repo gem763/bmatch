@@ -75,5 +75,38 @@
       });
 
     });
+
+    $('.brand.card .image').dimmer({
+      on: 'hover'
+    });
+
+    $(window).resize(function(){
+      var width = $(".brand.card").width();
+      $(".brand.card").css("height", width+"px");
+      $(".brand.card img").css({"width":width+"px", "height":width+"px"});
+      $(".brand.card .like.icon").css("font-size", width*0.15);
+    });
+
+    $(window).trigger('resize');
+
+    $(".like.button").click(function() {
+      $(this).parents(".image").children(".like.icon").css({"opacity":1});
+
+      $.ajax({
+        url: {% url 'save_likes' %},
+        async: true,
+        type: 'GET',
+        data: {
+          like: $(this).parents(".brand.card").attr("bname")
+        },
+        dataType: 'json',
+        success: function(jqXHR) {
+          if (!jqXHR.success) {
+            alert("데이터를 처리하는데 문제가 발생하였습니다.");
+          };
+        }
+      });
+    });
+    
   </script>
 {% endblock js %}

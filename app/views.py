@@ -71,6 +71,18 @@ def rating(request):
     return render(request, 'app/rating.html', {'pairs':pairs})
 
 
+class RatingView(AjaxListView):
+    context_object_name = 'pairs'
+    template_name = 'app/rating.html'
+    page_template = 'app/rating_page.html'
+    howmany = 500
+
+    def get_queryset(self):
+        bnames = list(Brand.objects.values_list('name', flat=True))
+        comb = list(combinations(bnames, 2))
+        return random.sample(comb, self.howmany)
+
+
 def profiling(request):
     try:
         profile = Profile.objects.get(user__email=request.user.email)
@@ -85,7 +97,12 @@ def profiling(request):
 
 
 def me(request):
-    return render(request, 'app/me.html')
+    profile = Profile.objects.get(user__email=request.user.email)
+    myidentity = {k:round(v*100) for k,v in profile.identify().items()}
+    # print(myidentity)
+    return render(request, 'app/me.html', {'myidentity':myidentity})
+    # return HttpResponse(profile.identify())
+
 
 def sharing(request):
     return render(request, 'app/sharing.html')
@@ -340,25 +357,3 @@ def gtrend(request, brand_name):
         'query_top_data':query_top_data,
         'query_rising_data':query_rising_data
     })
-
-
-
-
-
-  # <!-- {% if brands.recommend %}
-  #   <div class="ui five doubling cards">
-  #     {% for brand in brands.recommend %}
-  #       {% include "app/brand_card.html" with brand=brand %}
-  #     {% endfor %}
-  #   </div>
-  # {% endif %}
-  #
-  # {% if brands.not_recommend %}
-  #   <br>
-  #   <div class="ui horizontal divider header">Not Recommend</div>
-  #   <div class="ui five doubling cards">
-  #     {% for brand in brands.not_recommend %}
-  #       {% include "app/brand_card.html" with brand=brand %}
-  #     {% endfor %}
-  #   </div>
-  # {% endif %} -->

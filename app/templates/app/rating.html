@@ -6,113 +6,20 @@
 
 
 {% block content %}
-<style>
-  .ui.segments {
-    width:360px;
-    height:180px;
-    margin:auto !important;
-  }
-
-  .check.icon {
-    position:absolute;
-    transform:translate(-50%, -50%);
-    top:20%;
-    left:50%;
-    opacity:0;
-    color:orange;
-    -moz-text-stroke:1px #000;
-    -webkit-text-stroke:1px #000;
-  }
-
-  .ui.segment img {
-    opacity:0.5;
-    transition: 0.5s ease;
-    object-fit:contain;
-    width:150px;
-    height:150px;
-    margin:auto;
-    border-radius:4px !important;
-  }
-
-  /* .ui.segment:hover > img {
-    opacity:1;
-    background:yellow;
-  } */
-</style>
-
-  {% load ctags %}
   <div class="ui text container">
-    {% for pair in pairs %}
-      <div class="ui horizontal segments">
-        {% for brand in pair|of_name %}
-          <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0">
-             <!-- onclick="likemore(this)"> -->
-            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
-            <i class="huge check icon"></i>
-          </div>
-        {% endfor %}
-      </div><br>
-    {% endfor %}
-  </div>
-
-  <div class="ui mini need-login modal">
-    <i class="close icon"></i>
-    <div class="header">
-      ALERT
-    </div>
-    <div class="content">
-      <p>로그인이 필요한 기능입니다</p>
-    </div>
-    <div class="actions">
-      <div class="ui black deny button">Cancel</div>
-      <div class="ui positive right labeled icon button">
-        Login
-        <i class="checkmark icon"></i>
-      </div>
-    </div>
+    {% include page_template %}
   </div>
 {% endblock content %}
 
 
+{% load static %}
 {% block js %}
   {{ block.super }}
+  <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
   <script>
-    $("div.ui.segment").click(function(){
-      {% if user.is_authenticated %}
-        var more = $(this);
-        more.children("img").css("opacity", 1);
-        more.children("i").css("opacity", 1);
-
-        var less = $(this).siblings();
-        less.children("img").css("opacity", 0.5);
-        less.children("i").css("opacity", 0);
-
-        $.ajax({
-          url: {% url 'save_worldcup' %},
-          async: true,
-          type: 'GET',
-          data: {
-            more: more.attr("bname"),
-            less: less.attr("bname")
-          },
-          dataType: 'text',
-          success: function(jqXHR) {
-            alert(jqXHR);
-          }
-        });
-      {% else %}
-        // alert(1);
-        $(".need-login.modal").modal("show");
-      {% endif %}
+    $.endlessPaginate({
+      paginateOnScroll: true,
+      paginateOnScrollMargin: 100,
     });
-
-    $("div.ui.segment").hover(function(){
-      $(this).children("img").css("opacity", 1);
-    }, function(){
-      if ($(this).children("i").css("opacity")!=1) {
-        $(this).children("img").css("opacity", 0.5);
-      }
-    });
-
   </script>
 {% endblock js %}

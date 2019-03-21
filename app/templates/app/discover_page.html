@@ -52,9 +52,11 @@
       data: {
         like: $(this).parents(".brand.card").attr("bname")
       },
-      dataType: 'text',
+      dataType: 'json',
       success: function(jqXHR) {
-        alert(jqXHR);
+        if (!jqXHR.success) {
+          alert("데이터를 처리하는데 문제가 발생하였습니다.");
+        };
       }
     });
   });
