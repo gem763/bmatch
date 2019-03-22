@@ -71,7 +71,8 @@
 
     function paginate(btn) {
       url = "{% url 'discover' %}?p=" + $(btn).attr("page");
-      window.location.replace(url);
+      window.location.assign(url);
+      // window.location.replace(url);
     };
 
     $('.ui.search').search({

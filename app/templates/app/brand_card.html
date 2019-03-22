@@ -1,4 +1,8 @@
-<div class="brand card" bname="{{ brand.name }}">
+<div class="brand card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" style="box-shadow:0 0 10px 1px gainsboro;cursor:pointer"
+     onmouseover="bcard_mouseover(this)"
+     onmouseout="bcard_mouseout(this)"
+     onclick="bcard_click(this)">
+
   <div class="dimmable image" style="background:white">
     <div class="ui dimmer">
       <div class="content">
@@ -12,10 +16,10 @@
           {% endif %}
 
           <div class="ui small mini inverted compact icon buttons">
-            <a class="ui inverted detail button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a>
-            {% if user.is_authenticated %}
+            <!-- <a class="ui inverted detail button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a> -->
+            <!-- {% if user.is_authenticated %}
             <a class="ui inverted like button" onclick="like(this)"><i class="heart outline icon"></i></a>
-            {% endif %}
+            {% endif %} -->
             <a class="ui inverted compare button"><i class="exchange icon"></i></a>
           </div>
         </div>
@@ -24,12 +28,15 @@
 
     <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;margin:auto;border-radius:4px !important;">
 
-    {% load ctags %}
-    {% if user.is_authenticated and user.email|liked:brand.name %}
-      <i class="yellow like heart icon" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:1;"></i>
-    {% else %}
-      <i class="yellow like heart icon" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:0;"></i>
-    {% endif %}
+    <div onclick="toggle_like(event, this)">
+      {% load ctags %}
+      {% if user.is_authenticated and user.email|liked:brand.name %}
+        <i class="like yellow heart link icon" state="like" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:1;"></i>
+      {% else %}
+        <i class="like outline heart link icon" state="dontlike" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:0.5;color:gainsboro;""></i>
+      {% endif %}
+    </div>
+
   </div>
 </div>
 

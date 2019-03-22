@@ -29,10 +29,6 @@
 <script src="/static/semantic/semantic.min.js"></script>
 
 <script>
-  $('.brand.card .image').dimmer({
-    on: 'hover'
-  });
-
   $(window).resize(function(){
     var width = $(".brand.card").width();
     $(".brand.card").css("height", width+"px");
@@ -42,41 +38,52 @@
 
   $(window).trigger('resize');
 
-  function like(btn) {
-    $(btn).parents(".image").children(".like.icon").css({"opacity":1});
-
-    $.ajax({
-      url: {% url 'save_likes' %},
-      async: true,
-      type: 'GET',
-      data: {
-        like: $(btn).parents(".brand.card").attr("bname")
-      },
-      dataType: 'json',
-      success: function(jqXHR) {
-        if (!jqXHR.success) {
-          alert("데이터를 처리하는데 문제가 발생하였습니다.");
-        };
-      }
+  function bcard_mouseover(bcard) {
+    $(bcard).css({
+      "box-shadow": "0 0 10px 5px gainsboro"
     });
   };
 
-  // $(".like.button").click(function() {
-  //   $(this).parents(".image").children(".like.icon").css({"opacity":1});
-  //
-  //   $.ajax({
-  //     url: {% url 'save_likes' %},
-  //     async: true,
-  //     type: 'GET',
-  //     data: {
-  //       like: $(this).parents(".brand.card").attr("bname")
-  //     },
-  //     dataType: 'json',
-  //     success: function(jqXHR) {
-  //       if (!jqXHR.success) {
-  //         alert("데이터를 처리하는데 문제가 발생하였습니다.");
-  //       };
-  //     }
-  //   });
-  // });
+  function bcard_mouseout(bcard) {
+    $(bcard).css("box-shadow", "0 0 10px 1px gainsboro");
+  };
+
+  function bcard_click(bcard) {
+    url = $(bcard).attr("href");
+    window.location.assign(url); //.replace()로 하면 history가 저장 안된다
+    // window.location.replace(url);
+  };
+
+
+  function toggle_like(event, obj) {
+    event.stopPropagation();
+    icon = $(obj).children(".like.icon");
+    state = icon.attr("state");
+
+    if (state=="like") {
+      icon.attr("state", "dontlike");
+      icon.attr("class", "like outline heart link icon");
+      icon.css({"opacity":0.5, "color":"gainsboro"});
+
+    } else {
+      icon.attr("state", "like");
+      icon.attr("class", "like yellow heart link icon");
+      icon.css({"opacity":1, "color":""});
+    };
+
+    // $.ajax({
+    //   url: {% url 'save_likes' %},
+    //   async: true,
+    //   type: 'GET',
+    //   data: {
+    //     like: $(btn).parents(".brand.card").attr("bname")
+    //   },
+    //   dataType: 'json',
+    //   success: function(jqXHR) {
+    //     if (!jqXHR.success) {
+    //       alert("데이터를 처리하는데 문제가 발생하였습니다.");
+    //     };
+    //   }
+    // });
+  };
 </script>

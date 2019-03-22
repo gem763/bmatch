@@ -51,7 +51,7 @@ urlpatterns = [
 
     path('profiling/', v.profiling, name='profiling'),
     path('save_worldcup/', v.SaveWorldcupView.as_view(), name='save_worldcup'),
-    path('save_likes/', v.SaveLikesView.as_view(), name='save_likes'),
+    path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
     # path('search/<qry>/', v.search, name='search'),
 
