@@ -14,7 +14,7 @@
           <div class="ui small mini inverted compact icon buttons">
             <a class="ui inverted detail button" href="{% url 'brand_detail' brand.name %}"><i class="question icon"></i></a>
             {% if user.is_authenticated %}
-            <a class="ui inverted like button"><i class="heart outline icon"></i></a>
+            <a class="ui inverted like button" onclick="like(this)"><i class="heart outline icon"></i></a>
             {% endif %}
             <a class="ui inverted compare button"><i class="exchange icon"></i></a>
           </div>

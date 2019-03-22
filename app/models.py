@@ -24,6 +24,7 @@ class Brand(models.Model):
         return {i['key']:i['value'] for i in json.loads(self.identity)}
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     worldcup = models.TextField(blank=True, null=True, default='{}')
@@ -33,7 +34,7 @@ class Profile(models.Model):
         return self.user.email
 
     def get_likes(self):
-        return [] if self.likes is None else [w.strip() for w in self.likes.split(',')]
+        return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
 
 
     def _weighting(self, like=1, morelike=1):
