@@ -198,12 +198,21 @@ def _in_bnames(qry, brands):
     return None
 
 
-class SaveLikesView(View):
+class SaveLikeView(View):
     def get(self, request):
         try:
             like = request.GET.get('like', None)
+            dontlike = request.GET.get('dontlike', None)
             profile = Profile.objects.get(user__email=request.user.email)
-            likes_list = profile.get_likes() + [like]
+            likes_list = profile.get_likes()
+            
+            if (like is not None) and (dontlike is None):
+                likes_list.append(like)
+
+            elif (like is None) and (dontlike is not None):
+                if dontlike in likes_list:
+                    likes_list.remove(dontlike)
+
             profile.likes = ','.join(set(likes_list))
             profile.save()
             return JsonResponse({'success':True})

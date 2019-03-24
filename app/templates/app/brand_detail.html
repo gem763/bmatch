@@ -89,24 +89,24 @@
 
     $(window).trigger('resize');
 
-    $(".like.button").click(function() {
-      $(this).parents(".image").children(".like.icon").css({"opacity":1});
+    // $(".like.button").click(function() {
+    //   $(this).parents(".image").children(".like.icon").css({"opacity":1});
+    //
+    //   $.ajax({
+    //     url: {% url 'save_like' %},
+    //     async: true,
+    //     type: 'GET',
+    //     data: {
+    //       like: $(this).parents(".brand.card").attr("bname")
+    //     },
+    //     dataType: 'json',
+    //     success: function(jqXHR) {
+    //       if (!jqXHR.success) {
+    //         alert("데이터를 처리하는데 문제가 발생하였습니다.");
+    //       };
+    //     }
+    //   });
+    // });
 
-      $.ajax({
-        url: {% url 'save_likes' %},
-        async: true,
-        type: 'GET',
-        data: {
-          like: $(this).parents(".brand.card").attr("bname")
-        },
-        dataType: 'json',
-        success: function(jqXHR) {
-          if (!jqXHR.success) {
-            alert("데이터를 처리하는데 문제가 발생하였습니다.");
-          };
-        }
-      });
-    });
-    
   </script>
 {% endblock js %}

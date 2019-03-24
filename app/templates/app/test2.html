@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+</head>
+
+<body>
+<button class="ui button">
+	<i class="heart icon"></i>
+</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js"></script>
+
+<script>
+var scaleCurve = mojs.easing.path('M0,100 L25,99.9999983 C26.2328835,75.0708847 19.7847843,0 100,0');
+    var el = document.querySelector('.ui.button'),
+	elSpan = el.querySelector('i'),
+	// mo.js timeline obj
+	timeline = new mojs.Timeline(),
+
+	// tweens for the animation:
+
+	// burst animation
+	tween1 = new mojs.Burst({
+		parent: el,
+		duration: 1500,
+		shape : 'circle',
+		fill : [ '#988ADE', '#DE8AA0', '#8AAEDE', '#8ADEAD', '#DEC58A', '#8AD1DE' ],
+		opacity: 0.6,
+		childOptions: { radius: {20:0} },
+		radius: {40:120},
+		count: 6,
+		isSwirl: true,
+		easing: mojs.easing.bezier(0.1, 1, 0.3, 1)
+	}),
+	// ring animation
+	tween2 = new mojs.Transit({
+		parent: el,
+		duration: 750,
+		type: 'circle',
+		radius: {0: 50},
+		fill: 'transparent',
+		stroke: '#988ADE',
+		strokeWidth: {15:0},
+		opacity: 0.6,
+		easing: mojs.easing.bezier(0, 1, 0.5, 1)
+	}),
+	// icon scale animation
+	tween3 = new mojs.Tween({
+		duration : 900,
+		onUpdate: function(progress) {
+			var scaleProgress = scaleCurve(progress);
+			elSpan.style.WebkitTransform = elSpan.style.transform = 'scale3d(' + scaleProgress + ',' + scaleProgress + ',1)';
+		}
+	});
+
+// add tweens to timeline:
+timeline.add(tween1, tween2, tween3);
+
+// when clicking the button start the timeline/animation:
+el.addEventListener('mouseenter', function() {
+	timeline.replay();
+});
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
      onmouseout="bcard_mouseout(this)"
      onclick="bcard_click(this)">
 
-  <div class="dimmable image" style="background:white">
+  <div class="dimmable image" style="background:white;position:relative;">
     <div class="ui dimmer">
       <div class="content">
         <div class="center">
@@ -26,19 +26,28 @@
       </div>
     </div>
 
+    <div class="grad" style="transition: all 0.5s ease;opacity:0;position:absolute;top:50%;height:50%;width:100%;z-index:0;background-image: linear-gradient(to bottom, transparent 0%, #ffffff 100%);">
+      <span style="vertical-align:bottom;display:inline-block;">
+        <br>
+        <i class="external alternate icon"></i>
+        <i class="exchange icon"></i>
+      </span>
+    </div>
     <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;margin:auto;border-radius:4px !important;">
 
-    <div onclick="toggle_like(event, this)">
+    <div onclick="toggle_like(event, this)" style="position:absolute;top:5%;left:5%;" onmouseover="like_mouseover(this)" onmouseout="like_mouseout(this)">
       {% load ctags %}
       {% if user.is_authenticated and user.email|liked:brand.name %}
-        <i class="like yellow heart link icon" state="like" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:1;"></i>
+        <i class="like yellow heart icon" state="like" style="opacity:1;"></i>
+        <!-- <i class="like yellow heart link icon" state="like" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:1;animation: heartbeat 1s infinite;"></i> -->
       {% else %}
-        <i class="like outline heart link icon" state="dontlike" style="position:absolute;transform:translate(-50%, -50%);top:7%;left:90%;opacity:0.5;color:gainsboro;""></i>
+        <i class="like outline heart icon" state="dontlike" style="opacity:0.5;color:gainsboro;""></i>
       {% endif %}
     </div>
 
   </div>
 </div>
+
 
 
 <!-- <div class="ui mini inverted popup" style="text-align:center;width:150px">
