@@ -35,19 +35,22 @@
   }
 
   .bcard_more_btn:hover {
-    background:whitesmoke;
-    /* opacity:0.2; */
+    background:rgba(220, 220, 220, .2) !important;
   }
 
-  /* .bcard_more_icon {
+  .bcard_more_btn {
     position: absolute;
-    bottom: 5%;
-    right: 5%;
-    opacity: 0.5 !important;
-    color: gainsboro;
-  } */
+    right: 2%;
+    bottom: 2%;
+    background: transparent !important;
+  }
 
-  /* .bcard_more_icon:hover + .bcard_cover {
+  .bcard_more_icon {
+    color: gainsboro;
+    opacity: 0.8;
+  }
+
+  /* .bcard_more_btn:hover + .bcard_cover {
     animation: bcard_more 0.5s forwards;
   } */
 
@@ -58,7 +61,6 @@
     height: 70%;
     width: 100%;
     background: whitesmoke;
-    /* z-index: 0; */
     /* pointer-events: none; */
   }
 
@@ -115,7 +117,7 @@
     $(".bcard").css("height", width + "px");
     $(".bcard_img").css({"width":width + "px", "height":width + "px"});
     $(".bcard_like").css("font-size", width*0.15);
-    $(".bcard_more_icon").css("font-size", width*0.1);
+    $(".bcard_more_btn").css("font-size", width*0.1);
     $(".bcard_stat_value").css("font-size", width*0.2);
     $(".bcard_stat_label").css("font-size", width*0.07);
   });
