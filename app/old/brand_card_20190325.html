@@ -12,11 +12,15 @@
     </div>
   </div>
 
-  {% if type == "more" %}
   <div class="bcard_more">
+    <!-- <div class="bcard_more_btn" style="position:absolute;left:70%;top:70%;width:30%;height:30%;display:flex;align-items:center;justify-content:center;" onclick="bcard_more(event, this)">
+      <i class="bcard_more_icon ellipsis vertical link icon" style="height:50%;background:transparent;color:silver;"></i>
+    </div> -->
+
     <button class="bcard_more_btn ui compact icon button" onclick="bcard_more(event, this)">
       <i class="bcard_more_icon ellipsis horizontal icon"></i>
     </button>
+
 
     <div class="bcard_cover" onclick="bcard_cover_click(event, this)" onmouseleave="bcard_cover_mouseleave(this)">
       <div class="ui centered grid">
@@ -37,7 +41,33 @@
         </div>
       </div>
     </div>
-  </div>
-  {% endif %}
 
+  </div>
 </div>
+
+
+
+<!-- <div class="ui mini inverted popup" style="text-align:center;width:150px">
+  <div class="column">
+
+    <h4 class='ui yellow header'>
+      {{ brand.fullname_en }}
+      <div class='sub header'>{{ brand.fullname_kr }}</div>
+    </h4>
+
+    <div class="content">
+      {% if brand.score %}
+        <div class='ui inverted purple statistic'>
+          <div class='value'>{{ brand.score }}</div>
+          <div class='label'>MATCHING %</div>
+        </div>
+      {% endif %}
+
+      <div class="ui two mini inverted buttons">
+        <a class="ui inverted button" href="{% url 'brand_detail' brand.name %}">DETAIL</a>
+        <div class="ui inverted button">COMPARE</div>
+      </div>
+    </div>
+
+  </div>
+</div> -->
