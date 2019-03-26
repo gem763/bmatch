@@ -20,13 +20,13 @@ var RadarChart = {
 
     if('undefined' !== typeof options){
       for(var i in options){
-      if('undefined' !== typeof options[i]){
-        cfg[i] = options[i];
-      }
+        if('undefined' !== typeof options[i]){
+          cfg[i] = options[i];
+        }
       }
     }
 
-    cfg.maxValue = 100;
+    // cfg.maxValue = 100;
 
     var allAxis = (d[0].map(function(i, j){return i.area}));
     var total = allAxis.length;

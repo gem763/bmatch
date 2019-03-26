@@ -77,6 +77,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
 
   <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <!-- <script src="https://unpkg.com/tippy.js@4.2.0/umd/index.all.min.js"></script> -->
   <script src="https://unpkg.com/tippy.js@4"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
@@ -84,7 +85,8 @@
   https://github.com/jedtrow/Chart.js-Rounded-Bar-Charts -->
   <script src="{% static 'js/Chart.roundedBarCharts.min.js' %}"></script>
   <script src="{% static 'quantlab/bcard.js' %}"></script>
-  <script src="{% static 'js/RadarChart.js' %}"></script>
+  <script src="{% static 'js/d3-components-0.0.5.js' %}"></script>
+  <!-- <script src="{% static 'js/RadarChart.js' %}"></script> -->
 
   <script>
     function append_table_row(id, query_data){
@@ -135,18 +137,107 @@
 
     });
 
-    // $('.brand.card .image').dimmer({
-    //   on: 'hover'
-    // });
+    var jdata = [
+                  {
+                    axis: "Innovations",
+                    value: 92,
+                    city: "Shenzhen"
+                  },
+                  {
+                    axis: "Computing power",
+                    value: 90,
+                    city: "Hangzhou"
+                  },
+                  {
+                    axis: "Investments",
+                    value: 85,
+                    city: "Shenzhen"
+                  },
+                  {
+                    axis: "Computing power",
+                    value: 78,
+                    city: "Shenzhen"
+                  },
+                  {
+                    axis: "Innovations",
+                    value: 72,
+                    city: "Hangzhou"
+                  },
+                  {
+                    axis: "Investments",
+                    value: 66,
+                    city: "Hangzhou"
+                  },
+                  {
+                    axis: "Demands",
+                    value: 60,
+                    city: "Shenzhen"
+                  },
+                  {
+                    axis: "Big data",
+                    value: 45,
+                    city: "Hangzhou"
+                  },
+                  {
+                    axis: "Demands",
+                    value: 42,
+                    city: "Hangzhou"
+                  },
+                  {
+                    axis: "Big data",
+                    value: 30,
+                    city: "Shenzhen"
+                  }
+                ];
+
+    // d3.shuffle(jdata);
+    radarChart(jdata, {
+      id: 'chart',
+      title: {
+        show: true,
+        text: 'Cloud Indexes of China Cities'
+      },
+      axes: [
+        'Computing power',
+        'Investments',
+        'Big data',
+        'Innovations',
+        'Demands'
+      ],
+      series: [
+        'Hangzhou',
+        'Shenzhen'
+      ],
+      maxValue: 100,
+      levels: 5,
+      curve: 'curveCardinalClosed',
+      grids: {
+        shape: 'circle'
+      },
+      tooltip: {
+        html: function (d) {
+          return d.axis + ': ' + d.value + ' (' + d.city + ')';
+        }
+      },
+      legend: {
+        autoplay: true
+      }
+    });
+
+
+    // var width = 200;
+    // var height = 200;
     //
-    // $(window).resize(function(){
-    //   var width = $(".brand.card").width();
-    //   $(".brand.card").css("height", width+"px");
-    //   $(".brand.card img").css({"width":width+"px", "height":width+"px"});
-    //   $(".brand.card .like.icon").css("font-size", width*0.15);
-    // });
+    // var config = {
+    //     w: width,
+    //     h: height,
+    //     maxValue: 100,
+    //     levels: 5,
+    //     ExtraWidthX: 300
+    // }
     //
-    // $(window).trigger('resize');
+    // RadarChart.draw("#chart", jdata, config);
+
 
   </script>
 {% endblock js %}
