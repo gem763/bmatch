@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     #'sslserver',
     'el_pagination',
-    'chartjs',
+    # 'chartjs',
     # 'social_django',
     'custom_user',
     # 'users',
