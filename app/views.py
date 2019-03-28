@@ -205,7 +205,7 @@ class SaveLikeView(View):
             dontlike = request.GET.get('dontlike', None)
             profile = Profile.objects.get(user__email=request.user.email)
             likes_list = profile.get_likes()
-            
+
             if (like is not None) and (dontlike is None):
                 likes_list.append(like)
 
