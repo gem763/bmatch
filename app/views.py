@@ -20,8 +20,8 @@ import random
 from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-
-api = 'http://127.0.0.1:8080/api'
+opt = Option.objects.get(optname='init')
+# api = 'http://127.0.0.1:8080/api'
 # api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
@@ -55,10 +55,8 @@ def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     simbrands_top, simbrands_bottom = _simbrands(bname=bname, top_min=0.5, bottom_max=0)
     simwords = _simwords(bname, min=0.5, topn=100, amp=10)
-    # simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
-    print('--------------------------------', _identity(bname))
-    return render(request, 'app/brand_detail.html', {'brand':brand, 'simwords':simwords, 'simbrands_top':simbrands_top, 'simbrands_bottom':simbrands_bottom})
-    # return render(request, 'app/brand_detail.html', {'brand':brand, 'simwords':simwords, 'simbrands_top':simbrands_top[1:], 'simbrands_bottom':simbrands_bottom})
+    identity = _identity(bname)
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simwords':simwords, 'simbrands_top':simbrands_top, 'simbrands_bottom':simbrands_bottom, 'identity':identity})
 
 
 def rating(request):
@@ -111,10 +109,9 @@ def _simbrands(qry=None, bname=None, top_min=0.5, bottom_max=0):
     _top = None
     _bottom = None
     brands = Brand.objects
-    # keywords_dict = _keywords_dict(brands)
 
-    url = api + '/simbrands'
-    data = {} #'brands':json.dumps(keywords_dict)}
+    url = opt.api + '/simbrands'
+    data = {}
 
     if (qry is None) & (bname is not None):
         data['bname'] = bname
@@ -153,7 +150,7 @@ def _simbrands_old(qry=None, mybname=None, top_min=0.5, bottom_max=0):
     brands = Brand.objects
     keywords_dict = _keywords_dict(brands)
 
-    url = api + '/simbrands'
+    url = opt.api + '/simbrands'
     data = {'brands':json.dumps(keywords_dict)}
 
     if (qry is None) & (mybname is not None):
@@ -188,7 +185,7 @@ def _simbrands_old(qry=None, mybname=None, top_min=0.5, bottom_max=0):
 
 
 def _simwords(bname, amp=10, min=0, topn=10):
-    url = api + '/simwords'
+    url = opt.api + '/simwords'
     # words = ' '.join([kw.strip() for kw in keywords.split(',')])
     # data = {'w': words, 'min':min, 'topn':topn}
     data = {'bname': bname, 'min': min, 'topn': topn}
@@ -198,8 +195,9 @@ def _simwords(bname, amp=10, min=0, topn=10):
 
 
 def _identity(bname):
-    url = api + '/identity'
-    idwords = '[' + Option.objects.get(optname='init').idwords + ']'
+    url = opt.api + '/identity'
+    # idwords = '[' + Option.objects.get(optname=optname).idwords + ']'
+    idwords = '[' + opt.idwords + ']'
     data = {'bname':bname, 'idwords':idwords}
     req = requests.post(url, data=data)
     res = req.json()

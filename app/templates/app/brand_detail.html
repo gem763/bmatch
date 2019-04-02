@@ -139,7 +139,7 @@
     });
 
 
-    var identity = {{ brand.identity | safe }};
+    var identity = {{ identity | safe }};
     var bid = ['럭셔리','유니크','정통성','포멀','캐주얼','대중성','트렌디','액티브'];
     var bval = bid.map(function(id){ return identity[id]; });
 
@@ -149,7 +149,7 @@
         backgroundColor: 'rgb(255,99,132,0.2)',
         borderColor: 'rgb(255,99,132)',
         pointBackgroundColor: 'rgb(255,99,132)',
-        data: bval 
+        data: bval
       }]
     };
 
@@ -159,7 +159,8 @@
         options: {
           scale: {
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              max: 100
             },
             gridLines: {
               circular: true

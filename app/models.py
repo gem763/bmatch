@@ -19,6 +19,7 @@ class Option(models.Model):
 
     optname = models.CharField(max_length=120, default='')
     idwords = models.TextField(default='')
+    api = models.CharField(max_length=120, default='http://127.0.0.1:8080/api')
 
     def __str__(self):
         return self.optname
