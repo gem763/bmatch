@@ -7,7 +7,7 @@ from django.conf import settings
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
 from django.views.generic import View
-from app.models import Brand, Profile
+from app.models import Brand, Profile, Option
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 import time
 import json
@@ -21,8 +21,8 @@ from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 
-# api = 'http://127.0.0.1:8080/api'
-api = 'http://bmatchsupport.pythonanywhere.com/api'
+api = 'http://127.0.0.1:8080/api'
+# api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
 def intro(request):
@@ -53,14 +53,12 @@ def db_update(request, category):
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
-    # brand.identity = json.loads(brand.identity)
-    #
-    # for idty in brand.identity:
-    #     idty['key0'], idty['key1'] = idty['key'].split('-')
-
-    simbrands_top, simbrands_bottom = _simbrands(mybname=bname, top_min=0.5, bottom_max=0)
-    simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
-    return render(request, 'app/brand_detail.html', {'brand':brand, 'simbrands_top':simbrands_top[1:], 'simbrands_bottom':simbrands_bottom, 'simwords':simwords})
+    simbrands_top, simbrands_bottom = _simbrands(bname=bname, top_min=0.5, bottom_max=0)
+    simwords = _simwords(bname, min=0.5, topn=100, amp=10)
+    # simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
+    print('--------------------------------', _identity(bname))
+    return render(request, 'app/brand_detail.html', {'brand':brand, 'simwords':simwords, 'simbrands_top':simbrands_top, 'simbrands_bottom':simbrands_bottom})
+    # return render(request, 'app/brand_detail.html', {'brand':brand, 'simwords':simwords, 'simbrands_top':simbrands_top[1:], 'simbrands_bottom':simbrands_bottom})
 
 
 def rating(request):
@@ -109,7 +107,47 @@ def analysis(request):
     return render(request, 'app/analysis.html')
 
 
-def _simbrands(qry=None, mybname=None, top_min=0.5, bottom_max=0):
+def _simbrands(qry=None, bname=None, top_min=0.5, bottom_max=0):
+    _top = None
+    _bottom = None
+    brands = Brand.objects
+    # keywords_dict = _keywords_dict(brands)
+
+    url = api + '/simbrands'
+    data = {} #'brands':json.dumps(keywords_dict)}
+
+    if (qry is None) & (bname is not None):
+        data['bname'] = bname
+
+    elif (qry is not None) & (bname is None):
+        data['qry'] = qry
+
+    else:
+        return _top, _bottom
+
+    res = requests.post(url, data=data).json()
+
+    def _put_scores(scores):
+        simbrands = brands.filter(name__in=scores.keys())
+
+        for simbrand in simbrands:
+            simbrand.score = scores[simbrand.name]
+
+        return sorted(simbrands, key=lambda x:-x.score)
+
+
+    if top_min is not None:
+        _scores = {k:round(100*v) for k,v in res.items() if v > top_min}
+        _top = _put_scores(_scores)
+
+    if bottom_max is not None:
+        _scores = {k:round(100*v) for k,v in res.items() if v < bottom_max}
+        _bottom = _put_scores(_scores)
+
+    return _top, _bottom
+
+
+def _simbrands_old(qry=None, mybname=None, top_min=0.5, bottom_max=0):
     _top = None
     _bottom = None
     brands = Brand.objects
@@ -149,13 +187,23 @@ def _simbrands(qry=None, mybname=None, top_min=0.5, bottom_max=0):
     return _top, _bottom
 
 
-def _simwords(keywords, amp=10, min=0, topn=10):
+def _simwords(bname, amp=10, min=0, topn=10):
     url = api + '/simwords'
-    words = ' '.join([kw.strip() for kw in keywords.split(',')])
-    data = {'w': words, 'min':min, 'topn':topn}
+    # words = ' '.join([kw.strip() for kw in keywords.split(',')])
+    # data = {'w': words, 'min':min, 'topn':topn}
+    data = {'bname': bname, 'min': min, 'topn': topn}
     req = requests.post(url, data=data)
     res = req.json()
     return {k:v**amp for k,v in res.items()}
+
+
+def _identity(bname):
+    url = api + '/identity'
+    idwords = '[' + Option.objects.get(optname='init').idwords + ']'
+    data = {'bname':bname, 'idwords':idwords}
+    req = requests.post(url, data=data)
+    res = req.json()
+    return res
 
 
 # 주어진 Brand 객체의 로고 이미지 주소

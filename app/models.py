@@ -5,7 +5,7 @@ import json
 # Create your models here.
 
 
-class Options(models.Model):
+class Option(models.Model):
     # idwords_default = [
     #     {'럭셔리': '럭셔리 고급 호화 과시 명품 luxury 비싼 고가 expensive pricy pricey',
     #      '캐주얼': '캐주얼 캐쥬얼 casual 스타일리시 스타일리쉬 stylish'},
@@ -17,7 +17,11 @@ class Options(models.Model):
     #      '액티브': '화제 인기 hot 튀는 액티브 active 앞서가는 실험 과감 선도 선구 대담'}
     # ]
 
+    optname = models.CharField(max_length=120, default='')
     idwords = models.TextField(default='')
+
+    def __str__(self):
+        return self.optname
 
 
 class Brand(models.Model):
