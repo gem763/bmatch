@@ -18,3 +18,4 @@ from app.models import Brand, Profile
 
 admin.site.register(Brand)
 admin.site.register(Profile)
+admin.site.register(Options)

@@ -25,24 +25,12 @@
   </p>
 
 
-
   <div class="ui fluid card">
     <div class="content">
-      <div class="header">나의 아이덴티티</div>
+      <div class="header">아이덴티티 방사형</div>
     </div>
     <div class="content">
-      <div class="ui small feed">
-        <table class="ui very basic fixed selectable unstackable very compact table">
-          <tbody>
-            {% for myid,value in myidentity.items %}
-            <tr>
-              <td>{{ myid }}</td>
-              <td>{{ value }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      <canvas id="bid" width="200" height="200"></canvas>
     </div>
   </div>
 
@@ -83,9 +71,43 @@
 
 {% block js %}
   {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
   <script>
     $('#profile_image').dimmer({
       on: 'hover'
+    });
+
+    var identity = {{ myidentity | safe }};
+    var bid = ['럭셔리','유니크','정통성','포멀','캐주얼','대중성','트렌디','액티브'];
+    var bval = bid.map(function(id){ return identity[id]; });
+
+    var data = {
+      labels: bid,
+      datasets: [{
+        backgroundColor: 'rgb(255,99,132,0.2)',
+        borderColor: 'rgb(255,99,132)',
+        pointBackgroundColor: 'rgb(255,99,132)',
+        data: bval
+      }]
+    };
+
+    var myRadarChart = new Chart('bid', {
+        type: 'radar',
+        data: data,
+        options: {
+          scale: {
+            ticks: {
+              beginAtZero: true
+            },
+            gridLines: {
+              circular: true
+            }
+          },
+          legend: {
+            display: false
+          }
+        }
     });
   </script>
 {% endblock js %}

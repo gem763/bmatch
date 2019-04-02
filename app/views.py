@@ -53,10 +53,10 @@ def db_update(request, category):
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
-    brand.identity = json.loads(brand.identity)
-
-    for idty in brand.identity:
-        idty['key0'], idty['key1'] = idty['key'].split('-')
+    # brand.identity = json.loads(brand.identity)
+    #
+    # for idty in brand.identity:
+    #     idty['key0'], idty['key1'] = idty['key'].split('-')
 
     simbrands_top, simbrands_bottom = _simbrands(mybname=bname, top_min=0.5, bottom_max=0)
     simwords = _simwords(brand.keywords, min=0.5, topn=100, amp=10)
@@ -98,10 +98,8 @@ def profiling(request):
 
 def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
-    myidentity = {k:round(v*100) for k,v in profile.identify().items()}
-    # print(myidentity)
+    myidentity = profile.identify()
     return render(request, 'app/me.html', {'myidentity':myidentity})
-    # return HttpResponse(profile.identify())
 
 
 def sharing(request):
@@ -160,13 +158,6 @@ def _simwords(keywords, amp=10, min=0, topn=10):
     return {k:v**amp for k,v in res.items()}
 
 
-# def _brandscore_to_qry(qry, keywords_dict):
-#     url = api + '/search'
-#     data = {'qry':qry, 'brands':json.dumps(keywords_dict)}
-#     req = requests.post(url, data=data)
-#     return req.json()
-
-
 # 주어진 Brand 객체의 로고 이미지 주소
 def _imgurl(brand):
     return os.path.join(settings.MEDIA_URL, str(brand.logo))
@@ -178,11 +169,6 @@ def _indexer(brands):
 
 def _search_helper(brands):
     return [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)} for brand in brands.all()]
-
-
-# def _bnames_set(brands):
-#     _bnames = [[brand.name, brand.fullname_en, brand.fullname_kr] + [kw.strip() for kw in brand.keywords.split(',')] for brand in brands.all()]
-#     return set(sum(_bnames, []))
 
 
 def _keywords_dict(brands):
