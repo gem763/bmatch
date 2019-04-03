@@ -1,29 +1,39 @@
 from django.db import models
 from django.conf import settings
 import json
+import requests
 
 # Create your models here.
 
+optname = 'init'
+
+def get_opt():
+    return Option.objects.get(optname=optname)
+
 
 class Option(models.Model):
-    # idwords_default = [
-    #     {'럭셔리': '럭셔리 고급 호화 과시 명품 luxury 비싼 고가 expensive pricy pricey',
-    #      '캐주얼': '캐주얼 캐쥬얼 casual 스타일리시 스타일리쉬 stylish'},
-    #     {'유니크': '유니크 독특 독창 unique 개성 only 참신 신선 특이 아이디어 철학',
-    #      '대중성': '대중 popular 널리 흔한 massive mass 대중성'},
-    #     {'정통성': '정통 클래식 classic 품격 약속 신뢰 믿음 예측 견고 품질 안정',
-    #      '트렌디': '트렌디 트랜디 트렌드 트랜드 유행 trend trendy 변화 새로운 민감 예민 신상 최신'},
-    #     {'포멀': '포멀 formal 노멀 normal 평범 일상 무난 기본 베이스 베이직 base basic',
-    #      '액티브': '화제 인기 hot 튀는 액티브 active 앞서가는 실험 과감 선도 선구 대담'}
-    # ]
+    idwords_default = [
+        {"럭셔리": "럭셔리 고급 호화 과시 명품 luxury 비싼 고가 expensive pricy pricey",
+         "캐주얼": "캐주얼 캐쥬얼 casual 스타일리시 스타일리쉬 stylish"},
+        {"유니크": "유니크 독특 독창 unique 개성 only 참신 신선 특이 아이디어 철학",
+         "대중성": "대중 popular 널리 흔한 massive mass 대중성"},
+        {"정통성": "정통 클래식 classic 품격 약속 신뢰 믿음 예측 견고 품질 안정",
+         "트렌디": "트렌디 트랜디 트렌드 트랜드 유행 trend trendy 변화 새로운 민감 예민 신상 최신"},
+        {"포멀": "포멀 formal 노멀 normal 평범 일상 무난 기본 베이스 베이직 base basic",
+         "액티브": "화제 인기 hot 튀는 액티브 active 앞서가는 실험 과감 선도 선구 대담"}
+    ]
 
-    optname = models.CharField(max_length=120, default='')
-    idwords = models.TextField(default='')
+    optname = models.CharField(max_length=120, default='init')
+    idwords = models.TextField(default=json.dumps(idwords_default, ensure_ascii=False))
     api = models.CharField(max_length=120, default='http://127.0.0.1:8080/api')
 
     def __str__(self):
         return self.optname
 
+
+class Search(models.Model):
+    pass
+    
 
 class Brand(models.Model):
     name = models.CharField(max_length=120)
@@ -35,7 +45,7 @@ class Brand(models.Model):
     description = models.TextField(default='', blank=True, null=True)
     history = models.TextField(default='', blank=True, null=True)
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
-    identity = models.TextField(default='{}', blank=True, null=True)
+    # identity = models.TextField(default='{}', blank=True, null=True)
     # cluster = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -45,6 +55,21 @@ class Brand(models.Model):
         return json.loads(self.identity)
         # return {i['key']:i['value'] for i in json.loads(self.identity)}
 
+    def get_simwords(self, amp=10, min=0, topn=10):
+        url = get_opt().api + '/simwords'
+        data = {'bname': self.name, 'min': min, 'topn': topn}
+        req = requests.post(url, data=data)
+        res = req.json()
+        return {k:v**amp for k,v in res.items()}
+
+    def get_identity(self):
+        opt = get_opt()
+        url = opt.api + '/identity'
+        idwords = opt.idwords
+        data = {'bname':self.name, 'idwords':idwords}
+        req = requests.post(url, data=data)
+        res = req.json()
+        return res
 
 
 class Profile(models.Model):

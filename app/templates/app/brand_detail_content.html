@@ -101,7 +101,7 @@
       <div class="ui small feed">
 
         <div class="ui five doubling brandlist cards">
-          {% for sbrand in simbrands_top %}
+          {% for sbrand in brand.simbrands.top %}
             {% include "app/brand_card.html" with brand=sbrand type='more' %}
           {% endfor %}
         </div>
@@ -119,7 +119,7 @@
       <div class="ui small feed">
 
         <div class="ui five doubling brandlist cards">
-          {% for sbrand in simbrands_bottom %}
+          {% for sbrand in brand.simbrands.bottom %}
             {% include "app/brand_card.html" with brand=sbrand type='more' %}
           {% endfor %}
         </div>

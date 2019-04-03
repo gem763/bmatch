@@ -11,21 +11,21 @@
   {% show_more %}
 {% endif %}
 
-{% if brands.recommend %}
-  {% lazy_paginate brands.recommend as recommend %}
+{% if brands.simbrands.top %}
+  <!-- {% lazy_paginate brands.simbrands.top as recommend %} -->
   {% for brand in recommend %}
     {% include "app/brand_card.html" with brand=brand %}
   {% endfor %}
-  {% show_more %}
+  <!-- {% show_more %} -->
 {% endif %}
 
-{% if brands.not_recommend %}
+{% if brands.simbrands.bottom %}
   <div class="ui horizontal divider header">Not Recommend</div>
-  {% lazy_paginate brands.not_recommend as not_recommend %}
+  <!-- {% lazy_paginate brands.simbrands.bottom as not_recommend %} -->
   {% for brand in not_recommend %}
     {% include "app/brand_card.html" with brand=brand %}
   {% endfor %}
-  {% show_more %}
+  <!-- {% show_more %} -->
 {% endif %}
 
 
