@@ -40,6 +40,7 @@ urlpatterns = [
     # path('rating/', v.rating),
     path('rating/', v.RatingView.as_view(), name='rating'),
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
+    path('brands/<bname>/identity/', v.identity, name='identity'),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
     path('brands/<brand_name>/gtrend/', v.gtrend, name='gtrend'),
     # path('bnames/', v.bnames, name='bnames'),

@@ -156,6 +156,10 @@ def _simwords(bname, amp=10, min=0, topn=10):
     return {k:v**amp for k,v in res.items()}
 
 
+def identity(requests, bname):
+    return JsonResponse(_identity(bname=bname))
+
+
 def _identity(bname=None):
     opt = get_opt()
     url = opt.api + '/identity'

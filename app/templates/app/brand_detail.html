@@ -153,7 +153,7 @@
       }]
     };
 
-    var myRadarChart = new Chart('bid', {
+    new Chart('bid', {
         type: 'radar',
         data: data,
         options: {
@@ -171,6 +171,53 @@
           }
         }
     });
+
+
+    function show_compare(btn) {
+      var compare_to = $(btn).parents(".bcard").attr("bname");
+
+      $.get('/brands/' + compare_to + '/identity/', function(idty){
+        var bval_compared = bid.map(function(id){ return idty[id]; });
+
+        var data = {
+          labels: bid,
+          datasets: [{
+            label: '{{ brand.name }}',
+            backgroundColor: 'rgb(255,99,132,0.2)',
+            borderColor: 'rgb(255,99,132)',
+            pointBackgroundColor: 'rgb(255,99,132)',
+            data: bval },
+          {
+            label: compare_to,
+            backgroundColor: 'rgb(53,162,235,0.2)',
+            borderColor: 'rgb(53,162,235)',
+            pointBackgroundColor: 'rgb(53,162,235)',
+            data: bval_compared
+          }]
+        };
+
+        new Chart('bid-compare', {
+            type: 'radar',
+            data: data,
+            options: {
+              scale: {
+                ticks: {
+                  beginAtZero: true,
+                  max: 100
+                },
+                gridLines: {
+                  circular: true
+                }
+              },
+              legend: {
+                display: true
+              }
+            }
+        });
+
+        $('.ui.compare.modal').modal('show');
+      });
+    };
 
   </script>
 {% endblock js %}
