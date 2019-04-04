@@ -22,14 +22,12 @@ function bcard_cover_mouseleave(bcard_cover) {
 
 function bcard_cover_click(event, bcard_cover) {
   event.stopPropagation();
-}
-
+};
 
 function bcard_click(bcard) {
   var url = $(bcard).attr("href");
   window.location.assign(url); //.replace()로 하면 history가 저장 안된다
 };
-
 
 function toggle_like(event, obj) {
   event.stopPropagation();

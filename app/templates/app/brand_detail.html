@@ -57,6 +57,11 @@
     	font-weight: 500;
       color: #081F2C;
     }
+
+    /* @keyframes bcard_less {
+      0% { opacity:1; top:30%; box-shadow:0 0 10px 1px gainsboro }
+      100% { opacity:0 }
+    } */
   </style>
 {% endblock style %}
 
@@ -175,6 +180,7 @@
 
     function show_compare(btn) {
       var compare_to = $(btn).parents(".bcard").attr("bname");
+      // $(btn).parents(".bcard_cover").css({"animation":"bcard_less 0.5s forwards"});
 
       $.get('/brands/' + compare_to + '/identity/', function(idty){
         var bval_compared = bid.map(function(id){ return idty[id]; });
