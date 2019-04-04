@@ -58,8 +58,8 @@ def db_update(request, category):
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
     brand.simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
-    brand.simwords = brand.get_simwords(min=0.5, topn=100, amp=10)
-    brand.identity = brand.get_identity()
+    brand.simwords = _simwords(bname, min=0.5, topn=100, amp=10)
+    brand.identity = _identity(bname=bname)
     return render(request, 'app/brand_detail.html', {'brand':brand})
 
 
@@ -98,7 +98,8 @@ def profiling(request):
 
 def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
-    myidentity = profile.identify()
+    idty_all = _identity()
+    myidentity = profile.identify(idty_all)
     return render(request, 'app/me.html', {'myidentity':myidentity})
 
 
@@ -123,6 +124,7 @@ def _simbrands(qry=None, bname=None, top_min=50, bottom_max=0, n_max=20):
         return sims
 
     res = requests.post(url, data=data).json()
+    if len(res)==0: return sims
     scored = _scored_brands(res)
 
     if top_min is not None:
@@ -146,22 +148,28 @@ def _scored_brands(scores):
     return scored
 
 
-# def _simwords(bname, amp=10, min=0, topn=10):
-#     url = get_opt().api + '/simwords'
-#     data = {'bname': bname, 'min': min, 'topn': topn}
-#     req = requests.post(url, data=data)
-#     res = req.json()
-#     return {k:v**amp for k,v in res.items()}
+def _simwords(bname, amp=10, min=0, topn=10):
+    url = get_opt().api + '/simwords'
+    data = {'bname': bname, 'min': min, 'topn': topn}
+    req = requests.post(url, data=data)
+    res = req.json()
+    return {k:v**amp for k,v in res.items()}
 
 
-# def _identity(bname):
-#     opt = get_opt()
-#     url = opt.api + '/identity'
-#     idwords = opt.idwords
-#     data = {'bname':bname, 'idwords':idwords}
-#     req = requests.post(url, data=data)
-#     res = req.json()
-#     return res
+def _identity(bname=None):
+    opt = get_opt()
+    url = opt.api + '/identity'
+    idwords = opt.idwords
+
+    if bname is None:
+        data = {'idwords':idwords}
+
+    else:
+        data = {'bname':bname, 'idwords':idwords}
+
+    req = requests.post(url, data=data)
+    return req.json()
+
 
 
 # 주어진 Brand 객체의 로고 이미지 주소

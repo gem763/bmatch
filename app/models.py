@@ -5,11 +5,6 @@ import requests
 
 # Create your models here.
 
-optname = 'init'
-
-def get_opt():
-    return Option.objects.get(optname=optname)
-
 
 class Option(models.Model):
     idwords_default = [
@@ -31,10 +26,6 @@ class Option(models.Model):
         return self.optname
 
 
-class Search(models.Model):
-    pass
-    
-
 class Brand(models.Model):
     name = models.CharField(max_length=120)
     fullname_kr = models.CharField(max_length=120, blank=True, null=True)
@@ -51,25 +42,9 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
-    def get_id(self):
-        return json.loads(self.identity)
+    # def get_id(self):
+    #     return json.loads(self.identity)
         # return {i['key']:i['value'] for i in json.loads(self.identity)}
-
-    def get_simwords(self, amp=10, min=0, topn=10):
-        url = get_opt().api + '/simwords'
-        data = {'bname': self.name, 'min': min, 'topn': topn}
-        req = requests.post(url, data=data)
-        res = req.json()
-        return {k:v**amp for k,v in res.items()}
-
-    def get_identity(self):
-        opt = get_opt()
-        url = opt.api + '/identity'
-        idwords = opt.idwords
-        data = {'bname':self.name, 'idwords':idwords}
-        req = requests.post(url, data=data)
-        res = req.json()
-        return res
 
 
 class Profile(models.Model):
@@ -93,14 +68,14 @@ class Profile(models.Model):
                 weights[b] = weights[b] + add if b in weights else add
         return weights
 
-    def identify(self, like=1, morelike=1):
+    def identify(self, idty_all, like=1, morelike=1):
         score = {}
-        brands = Brand.objects
         weights = self._weighting(like=like, morelike=morelike)
 
         for bname, w in weights.items():
-            for k,v in brands.get(name=bname).get_id().items():
-                score[k] = score[k] + v*w if k in score else v*w
+            if bname in idty_all:
+                for k,v in idty_all[bname].items():
+                    score[k] = score[k] + v*w if k in score else v*w
 
         score_sum = sum(score.values())
         return {k:round(v/score_sum*100) for k,v in score.items()}
