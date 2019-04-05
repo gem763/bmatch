@@ -61,6 +61,8 @@
   justify-content: center;
   background: whitesmoke;
   cursor: default;
+  box-shadow: 0 0 10px 1px gainsboro;
+  opacity: 0;
   /* pointer-events: none; */
 }
 
@@ -79,11 +81,11 @@
 }
 
 @keyframes bcard_more {
-  0% { opacity:0 }
-  100% { opacity:1; top:30%; box-shadow:0 0 10px 1px gainsboro }
+  /* 0% { opacity:0 } */
+  100% { opacity:1; top:30%; }
 }
 
 @keyframes bcard_less {
-  0% { opacity:1; top:30%; box-shadow:0 0 10px 1px gainsboro }
-  100% { opacity:0 }
+  0% { opacity:1; top:30%; }
+  /* 100% { opacity:0; top:100%; } */
 }

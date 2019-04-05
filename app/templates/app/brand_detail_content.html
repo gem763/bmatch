@@ -232,42 +232,25 @@
     </div>
   </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <br>
-
   {% include "app/brand_comment.html" %}
 
 </div>
 
 
-<div id="bottom_panel" style="background:whitesmoke;height:40%;min-height:200px;width:100%;bottom:-30%;position:fixed;opacity:0;display:flex;align-items:center;padding:5%;justify-content:center;box-shadow:0 0 10px 10px gainsboro">
-  <button class="ui compact icon button" style="background:transparent;position:absolute;right:3%;top:3%;">
-    <i class="arrow down icon"></i>
-  </button>
+<!-- <div id="bottom_panel" style="background:yellow;height:40%;min-height:200px;width:100%;bottom:-30%;position:fixed;opacity:0;display:flex;align-items:center;padding:5%;justify-content:center;box-shadow:0 0 10px 10px gainsboro"> -->
+<div id="bottom_panel" style="background:transparent;height:90vw;max-height:300px;width:100%;bottom:-30%;opacity:0;position:fixed;display:flex;align-items:center;justify-content:center">
+  <div style="background:white;position:absolute;top:0;bottom:0;width:90%;max-width:600px;border-radius:10px 10px 0 0;box-shadow:0 0 10px 1px gainsboro;">
 
-  <!-- <div class="chart-container" style="position:relative;height:70vh;width:70vh;"> -->
-    <canvas id="bid-compare" style="height:35vh;width:35vh;max-height:300px;max-width:300px;"></canvas>
-  <!-- </div> -->
+    <button class="ui compact icon button" style="background:transparent;position:absolute;right:1%;top:2%;">
+      <i class="arrow down icon"></i>
+    </button>
+
+    <div style="padding-bottom:5%;background:transparent;position:absolute;top:10%;bottom:0;left:5%;right:5%;display:flex;align-items:center;justify-content:center">
+      <canvas id="bid-compare"></canvas>
+      <!-- <canvas id="bid-compare" style="position:absolute;width:80%;height:80%;"></canvas> -->
+      <!-- <canvas id="bid-compare" style="height:35vh;width:35vh;max-height:300px;max-width:300px;"></canvas> -->
+    </div>
+
+  </div>
 </div>

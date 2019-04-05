@@ -74,6 +74,14 @@
 
 {% block content %}
   {% include "app/brand_detail_content.html" %}
+
+  <!-- <div class="ui blurring segment">
+    <div class="ui page dimmer">
+      <div class="content">
+        Hello
+      </div>
+    </div>
+  </div> -->
 {% endblock content %}
 
 
@@ -176,6 +184,9 @@
           },
           legend: {
             display: false
+          },
+          layout: {
+            padding: 10
           }
         }
     });
@@ -188,7 +199,6 @@
 
     function compare(btn) {
       var compare_to = $(btn).parents(".bcard").attr("bname");
-      // $(btn).parents(".bcard_cover").css({"animation":"bcard_less 0.5s forwards"});
 
       $.get('/brands/' + compare_to + '/identity/', function(idty){
         var bval_compared = bid.map(function(id){ return idty[id]; });
@@ -230,6 +240,8 @@
         });
 
         $("#bottom_panel").css({"animation":"bottom_panel_show 0.5s forwards"});
+        // $(".compare.modal").modal("show");
+        // $(".ui.dimmer").dimmer("show");
       });
     };
 
