@@ -10,7 +10,6 @@ $(window).resize(function(){
 
 $(window).trigger('resize');
 
-
 function bcard_more(event, icon) {
   event.stopPropagation();
   $(icon).siblings(".bcard_cover").css({"animation":"bcard_more 0.5s forwards"});
