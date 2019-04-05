@@ -128,7 +128,7 @@
     </div>
   </div>
 
-  <div class="ui compare modal">
+  <!-- <div class="ui compare modal">
     <i class="close icon"></i>
     <div class="header">
       Identity comparing
@@ -143,7 +143,7 @@
         <i class="checkmark icon"></i>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="ui fluid card">
     <div class="content">
@@ -232,9 +232,42 @@
     </div>
   </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <br>
 
   {% include "app/brand_comment.html" %}
 
 </div>
-<br>
+
+
+<div id="bottom_panel" style="background:whitesmoke;height:40%;min-height:200px;width:100%;bottom:-30%;position:fixed;opacity:0;display:flex;align-items:center;padding:5%;justify-content:center;box-shadow:0 0 10px 10px gainsboro">
+  <button class="ui compact icon button" style="background:transparent;position:absolute;right:3%;top:3%;">
+    <i class="arrow down icon"></i>
+  </button>
+
+  <!-- <div class="chart-container" style="position:relative;height:70vh;width:70vh;"> -->
+    <canvas id="bid-compare" style="height:35vh;width:35vh;max-height:300px;max-width:300px;"></canvas>
+  <!-- </div> -->
+</div>

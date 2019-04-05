@@ -58,10 +58,13 @@
       color: #081F2C;
     }
 
-    /* @keyframes bcard_less {
-      0% { opacity:1; top:30%; box-shadow:0 0 10px 1px gainsboro }
-      100% { opacity:0 }
-    } */
+    @keyframes bottom_panel_show {
+      100% { opacity:1; bottom:0; }
+    }
+
+    @keyframes bottom_panel_hide {
+      0% { opacity:1; bottom:0; }
+    }
   </style>
 {% endblock style %}
 
@@ -178,7 +181,12 @@
     });
 
 
-    function show_compare(btn) {
+    $("#bottom_panel .button").click(function() {
+      $("#bottom_panel").css({"animation":"bottom_panel_hide 0.5s forwards"});
+    });
+
+
+    function compare(btn) {
       var compare_to = $(btn).parents(".bcard").attr("bname");
       // $(btn).parents(".bcard_cover").css({"animation":"bcard_less 0.5s forwards"});
 
@@ -221,9 +229,10 @@
             }
         });
 
-        $('.ui.compare.modal').modal('show');
+        $("#bottom_panel").css({"animation":"bottom_panel_show 0.5s forwards"});
       });
     };
+
 
   </script>
 {% endblock js %}
