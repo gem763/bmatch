@@ -18,7 +18,7 @@
 
 
 <div class="ui text container" style="text-align:center">
-  <form class="ui form" action="{% url 'discover' %}" method="get">
+  <!-- <form class="ui form" action="{% url 'discover' %}" method="get">
     <div class="ui fluid search">
       <div class="ui large fluid left icon action input">
         {% if brands.qry %}
@@ -31,7 +31,7 @@
       </div>
       <div class="results"></div>
     </div>
-  </form>
+  </form> -->
   <br>
 
   <div>
@@ -73,6 +73,23 @@
       window.location.assign(url);
       // window.location.replace(url);
     };
+
+    function show_submit(input) {
+      var bsearch_submit = $(input).siblings(".bsearch-submit")
+
+      if (input.value.length > 0) {
+        bsearch_submit.css({
+          "opacity": 1,
+          "transition": "opacity 1s ease"
+        });
+      } else {
+        bsearch_submit.css({
+          "opacity": 0,
+          "transition": "opacity 1s ease"
+        });
+      }
+    };
+
 
     $('.ui.search').search({
         source: {{ brands.search_helper | safe }},

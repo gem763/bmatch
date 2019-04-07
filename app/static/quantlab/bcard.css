@@ -1,11 +1,13 @@
 .bcard {
-  box-shadow: 0 0 10px 1px gainsboro !important;
+  /* box-shadow: 0 0 10px 1px gainsboro !important; */
+  box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
   cursor: pointer;
   overflow: hidden;
 }
 
 .bcard:hover {
-  box-shadow: 0 0 10px 5px gainsboro !important;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  /* box-shadow: 0 0 10px 5px gainsboro !important; */
   /* background: yellow !important; */
 }
 
@@ -61,7 +63,7 @@
   justify-content: center;
   background: whitesmoke;
   cursor: default;
-  box-shadow: 0 0 10px 1px gainsboro;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
   opacity: 0;
   /* pointer-events: none; */
 }
