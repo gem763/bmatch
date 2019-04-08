@@ -8,6 +8,18 @@
     fill: black;
     fill-opacity: 1;
   }
+
+  .detailsec {
+    padding-bottom:50px !important;
+  }
+
+  .detailsec .header {
+    font-size: 20px !important;
+  }
+
+  .detailsec .content {
+    padding: 20px;
+  }
 </style>
 
 <div style="position:fixed;top:50%;z-index:100">
@@ -15,12 +27,25 @@
 </div>
 
 
-<div class="ui fluid container" style="position:relative;background:white;top:-50px !important;">
-  <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="padding:10px;height:300px">
-  <br>
-  <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
+<div class="ui fluid container" style="height:300px;background:white;padding-top:100px;">
 
-  <table class="ui selectable celled unstackable very compact small definition table">
+  <div class="ui grid text container" style="background:none">
+    <div class="six wide column" style="background:none;padding:0">
+      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:200px;height:200px">
+    </div>
+
+    <div class="ten wide column">
+      <p>{{ brand.fullname_en }} ({{ brand.fullname_kr }})</p>
+      <p>{{ brand.origin }}</p>
+      <p>
+        <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
+      </p>
+    </div>
+  </div>
+
+
+
+  <!-- <table class="ui selectable celled unstackable very compact small definition table">
     <tbody>
       <tr>
         <td class="right aligned three wide">Name</td>
@@ -51,24 +76,25 @@
         </td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
 </div>
 
 
 
 <div class="ui text container segments">
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Brand identity</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Brand identity</div>
     <div class="content">
       <canvas id="bid" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
     </div>
+    <br>
   </div>
 
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Similar brands</h4>
-    <div class="content" style="padding:10px;">
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Similar brands</div>
+    <div class="content">
       <div class="ui four doubling brandlist cards">
         {% for sbrand in brand.simbrands.top %}
           {% include "app/brand_card.html" with brand=sbrand type='more' %}
@@ -77,9 +103,9 @@
     </div>
   </div>
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Different brands</h4>
-    <div class="content" style="padding:10px;">
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Different brands</div>
+    <div class="content">
       <div class="ui four doubling brandlist cards">
         {% for sbrand in brand.simbrands.bottom %}
           {% include "app/brand_card.html" with brand=sbrand type='more' %}
@@ -89,23 +115,23 @@
   </div>
 
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Keywords</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Keywords</div>
     <div class="content">
       <div id="wordcloud" style="text-align:center"></div>
     </div>
   </div>
 
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Interest trend</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Interest trend</div>
     <div class="content">
       <canvas id="trend"></canvas>
     </div>
   </div>
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Top searches</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Top searches</div>
     <div class="content">
       <table class="ui very basic fixed selectable unstackable very compact table">
         <tbody id="query_top"></tbody>
@@ -113,8 +139,8 @@
     </div>
   </div>
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Rising searches</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Rising searches</div>
     <div class="content">
       <table class="ui very basic fixed selectable unstackable very compact table">
         <tbody id="query_rising"></tbody>
@@ -123,17 +149,17 @@
   </div>
 
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Pros & Cons</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Pros & Cons</div>
     <div class="content"></div>
   </div>
 
-  <div class="ui padded segment">
-    <h4 class="ui header">Rating history</h4>
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Rating history</div>
     <div class="content"></div>
   </div>
 
-  <div class="ui padded segment">
+  <div class="detailsec ui padded segment">
     {% include "app/brand_comment.html" %}
   </div>
 
