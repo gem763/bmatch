@@ -18,21 +18,6 @@
 
 
 <div class="ui text container" style="text-align:center">
-  <!-- <form class="ui form" action="{% url 'discover' %}" method="get">
-    <div class="ui fluid search">
-      <div class="ui large fluid left icon action input">
-        {% if brands.qry %}
-          <input class="prompt" type="text" value="{{ brands.qry }}" name="q">
-        {% else %}
-          <input class="prompt" type="text" placeholder="예: adidas, 섹시 청바지, 가성비 끝판왕... " name="q">
-        {% endif %}
-        <i class="search icon"></i>
-        <button class="ui icon button"><i class="right arrow icon"></i></button>
-      </div>
-      <div class="results"></div>
-    </div>
-  </form> -->
-  <br>
 
   <div>
     <div class="ui pagination mini menu">
@@ -74,50 +59,5 @@
       // window.location.replace(url);
     };
 
-    function show_submit(input) {
-      var bsearch_submit = $(input).siblings(".bsearch-submit")
-
-      if (input.value.length > 0) {
-        bsearch_submit.css({
-          "opacity": 1,
-          "transition": "opacity 1s ease"
-        });
-      } else {
-        bsearch_submit.css({
-          "opacity": 0,
-          "transition": "opacity 1s ease"
-        });
-      }
-    };
-
-
-    $('.ui.search').search({
-        source: {{ brands.search_helper | safe }},
-        fullTextSearch: true,
-        showNoResults: false,
-        maxResults: 5,
-        searchFields: ['title', 'description', 'categories'],
-        templates: {
-          standard: function(response){
-            htmls = $.map(response.results, function(item) {
-                      var whereto = "{% url 'discover' %}?q=" + item.title;
-                      var html = '<a class="result" style="height:100px" href="' + whereto + '">';
-                      html += '<div class="image" style="height:80px;width:80px;">'
-                            + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
-                            + '</div>';
-                      html += '<div class="content">';
-                      html += '<div class="ui header">' + item.title;
-                      // html += '<div class="title">' + item.title + '</div>';
-                      html += '<div class="sub header">' + item.description + '</div>';
-                      // html += '<div class="description">' + item.description + '</div>';
-                      html += '</div></div>';
-                      html += '</a>';
-                      return html
-                    });
-
-            return htmls
-          },
-        },
-      });
   </script>
 {% endblock js %}

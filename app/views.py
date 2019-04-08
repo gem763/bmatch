@@ -156,7 +156,7 @@ def _simwords(bname, amp=10, min=0, topn=10):
     return {k:v**amp for k,v in res.items()}
 
 
-def identity(requests, bname):
+def identity(request, bname):
     return JsonResponse(_identity(bname=bname))
 
 
@@ -185,8 +185,16 @@ def _indexer(brands):
     return sorted(list({brand.name[0] for brand in brands.all()}))
 
 
-def _search_helper(brands):
-    return [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)} for brand in brands.all()]
+# def _search_helper(brands):
+#     return [{'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)} for brand in brands.all()]
+
+
+def search_helper(request):
+    helper = [
+        {'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)}
+        for brand in Brand.objects.all()
+    ]
+    return JsonResponse(helper, safe=False)
 
 
 def _keywords_dict(brands):
@@ -252,7 +260,7 @@ class DiscoverView(AjaxListView):
     def get_queryset(self):
         brands = Brand.objects
         indexer = _indexer(brands)
-        search_helper = _search_helper(brands)
+        # search_helper = _search_helper(brands)
 
         all = None
         simbrands = None
@@ -284,7 +292,7 @@ class DiscoverView(AjaxListView):
         return {
             'qry':self.qry,
             'indexer':indexer,
-            'search_helper':search_helper,
+            # 'search_helper':search_helper,
             'all':all,
             'simbrands':simbrands
         }

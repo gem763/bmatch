@@ -43,6 +43,7 @@ urlpatterns = [
     path('brands/<bname>/identity/', v.identity, name='identity'),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),
     path('brands/<brand_name>/gtrend/', v.gtrend, name='gtrend'),
+    path('search_helper/', v.search_helper, name='search_helper'),
     # path('bnames/', v.bnames, name='bnames'),
     #path('brands/<bname>/identities/', identities, name='identities'),
 

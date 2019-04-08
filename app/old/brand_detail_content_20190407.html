@@ -1,0 +1,276 @@
+<style>
+  text:hover {
+    fill: black !important;
+    font-weight: bold;
+  }
+
+  .label-background-strong {
+    fill: black;
+    fill-opacity: 1;
+  }
+</style>
+
+<div style="position:fixed;top:50%;z-index:100">
+  <i class="green angle left huge icon link" onclick="window.history.back()"></i>
+</div>
+
+
+<div class="ui very padded text container segments">
+
+  <div class="ui segment">
+    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="padding:10px;height:300px">
+    <br>
+    <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
+
+
+    <table class="ui selectable celled unstackable very compact small definition table">
+      <tbody>
+        <tr>
+          <td class="right aligned three wide">Name</td>
+          <td class="left aligend thirteen wide">{{ brand.fullname_en }} ({{ brand.fullname_kr }})</td>
+        </tr>
+
+        <tr>
+          <td class="right aligned">Origin</td>
+          <td class="left aligend">{{ brand.origin }}</td>
+        </tr>
+
+        <tr>
+          <td class="right aligned">Description</td>
+          <td class="left aligend">{{ brand.description }}</td>
+        </tr>
+
+        <tr>
+          <td class="right aligned">History</td>
+          <td class="left aligend">{{ brand.history }}</td>
+        </tr>
+
+        <tr>
+          <td class="right aligned">Website</td>
+          <td class="left aligned selectable">
+            <a href="//{{ brand.website }}" target="_blank">
+              {{ brand.website }}
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">아이덴티티 방사형</div>
+      </div>
+      <div class="content">
+        <canvas id="bid" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="ui fluid card">
+    <div class="content">
+      <div class="header">Brand identity</div>
+      <div class="meta">2 days ago</div>
+    </div>
+    <div class="content">
+      {% if brand.identity %}
+        <div class="ui small feed">
+          <table class="ui very basic fixed selectable unstackable very compact table">
+            <tbody>
+              {% for idty in brand.identity %}
+                <tr>
+                  <td class="right aligned four wide">{{idty.key1}}</td>
+                  <td class="eight wide" style="background:#eaeded;padding:0 10% 0 10%">
+                    <button class="ui green icon button" style="margin-left:{{idty.value}}%"></button>
+                  </td>
+                  <td class="left aligned four wide">{{idty.key0}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </div>
+  </div> -->
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">느낌이 비슷한 브랜드들</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+
+          <div class="ui five doubling brandlist cards">
+            {% for sbrand in brand.simbrands.top %}
+              {% include "app/brand_card.html" with brand=sbrand type='more' %}
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">느낌이 다른 브랜드들</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+
+          <div class="ui five doubling brandlist cards">
+            {% for sbrand in brand.simbrands.bottom %}
+              {% include "app/brand_card.html" with brand=sbrand type='more' %}
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="ui compare modal">
+    <i class="close icon"></i>
+    <div class="header">
+      Identity comparing
+    </div>
+    <div class="content">
+      <canvas id="bid-compare" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">Close</div>
+      <div class="ui positive right labeled icon button">
+        좋아요
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">연관된 단어</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div id="wordcloud" style="text-align:center"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">{{brand.name}}의 장단점</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <p>블라블라</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">{{brand.name}}에 대한 관심도 추이</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <p>블라블라</p>
+          <canvas id="trend"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">{{brand.name}} 관련 상위 검색어</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <table class="ui very basic fixed selectable unstackable very compact table">
+            <tbody id="query_top"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">{{brand.name}} 관련 급등 검색어</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <table class="ui very basic fixed selectable unstackable very compact table">
+            <tbody id="query_rising"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">임동석님의 {{brand.name}} 평가이력</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <p>블라블라</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">{{brand.name}}와 함께 검색한 키워드</div>
+        <div class="meta">2 days ago</div>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+          <p>블라블라</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    {% include "app/brand_comment.html" %}
+  </div>
+
+</div>
+
+
+<div id="bottom_panel" style="background:transparent;height:90vw;max-height:300px;width:100%;bottom:-30%;opacity:0;position:fixed;display:flex;align-items:center;justify-content:center">
+  <div style="background:white;position:absolute;top:0;bottom:0;width:90%;max-width:600px;border-radius:10px 10px 0 0;box-shadow:0 0 15px rgba(0,0,0,0.3);">
+
+    <button class="ui compact icon button" style="background:transparent;position:absolute;right:1%;top:2%;">
+      <i class="arrow down icon"></i>
+    </button>
+
+    <div style="padding-bottom:5%;background:transparent;position:absolute;top:10%;bottom:0;left:5%;right:5%;display:flex;align-items:center;justify-content:center">
+      <canvas id="bid-compare"></canvas>
+      <!-- <canvas id="bid-compare" style="position:absolute;width:80%;height:80%;"></canvas> -->
+      <!-- <canvas id="bid-compare" style="height:35vh;width:35vh;max-height:300px;max-width:300px;"></canvas> -->
+    </div>
+
+  </div>
+</div>
