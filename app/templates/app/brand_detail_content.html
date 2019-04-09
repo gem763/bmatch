@@ -20,6 +20,14 @@
   .detailsec .content {
     padding: 20px;
   }
+
+  .metabutton {
+    background: transparent !important;
+  }
+
+  .metabutton:hover {
+    background: rgba(220, 220, 220, .2) !important;
+  }
 </style>
 
 <div style="position:fixed;top:50%;z-index:100">
@@ -27,9 +35,41 @@
 </div>
 
 
-<div class="ui fluid container" style="height:300px;background:white;padding-top:100px;">
+<div class="ui fluid container" style="height:200px;background:white;margin-top:50px;">
 
-  <div class="ui grid text container" style="background:none">
+  <div class="ui text container">
+    <div class="ui items" style="background:none;padding:20px;">
+      <div class="item">
+        <div class="image" style="width:160px;height:160px;">
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;">
+        </div>
+
+        <div class="content" style="background:none;padding-top:20px">
+          <h3 class="ui header" style="text-transform:capitalize;">
+            {{ brand.fullname_en }}
+            <div class="sub header">{{ brand.fullname_kr }}</div>
+          </h3>
+
+          <div class="meta">
+            <div class="metabutton ui compact mini button">{{ brand.origin }}</div>
+            <a class="metabutton ui compact icon mini button" href="//{{ brand.website }}" target="_blank"><i class="home icon"></i></a>
+          </div>
+
+          <!-- <div class="extra">
+            <div class="ui mini compact button">
+              test1
+            </div>
+            <div class="ui mini compact button">
+              test2
+            </div>
+          </div> -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="ui grid text container" style="background:none">
     <div class="six wide column" style="background:none;padding:0">
       <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:200px;height:200px">
     </div>
@@ -41,7 +81,7 @@
         <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
       </p>
     </div>
-  </div>
+  </div> -->
 
 
 
