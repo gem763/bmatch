@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import json
 import requests
+import numpy as np
 
 # Create your models here.
 
@@ -21,6 +22,7 @@ class Option(models.Model):
     optname = models.CharField(max_length=120, default='init')
     idwords = models.TextField(default=json.dumps(idwords_default, ensure_ascii=False))
     api = models.CharField(max_length=120, default='http://127.0.0.1:8080/api')
+    id_scaletype = models.IntegerField(default='0')
 
     def __str__(self):
         return self.optname
@@ -77,5 +79,14 @@ class Profile(models.Model):
                 for k,v in idty_all[bname].items():
                     score[k] = score[k] + v*w if k in score else v*w
 
-        score_sum = sum(score.values())
-        return {k:round(v/score_sum*100) for k,v in score.items()}
+        return self._minmax_scale(score, max=100, min=30)
+        # score_sum = sum(score.values())
+        # return {k:round(v/score_sum*100) for k,v in score.items()}
+
+
+    def _minmax_scale(self, dic, max=100, min=0):
+        keys = dic.keys()
+        x = np.array(list(dic.values()))
+        x = np.interp(x, (x.min(), x.max()), (min, max))
+
+        return {k:int(v) for k,v in zip(keys, x)}

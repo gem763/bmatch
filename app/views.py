@@ -164,12 +164,13 @@ def _identity(bname=None):
     opt = get_opt()
     url = opt.api + '/identity'
     idwords = opt.idwords
+    id_scaletype = opt.id_scaletype
 
     if bname is None:
-        data = {'idwords':idwords}
+        data = {'idwords':idwords, 'id_scaletype':id_scaletype}
 
     else:
-        data = {'bname':bname, 'idwords':idwords}
+        data = {'bname':bname, 'idwords':idwords, 'id_scaletype':id_scaletype}
 
     req = requests.post(url, data=data)
     return req.json()

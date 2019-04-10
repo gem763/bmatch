@@ -5,7 +5,7 @@
 {% endblock menu_top %}
 
 {% block content %}
-<div class="ui center aligned text container">
+<div class="ui center aligned text container" style="margin-top:100px;">
 
   <div class="ui centered circular blurring dimmable image" id="profile_image">
     <div class="ui dimmer">
@@ -98,7 +98,10 @@
         options: {
           scale: {
             ticks: {
-              beginAtZero: true
+              min: 0,
+              max: 100,
+              stepSize: 100,
+              display: false
             },
             gridLines: {
               circular: true
