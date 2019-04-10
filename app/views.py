@@ -98,7 +98,7 @@ def profiling(request):
 
 def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
-    idty_all = _identity()
+    idty_all = _identity(weights=profile.weights())
     myidentity = profile.identify(idty_all)
     return render(request, 'app/me.html', {'myidentity':myidentity})
 
@@ -156,18 +156,18 @@ def _simwords(bname, amp=10, min=0, topn=10):
     return {k:v**amp for k,v in res.items()}
 
 
-def identity(request, bname):
-    return JsonResponse(_identity(bname=bname))
+def identity(request, bname, weights=None):
+    return JsonResponse(_identity(bname=bname, weights=weights))
 
 
-def _identity(bname=None):
+def _identity(bname=None, weights=None):
     opt = get_opt()
     url = opt.api + '/identity'
     idwords = opt.idwords
     id_scaletype = opt.id_scaletype
 
     if bname is None:
-        data = {'idwords':idwords, 'id_scaletype':id_scaletype}
+        data = {'idwords':idwords, 'id_scaletype':id_scaletype, 'weights':weights}
 
     else:
         data = {'bname':bname, 'idwords':idwords, 'id_scaletype':id_scaletype}

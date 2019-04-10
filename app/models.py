@@ -70,6 +70,12 @@ class Profile(models.Model):
                 weights[b] = weights[b] + add if b in weights else add
         return weights
 
+    def weights(self, like=1, morelike=1):
+        w = self._weighting(like=like, morelike=morelike)
+        w_sum = sum(w.values())
+        return {k:v/w_sum for k,v in w.items()}
+
+
     def identify(self, idty_all, like=1, morelike=1):
         score = {}
         weights = self._weighting(like=like, morelike=morelike)
