@@ -27,7 +27,7 @@ optname = 'init'
 
 
 def posts(request):
-    posts_all = Post.objects.all()
+    posts_all = Post.objects.order_by('-created_at')
     return render(request, 'app/posts.html', {'posts_all':posts_all})
     # return HttpResponse('1111')
 

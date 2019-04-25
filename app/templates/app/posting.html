@@ -10,9 +10,20 @@
   <div class="ui padded segment">
     <div class="ui header">포스팅하기</div>
     <div class="content">
-      <form method="post" action="" enctype="multipart/form-data">
+      <form class="ui form" method="post" action="" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <div class="field">
+          <label>Image upload</label>
+          <input id="id_image" type="file" name="image" onchange="upload_img(this)"></input>
+          <div style="background:none;text-align:center;margin-top:10px;display:none;">
+            <img id="img_uploaded" src="#" alt="image uploaded" style="width:80%;height:auto;" />
+          </div>
+        </div>
+
+        <div class="field">
+          <textarea id="id_content" name="content"></textarea>
+        </div>
 
         <button class="ui button" type="submit">Save</button>
       </form>
@@ -24,4 +35,19 @@
 
 {% block js %}
   {{ block.super }}
+
+  <script>
+    function upload_img(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          $("#img_uploaded").attr("src", e.target.result);
+          $("#img_uploaded").parent().css("display", "block");
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
 {% endblock js %}
