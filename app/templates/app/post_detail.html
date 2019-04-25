@@ -1,0 +1,36 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with me_act="active" %}
+{% endblock menu_top %}
+
+{% block content %}
+<div class="ui text container segments" style="margin-top:70px;">
+
+  <div class="ui padded segment">
+    <div class="ui header">포스트</div>
+    <div class="content">
+      <div class="image">
+        <img src="{{ post.image.url }}" class="ui centered image">
+      </div>
+
+      <p>
+        {{ post.content }}
+      </p>
+
+      <p>
+        작성일: {{ post.created_at }}
+      </p>
+
+      <p>
+        작성자: 누구냐넌
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+{% endblock js %}

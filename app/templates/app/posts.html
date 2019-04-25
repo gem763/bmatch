@@ -1,0 +1,65 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with discover_act="active" %}
+{% endblock menu_top %}
+
+
+{% block content %}
+<style>
+  .pcard {
+    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .pcard:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  }
+</style>
+
+<div class="ui text container" style="text-align:center;margin-top:70px">
+
+  <div class="ui basic fluid buttons">
+    <a class="ui button" href="{% url 'discover' %}">Brands</a>
+    <a class="ui active button" href="{% url 'posts' %}">Posts</a>
+  </div>
+
+  <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right">
+    <a class="ui icon button" href="{% url 'posting' %}">
+      <i class="edit outline icon"></i>
+    </a>
+  </div>
+
+
+  <div class="ui four doubling cards">
+    {% for post in posts_all %}
+    <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
+      <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock content %}
+
+
+{% load static %}
+{% block js %}
+  {{ block.super }}
+
+  <script>
+    $(window).resize(function(){
+      var width = $(".pcard").width();
+      $(".pcard").css("height", width + "px");
+      $(".pcard_img").css({"width":width + "px", "height":width + "px"});
+    });
+
+    $(window).trigger('resize');
+
+    function pcard_click(pcard) {
+      var url = $(pcard).attr("href");
+      window.location.assign(url);
+    };
+  </script>
+{% endblock js %}

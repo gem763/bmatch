@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic.list import ListView
@@ -7,7 +7,8 @@ from django.conf import settings
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
 from django.views.generic import View
-from app.models import Brand, Profile, Option
+from .forms import PostForm
+from app.models import Brand, Profile, Option, Post
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 import time
 import json
@@ -23,6 +24,30 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 optname = 'init'
 # api = 'http://127.0.0.1:8080/api'
 # api = 'http://bmatchsupport.pythonanywhere.com/api'
+
+
+def posts(request):
+    posts_all = Post.objects.all()
+    return render(request, 'app/posts.html', {'posts_all':posts_all})
+    # return HttpResponse('1111')
+
+
+def posting(request):
+    if request.method=='GET':
+        form = PostForm()
+        return render(request, 'app/posting.html', {'form':form})
+
+    elif request.method=='POST':
+        form = PostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            obj = form.save()
+            return redirect(obj)
+
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'app/post_detail.html', {'post':post})
 
 
 def get_opt():

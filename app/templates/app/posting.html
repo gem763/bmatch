@@ -1,0 +1,27 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with me_act="active" %}
+{% endblock menu_top %}
+
+{% block content %}
+<div class="ui text container segments" style="margin-top:70px;">
+
+  <div class="ui padded segment">
+    <div class="ui header">포스팅하기</div>
+    <div class="content">
+      <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button class="ui button" type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+{% endblock js %}

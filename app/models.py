@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse_lazy
+# from django.core.urlresolvers import reverse_lazy
 import json
 import requests
 import numpy as np
@@ -70,6 +72,7 @@ class Profile(models.Model):
                 weights[b] = weights[b] + add if b in weights else add
         return weights
 
+
     def weights(self, like=1, morelike=1):
         w = self._weighting(like=like, morelike=morelike)
         w_sum = sum(w.values())
@@ -89,10 +92,26 @@ class Profile(models.Model):
         # score_sum = sum(score.values())
         # return {k:round(v/score_sum*100) for k,v in score.items()}
 
-
     def _minmax_scale(self, dic, max=100, min=0):
         keys = dic.keys()
         x = np.array(list(dic.values()))
         x = np.interp(x, (x.min(), x.max()), (min, max))
 
         return {k:int(v) for k,v in zip(keys, x)}
+
+
+
+class Post(models.Model):
+    image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
+    # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        url = reverse_lazy('post_detail', kwargs={'pk':self.pk})
+        return url
+
+    # def delete(self, *args, **kwargs):
+    #     self.image.delete()
+    #     # self.filtered_image.delete()
+    #     super(Photo, self).delete(*args, **kwargs)

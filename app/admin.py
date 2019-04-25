@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Brand, Profile, Option
+from app.models import Brand, Profile, Option, Post
 # from custom_user.admin import EmailUserAdmin
 # from .models import MyUser
 
@@ -19,3 +19,4 @@ from app.models import Brand, Profile, Option
 admin.site.register(Brand)
 admin.site.register(Profile)
 admin.site.register(Option)
+admin.site.register(Post)

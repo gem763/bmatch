@@ -55,6 +55,10 @@ urlpatterns = [
     path('save_worldcup/', v.SaveWorldcupView.as_view(), name='save_worldcup'),
     path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
+    path('posts/', v.posts, name='posts'),
+    path('posts/posting/', v.posting, name='posting'),
+    path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
+
     # path('search/<qry>/', v.search, name='search'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
