@@ -102,6 +102,7 @@ class Profile(models.Model):
 
 
 class Post(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
     # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
     content = models.TextField(max_length=500, null=True, blank=True)

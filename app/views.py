@@ -10,6 +10,7 @@ from django.views.generic import View
 from .forms import PostForm
 from app.models import Brand, Profile, Option, Post
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
+from django.contrib.auth.decorators import login_required
 import time
 import json
 import math
@@ -32,6 +33,7 @@ def posts(request):
     # return HttpResponse('1111')
 
 
+@login_required
 def posting(request):
     if request.method=='GET':
         form = PostForm()
@@ -41,7 +43,9 @@ def posting(request):
         form = PostForm(request.POST, request.FILES)
 
         if form.is_valid():
-            obj = form.save()
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
             return redirect(obj)
 
 
