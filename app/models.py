@@ -37,6 +37,8 @@ class Brand(models.Model):
     keywords = models.TextField(default='')
     website = models.CharField(max_length=200, blank=True, null=True)
     origin = models.CharField(max_length=50, blank=True, null=True)
+    awareness = models.FloatField(default=0)
+    category = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(default='', blank=True, null=True)
     history = models.TextField(default='', blank=True, null=True)
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
