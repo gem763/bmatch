@@ -196,7 +196,8 @@ def _identity(bname=None, weights=None):
     id_scaletype = opt.id_scaletype
 
     if bname is None:
-        data = {'idwords':idwords, 'id_scaletype':id_scaletype, 'weights':weights}
+        # data = {'idwords':idwords, 'id_scaletype':id_scaletype, 'weights':weights}
+        data = {'idwords':idwords, 'id_scaletype':id_scaletype, 'weights':json.dumps(weights)}
 
     else:
         data = {'bname':bname, 'idwords':idwords, 'id_scaletype':id_scaletype}
