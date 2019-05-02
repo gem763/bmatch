@@ -49,7 +49,7 @@
     </div>
 
 
-    <div class="ui horizontal segments">
+    <!-- <div class="ui horizontal segments">
       {% for aware, ratio in myawareness.items %}
       <div class="ui segment">
         <div class="ui tiny statistic">
@@ -58,10 +58,19 @@
         </div>
       </div>
       {% endfor %}
-    </div>
-
+    </div> -->
 
   </div>
+
+
+  <div class="detailsec ui padded segment">
+    <div class="ui header">Brand awareness</div>
+    <div class="content">
+      <canvas id="myawareness" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
+    </div>
+    <br>
+  </div>
+
 
   <div class="detailsec ui padded segment">
     <div class="ui header">My identity</div>
@@ -168,6 +177,45 @@
     var myRadarChart = new Chart('bid', {
         type: 'radar',
         data: data,
+        options: {
+          scale: {
+            ticks: {
+              min: 0,
+              max: 100,
+              stepSize: 100,
+              display: false
+            },
+            gridLines: {
+              circular: true
+            }
+          },
+          legend: {
+            display: false
+          }
+        }
+    });
+
+
+
+
+    var awareness = {{ myawareness | safe }};
+    var _levels = [1, 2, 3, 4, 5];
+    var levels = _levels.map(function(level){ return 'Level ' + level; });
+    var scores = _levels.map(function(level){ return awareness[level]*100; });
+
+    var aware_data = {
+      labels: levels,
+      datasets: [{
+        backgroundColor: 'rgb(255,99,132,0.2)',
+        borderColor: 'rgb(255,99,132)',
+        pointBackgroundColor: 'rgb(255,99,132)',
+        data: scores
+      }]
+    };
+
+    var myawarenessRadarChart = new Chart('myawareness', {
+        type: 'radar',
+        data: aware_data,
         options: {
           scale: {
             ticks: {

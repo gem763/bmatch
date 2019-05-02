@@ -141,7 +141,7 @@ def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
     idty_all = _identity(weights=profile.weights())
     myidentity = profile.identify(idty_all)
-    myawareness = profile.awareness()
+    myawareness = dict(profile.awareness())
     return render(request, 'app/me.html', {'myidentity':myidentity, 'myawareness':myawareness})
 
 
