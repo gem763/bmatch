@@ -47,6 +47,20 @@
         </div>
       </div>
     </div>
+
+
+    <div class="ui horizontal segments">
+      {% for aware, ratio in myawareness.items %}
+      <div class="ui segment">
+        <div class="ui tiny statistic">
+          <div class="value">{{ ratio }}</div>
+          <div class="label">{{ aware }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+
   </div>
 
   <div class="detailsec ui padded segment">

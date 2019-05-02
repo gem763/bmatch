@@ -107,7 +107,19 @@ class RatingView(AjaxListView):
     howmany = 500
 
     def get_queryset(self):
-        bnames = list(Brand.objects.values_list('name', flat=True))
+        brands = Brand.objects
+
+        if self.request.user.is_authenticated:
+            bnames = []
+            myawareness = Profile.objects.get(user__email=self.request.user.email).awareness()
+            for level, score in myawareness.items():
+                _bnames = brands.filter(awareness=level).values_list('name', flat=True)
+                _n = round(len(_bnames) * score)
+                bnames += random.sample(list(_bnames), _n)
+
+        else:
+            bnames = list(brands.values_list('name', flat=True))
+
         comb = list(combinations(bnames, 2))
         return random.sample(comb, self.howmany)
 
@@ -129,7 +141,8 @@ def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
     idty_all = _identity(weights=profile.weights())
     myidentity = profile.identify(idty_all)
-    return render(request, 'app/me.html', {'myidentity':myidentity})
+    myawareness = profile.awareness()
+    return render(request, 'app/me.html', {'myidentity':myidentity, 'myawareness':myawareness})
 
 
 def sharing(request):

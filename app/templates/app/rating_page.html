@@ -1,6 +1,6 @@
 <style>
   .ui.segments {
-    width:360px;
+    width:600px;
     height:180px;
     margin:auto !important;
   }
@@ -25,20 +25,41 @@
     margin:auto;
     border-radius:4px !important;
   }
+
+  .rating_close {
+    position: absolute;
+    background: none;
+    transform: translate(-50%,-50%);
+    top: 0;
+    left: 100%;
+  }
+
+  .rating_close_icon {
+    background: white;
+  }
+
+  .rating_close_icon:hover {
+    background: whitesmoke;
+  }
 </style>
 
+{% load static %}
 {% load ctags %}
 {% load el_pagination_tags %}
 {% lazy_paginate 10,5 pairs %}
 {% for pair in pairs %}
-  <div class="ui horizontal segments">
+<div class="rating_pair" style="position:relative">
+  <div class="ui horizontal segments" style="position:relative;">
     {% for brand in pair|of_name %}
       <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0" onclick="like_this_more(this)" onmouseover="worldcup_mouseover(this)" onmouseout="worldcup_mouseout(this)">
         <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
         <i class="huge check icon"></i>
       </div>
     {% endfor %}
+    <div class="rating_close"><i class="rating_close_icon close circular icon" onclick="remove_this_rating(this)"></i></div>
   </div><br>
+  <img src="{% static 'layout/vs.png' %}" style="position:absolute;transform:translate(-50%,-50%);top:50%;left:50%;"></img>
+</div>
 {% endfor %}
 {% show_more %}
 
@@ -64,6 +85,10 @@
 <script src="/static/semantic/semantic.min.js"></script>
 
 <script>
+  function remove_this_rating(obj) {
+    $(obj).parents(".rating_pair").css("display", "none");
+  }
+
   function like_this_more(obj) {
     // 중요! ======================
     // 여기에서는 jquery를 쓰면 안된다

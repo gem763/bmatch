@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 import json
 import requests
 import numpy as np
+from collections import OrderedDict
 
 # Create your models here.
 
@@ -57,12 +58,43 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     worldcup = models.TextField(blank=True, null=True, default='{}')
     likes = models.TextField(blank=True, null=True)
+    initial_awared = models.TextField(blank=True, null=True)
+    # awareness = models.TextField(blank=True, null=True, default='{}')
 
     def __str__(self):
         return self.user.email
 
     def get_likes(self):
         return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
+
+    def get_worldcupped(self):
+        worldcupped = []
+        for bnames in json.loads(self.worldcup).keys():
+            worldcupped += bnames.split('-')
+        return set(worldcupped)
+
+
+    def get_awared(self):
+        _likes = self.get_likes()
+        _worldcupped = self.get_worldcupped()
+        awared = set(_likes) | _worldcupped
+        return awared
+
+    def awareness(self):
+        awared = self.get_awared()
+        brands = Brand.objects.all()
+        bawareness = set(brands.values_list('awareness', flat=True))
+
+        my_awareness = OrderedDict()
+        for _baware in bawareness:
+            _brands = brands.filter(awareness=_baware)
+            _brands_awared = _brands.filter(name__in=awared)
+            my_awareness[int(_baware)] = len(_brands_awared)/len(_brands)
+            # my_awareness[int(_baware)] = '{}%'.format(round(len(_brands_awared)/len(_brands) * 100))
+
+        # print(my_awareness)
+        return my_awareness
+
 
     def _weighting(self, like=1, morelike=1):
         weights = {}
