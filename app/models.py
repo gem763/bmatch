@@ -142,6 +142,9 @@ class Post(models.Model):
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
+
     def get_absolute_url(self):
         url = reverse_lazy('post_detail', kwargs={'pk':self.pk})
         return url
@@ -150,3 +153,26 @@ class Post(models.Model):
     #     self.image.delete()
     #     # self.filtered_image.delete()
     #     super(Photo, self).delete(*args, **kwargs)
+
+
+
+class CommentBrand(models.Model):
+    brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
+    # post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
+
+
+class CommentPost(models.Model):
+    # brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.post.user.email)
