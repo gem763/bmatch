@@ -12,20 +12,36 @@
         <span class="date">Today at 5:42PM</span>
       </div>
       <div class="text">
-        추억의 브랜드임...
+        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
+        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
+        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
+        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
+        추억의 브랜드임...추억의 브랜드임...
       </div>
       <div class="actions">
         <a class="reply">Reply</a>
+        <a class="reply">Edit</a>
+        <a class="reply">Delete</a>
       </div>
     </div>
   </div>
 
-  <form class="ui reply form">
-    <div class="field">
-      <textarea rows="2"></textarea>
+  <div class="comment">
+    <a class="avatar" style="position:absolute;">
+      {% include "app/user_avatar.html" with user=post.user %}
+    </a>
+
+    <div class="content" style="background:none;">
+      <form class="ui reply form" style="background:none;margin-top:0px;">
+        <div class="field">
+          <textarea rows="2" style="height:45px;padding-right:100px;"></textarea>
+        </div>
+        <div class="ui compact submit icon right floated button">
+          <i class="paper plane outline icon"></i>
+        </div>
+      </form>
+      <br><br>
     </div>
-    <div class="ui blue labeled submit icon button">
-      <i class="icon edit"></i> 댓글달기
-    </div>
-  </form>
+  </div>
+
 </div>

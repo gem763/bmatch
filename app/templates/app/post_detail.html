@@ -7,9 +7,44 @@
 {% block content %}
 <div class="ui text container segments" style="margin-top:70px;">
 
+  <div class="ui segment">
+    <div class="ui secondary icon menu" style="background:none;">
+      <div class="item" style="background:none;padding:5px;">
+        {% include "app/user_avatar.html" with user=post.user %}
+      </div>
+
+      <div class="right compact menu">
+
+        <a class="item">
+          <i class="edit outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="trash alternate outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="comment alternate outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="star outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="bookmark outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="share alternate icon"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
   <div class="ui padded segment">
-    <div class="ui header">포스트</div>
-    <div class="content">
+    <div class="content" style="padding:20px;">
       <div class="image">
         <img src="{{ post.image.url }}" class="ui centered image">
       </div>
@@ -18,13 +53,9 @@
         {{ post.content }}
       </p>
 
-      <p>
+      <!-- <p>
         작성일: {{ post.created_at }}
-      </p>
-
-      <p>
-        작성자: <img class="ui rounded image" src="{{ post.user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:30px;height:30px">
-      </p>
+      </p> -->
 
     </div>
   </div>
@@ -33,10 +64,40 @@
     {% include "app/post_comment.html" %}
   </div>
 
-  <div class="ui padded right aligned segment">
-    <a class="ui icon button" href="{% url 'posts' %}">
-      <i class="th icon"></i>
-    </a>
+
+  <div class="ui segment">
+    <div class="ui secondary icon menu" style="background:none;">
+      <div class="item" style="font-size:small">
+        created at {{ post.created_at }}
+      </div>
+
+      <div class="right compact menu">
+
+        <a class="item">
+          <i class="edit outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="trash alternate outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="comment alternate outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="star outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="bookmark outline icon"></i>
+        </a>
+
+        <a class="item">
+          <i class="share alternate icon"></i>
+        </a>
+      </div>
+    </div>
   </div>
 
 </div>
