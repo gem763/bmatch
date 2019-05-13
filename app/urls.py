@@ -58,6 +58,7 @@ urlpatterns = [
     path('posts/', v.posts, name='posts'),
     path('posts/posting/', v.posting, name='posting'),
     path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
+    path('posts/detail/<pk>/commenting/', v.commenting_post, name='commenting_post'),
 
     # path('search/<qry>/', v.search, name='search'),
 

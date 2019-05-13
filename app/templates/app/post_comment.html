@@ -6,45 +6,42 @@
     </div>
   </h4>
 
-  <div class="comment">
-    <a class="avatar">
-      <img src="http://www.semantic-ui.com/images/avatar/small/matt.jpg">
-    </a>
+  {% for comment in post.commentpost_set.all %}
+    <div class="comment">
+      <a class="avatar">
+        {% include "app/user_avatar.html" with user=comment.user %}
+      </a>
 
-    <div class="content">
-      <a class="author">임동석</a>
-      <div class="metadata">
-        <span class="date">Today at 5:42PM</span>
-      </div>
-      <div class="text">
-        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
-        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
-        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
-        추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...추억의 브랜드임...
-        추억의 브랜드임...추억의 브랜드임...
-      </div>
-      <div class="actions">
-        <a class="reply">Reply</a>
-        <a class="reply">Edit</a>
-        <a class="reply">Delete</a>
+      <div class="content">
+        <a class="author">{{ comment.user.email }}</a>
+        <div class="metadata">
+          <span class="date">{{ comment.created_at }}</span>
+        </div>
+        <div class="text">{{ comment.content }}</div>
+        <div class="actions">
+          <a class="reply">Reply</a>
+          <a class="edit">Edit</a>
+          <a class="delete">Delete</a>
+        </div>
       </div>
     </div>
-  </div>
+  {% endfor %}
 
   {% if user.is_authenticated %}
   <div class="comment" style="margin-top:30px;">
     <a class="avatar" style="position:absolute;">
-      {% include "app/user_avatar.html" with user=post.user %}
+      {% include "app/user_avatar.html" with user=user %}
     </a>
 
     <div class="content" style="background:none;">
-      <form class="ui reply form" style="background:none;margin-top:0px;">
+      <form class="ui reply form" method="post" action="{% url 'commenting_post' post.pk %}" style="background:none;margin-top:0px;">
+        {% csrf_token %}
         <div class="field">
-          <textarea rows="2" style="height:45px;padding-right:100px;"></textarea>
+          <textarea rows="2" id="id_comment" name="content" style="height:45px;padding-right:100px;"></textarea>
         </div>
-        <div class="ui compact submit icon right floated button">
+        <button class="ui compact submit icon right floated button" onclick="return empty()">
           <i class="paper plane outline icon"></i>
-        </div>
+        </button>
       </form>
       <br><br>
     </div>

@@ -170,9 +170,13 @@ class CommentBrand(models.Model):
 class CommentPost(models.Model):
     # brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return '{created_at} {email}'.format(created_at=self.created_at, email=self.post.user.email)
+
+    def get_absolute_url(self):
+        url = reverse_lazy('post_detail', kwargs={'pk':self.post.pk})
+        return url

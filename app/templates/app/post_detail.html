@@ -53,10 +53,6 @@
         {{ post.content }}
       </p>
 
-      <!-- <p>
-        작성일: {{ post.created_at }}
-      </p> -->
-
     </div>
   </div>
 
@@ -106,4 +102,13 @@
 
 {% block js %}
   {{ block.super }}
+
+  <script>
+  function empty() {
+    var x = document.getElementById("id_comment").value;
+    if (x == "") {
+      return false;
+    }
+  }
+  </script>
 {% endblock js %}

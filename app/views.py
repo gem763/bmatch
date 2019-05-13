@@ -7,7 +7,7 @@ from django.conf import settings
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
 from django.views.generic import View
-from .forms import PostForm
+from .forms import PostForm, CommentPostForm
 from app.models import Brand, Profile, Option, Post
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
@@ -25,6 +25,19 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 optname = 'init'
 # api = 'http://127.0.0.1:8080/api'
 # api = 'http://bmatchsupport.pythonanywhere.com/api'
+
+
+# @login_required
+def commenting_post(request, pk):
+    if request.method=='POST':
+        form = CommentPostForm(request.POST)
+        # print('*******************************', type(request.POST['content']))
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.post = get_object_or_404(Post, pk=pk)
+            obj.save()
+            return redirect(obj)
 
 
 def posts(request):
@@ -121,7 +134,9 @@ class RatingView(AjaxListView):
             bnames = list(brands.values_list('name', flat=True))
 
         comb = list(combinations(bnames, 2))
-        return random.sample(comb, self.howmany)
+        _howmany = self.howmany if len(comb)>self.howmany else len(comb)
+        return random.sample(comb, _howmany)
+        # return random.sample(comb, self.howmany)
 
 
 def profiling(request):
