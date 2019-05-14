@@ -394,7 +394,7 @@ class DiscoverView(AjaxListView):
             'all': all,
             'simbrands': simbrands,
             'suggest': random.sample(list(all), 8),
-            'posts': Post.objects.all().order_by('-created_at')
+            'posts': Post.objects.all().order_by('-created_at')[:16]
         }
 
 
