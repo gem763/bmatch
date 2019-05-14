@@ -104,6 +104,10 @@ def get_opt():
     return Option.objects.get(optname=optname)
 
 
+def home(request):
+    return render(request, 'app/home.html')
+
+
 def intro(request):
     return render(request, 'app/intro.html')
 
@@ -356,6 +360,8 @@ class DiscoverView(AjaxListView):
 
         all = None
         simbrands = None
+        suggest = None
+        posts = None
 
         # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
@@ -382,11 +388,13 @@ class DiscoverView(AjaxListView):
                 simbrands = _simbrands(qry=self.qry, top_min=60, bottom_max=10, n_max=20)
 
         return {
-            'qry':self.qry,
-            'indexer':indexer,
+            'qry': self.qry,
+            'indexer': indexer,
             # 'search_helper':search_helper,
-            'all':all,
-            'simbrands':simbrands
+            'all': all,
+            'simbrands': simbrands,
+            'suggest': random.sample(list(all), 8),
+            'posts': Post.objects.all().order_by('-created_at')
         }
 
 

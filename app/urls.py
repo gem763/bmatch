@@ -30,8 +30,9 @@ urlpatterns = [
     # path('auth/', include('social_django.urls', namespace='social')),
 
 
-    path('', v.DiscoverView.as_view(), name='home'),
+    path('', v.home, name='home'),
     path('discover/', v.DiscoverView.as_view(), name='discover'),
+    path('library/', v.DiscoverView.as_view(template_name='app/discover_20190514.html'), name='library'), 
     # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),
