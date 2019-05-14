@@ -8,7 +8,7 @@ from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post
+from app.models import Brand, Profile, Option, Post, CommentPost
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
@@ -27,11 +27,44 @@ optname = 'init'
 # api = 'http://bmatchsupport.pythonanywhere.com/api'
 
 
+class CommentPostActionsView(View):
+    def get(self, request):
+        try:
+            pk = request.GET.get('pk', None)
+            action = request.GET.get('action', None)
+
+            if action=='edit':
+                pass
+
+            elif action=='delete':
+                commentpost = CommentPost.objects.get(pk=pk)
+                commentpost.delete()
+
+            return JsonResponse({'success':True})
+
+        except:
+            return JsonResponse({'success':False})
+
+
+# def commentpost_actions(request):
+#     if request.method=='GET':
+#         pk = request.GET.get('pk', None)
+#         action = request.GET.get('actoin', None)
+#
+#         if action=='edit':
+#             pass
+#
+#         elif action=='delete':
+#             commentpost = CommentPost.objects.get(pk=pk)
+#             commentpost.delete()
+#             return redirect(commentpost)
+
+
 # @login_required
 def commenting_post(request, pk):
     if request.method=='POST':
         form = CommentPostForm(request.POST)
-        # print('*******************************', type(request.POST['content']))
+
         if form.is_valid():
             obj = form.save(commit=False)
             obj.user = request.user

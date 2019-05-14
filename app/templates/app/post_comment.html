@@ -7,7 +7,7 @@
   </h4>
 
   {% for comment in post.commentpost_set.all %}
-    <div class="comment">
+    <div class="comment" comment-id="{{ comment.pk }}">
       <a class="avatar">
         {% include "app/user_avatar.html" with user=comment.user %}
       </a>
@@ -20,8 +20,10 @@
         <div class="text">{{ comment.content }}</div>
         <div class="actions">
           <a class="reply">Reply</a>
-          <a class="edit">Edit</a>
-          <a class="delete">Delete</a>
+          {% if user == comment.user %}
+          <a class="edit" onclick="edit_commentpost(this)">Edit</a>
+          <a class="delete" onclick="delete_commentpost('{{comment.pk}}')">Delete</a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -51,3 +53,77 @@
   {% endif %}
 
 </div>
+
+
+<!-- <div class="ui tiny edit_commentpost modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Edit comment
+  </div>
+  <div class="content">
+    <form class="ui form" method="" action="">
+      <div class="field">
+        <label>Original comment</label>
+        <textarea rows="2">11111111111111111111111111</textarea>
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">Cancel</div>
+    <div class="ui positive right labeled icon button">
+      Edit
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div> -->
+
+<div class="ui mini delete_commentpost modal">
+  <i class="close icon"></i>
+  <div class="header">
+    ALERT
+  </div>
+  <div class="content">
+    <p>댓글을 지울건가요? 복구는 불가능하니, 신중히 생각해주세요.</p>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">Cancel</div>
+    <div class="ui positive right labeled icon button">
+      Delete
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+<script>
+  function edit_commentpost(edit_link) {
+    // $('.edit_commentpost.modal').modal('show');
+    console.log(1);
+  }
+
+  function delete_commentpost(comment_pk) {
+    $('.delete_commentpost.modal')
+      .modal({
+        onApprove: function() {
+          $.ajax({
+            url: {% url 'commentpost_actions' %},
+            async: true,
+            type: 'GET',
+            data: {
+              pk: comment_pk,
+              action: 'delete'
+            },
+            dataType: 'json',
+            success: function(jqXHR) {
+              if (!jqXHR.success) {
+                alert("데이터를 처리하는데 문제가 발생하였습니다.");
+              } else {
+                var ele = ".comment[comment-id='" + comment_pk + "']"
+                $(ele).remove();
+              };
+            }
+          });
+        }
+      })
+      .modal('show');
+  }
+</script>
