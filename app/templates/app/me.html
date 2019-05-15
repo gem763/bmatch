@@ -5,6 +5,18 @@
 {% endblock menu_top %}
 
 {% block content %}
+<style>
+  .pcard {
+    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .pcard:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  }
+</style>
+
 <div class="ui text container segments" style="margin-top:70px;">
 
   <div class="detailsec ui padded center aligned segment">
@@ -48,20 +60,37 @@
       </div>
     </div>
 
-
-    <!-- <div class="ui horizontal segments">
-      {% for aware, ratio in myawareness.items %}
-      <div class="ui segment">
-        <div class="ui tiny statistic">
-          <div class="value">{{ ratio }}</div>
-          <div class="label">{{ aware }}</div>
-        </div>
-      </div>
-      {% endfor %}
-    </div> -->
-
   </div>
 
+
+  <div class="detailsec ui padded segment">
+    <div class="ui header">My favorite</div>
+    <div class="content">
+      adidas
+    </div>
+    <br>
+  </div>
+
+
+  <div class="detailsec ui padded segment">
+    <div class="ui header">My posts</div>
+    <div class="content">
+      <div class="ui four doubling cards">
+        {% for post in myposts %}
+          <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
+            <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
+          </div>
+        {% endfor %}
+      </div>
+
+      <br>
+      <a href="{% url 'posting' %}">posting</a>
+
+      <br>
+      <a href="{% url 'posts' %}">see all posts</a>
+    </div>
+    <br>
+  </div>
 
   <div class="detailsec ui padded segment">
     <div class="ui header">Brand awareness</div>
@@ -156,6 +185,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
   <script>
+    $(window).resize(function(){
+      var width = $(".pcard").width();
+      $(".pcard").css("height", width + "px");
+      $(".pcard_img").css({"width":width + "px", "height":width + "px"});
+    });
+
+    $(window).trigger('resize');
+
+    function pcard_click(pcard) {
+      var url = $(pcard).attr("href");
+      window.location.assign(url);
+    };
+
+
     $('#profile_image').dimmer({
       on: 'hover'
     });

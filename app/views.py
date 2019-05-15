@@ -76,7 +76,11 @@ def commenting_post(request, pk):
 def posts(request):
     posts_all = Post.objects.order_by('-created_at')
     return render(request, 'app/posts.html', {'posts_all':posts_all})
-    # return HttpResponse('1111')
+
+
+def posts_all(request):
+    posts = Post.objects.order_by('-created_at')
+    return render(request, 'app/posts_list.html', {'posts':posts})
 
 
 @login_required
@@ -194,7 +198,8 @@ def me(request):
     idty_all = _identity(weights=profile.weights())
     myidentity = profile.identify(idty_all)
     myawareness = dict(profile.awareness())
-    return render(request, 'app/me.html', {'myidentity':myidentity, 'myawareness':myawareness})
+    myposts = Post.objects.filter(user__email=request.user.email).order_by('-created_at')
+    return render(request, 'app/me.html', {'myidentity':myidentity, 'myawareness':myawareness, 'myposts':myposts})
 
 
 def sharing(request):
@@ -362,6 +367,7 @@ class DiscoverView(AjaxListView):
         simbrands = None
         suggest = None
         posts = None
+        hottrend = None
 
         # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
@@ -387,6 +393,12 @@ class DiscoverView(AjaxListView):
             else:
                 simbrands = _simbrands(qry=self.qry, top_min=60, bottom_max=10, n_max=20)
 
+        # 현재는 hot trend가 특정 브랜드로 들어가 있는데,
+        # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
+        hottrend_test = 'crocs'
+        hottrend = Brand.objects.get(name=hottrend_test)
+        hottrend.simwords = _simwords(hottrend_test, min=0.5, topn=100, amp=10)
+
         return {
             'qry': self.qry,
             'indexer': indexer,
@@ -394,7 +406,8 @@ class DiscoverView(AjaxListView):
             'all': all,
             'simbrands': simbrands,
             'suggest': random.sample(list(all), 8),
-            'posts': Post.objects.all().order_by('-created_at')[:16]
+            'posts': Post.objects.all().order_by('-created_at')[:16],
+            'hottrend': hottrend
         }
 
 

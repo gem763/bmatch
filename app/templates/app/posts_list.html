@@ -1,0 +1,5 @@
+{% for post in posts %}
+  <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
+    <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
+  </div>
+{% endfor %}

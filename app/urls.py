@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('', v.home, name='home'),
     path('discover/', v.DiscoverView.as_view(), name='discover'),
-    path('library/', v.DiscoverView.as_view(template_name='app/discover_20190514.html'), name='library'), 
+    path('library/', v.DiscoverView.as_view(template_name='app/discover_20190514.html'), name='library'),
     # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),
@@ -57,6 +57,7 @@ urlpatterns = [
     path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
     path('posts/', v.posts, name='posts'),
+    path('posts/all/', v.posts_all, name='posts_all'),
     path('posts/posting/', v.posting, name='posting'),
     path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
     path('posts/detail/<pk>/commenting/', v.commenting_post, name='commenting_post'),
