@@ -57,7 +57,7 @@ urlpatterns = [
     path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
     path('posts/', v.posts, name='posts'),
-    path('posts/all/', v.posts_all, name='posts_all'),
+    path('posts_list/', v.posts_list, name='posts_list'),
     path('posts/posting/', v.posting, name='posting'),
     path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
     path('posts/detail/<pk>/commenting/', v.commenting_post, name='commenting_post'),

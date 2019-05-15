@@ -21,8 +21,10 @@
 <div class="ui text container" style="text-align:center;margin-top:70px">
 
   <div class="ui basic fluid buttons">
-    <a class="ui button" href="{% url 'discover' %}">All</a>
-    <a class="ui active button" href="{% url 'posts' %}">My</a>
+    <div class="ui button" onclick="load_posts('all')">All</div>
+    <div class="ui active button" onclick="load_posts('my')">My</div>
+    <!-- <a class="ui button" href="{% url 'discover' %}">All</a>
+    <a class="ui active button" href="{% url 'posts' %}">My</a> -->
   </div>
 
   <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right">
@@ -32,14 +34,7 @@
   </div>
 
 
-  <div class="ui four doubling cards">
-    {% for post in posts_all %}
-    <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
-      <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
-    </div>
-    {% endfor %}
-  </div>
-
+  <div class="ui four doubling cards" id="posts_cards"></div>
 </div>
 {% endblock content %}
 
@@ -49,8 +44,6 @@
   {{ block.super }}
 
   <script>
-    var test = {% include 'app/posts_list.html' %}
-
     $(window).resize(function(){
       var width = $(".pcard").width();
       $(".pcard").css("height", width + "px");
@@ -62,6 +55,13 @@
     function pcard_click(pcard) {
       var url = $(pcard).attr("href");
       window.location.assign(url);
+    };
+
+    function load_posts(type) {
+      var url = "{% url 'posts_list' %}?type=" + type
+      $('#posts_cards').html('').load(url, function() {
+        $(window).trigger('resize');
+      });
     };
   </script>
 {% endblock js %}

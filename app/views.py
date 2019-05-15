@@ -74,13 +74,26 @@ def commenting_post(request, pk):
 
 
 def posts(request):
-    posts_all = Post.objects.order_by('-created_at')
-    return render(request, 'app/posts.html', {'posts_all':posts_all})
+    # posts_all = Post.objects.order_by('-created_at')
+    return render(request, 'app/posts.html')#, {'posts_all':posts_all})
 
 
-def posts_all(request):
-    posts = Post.objects.order_by('-created_at')
-    return render(request, 'app/posts_list.html', {'posts':posts})
+def posts_list(request):
+    if request.method=='GET':
+        type = request.GET.get('type', None)
+
+        if type is not None:
+            posts = Post.objects
+
+            # all
+            if type=='all':
+                posts = posts.all()
+
+            # my
+            elif type=='my':
+                posts = posts.filter(user__email=request.user.email)
+
+            return render(request, 'app/posts_list.html', {'posts':posts.order_by('-created_at')})
 
 
 @login_required
