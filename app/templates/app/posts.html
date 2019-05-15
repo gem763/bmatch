@@ -49,6 +49,8 @@
   {{ block.super }}
 
   <script>
+    var test = {% include 'app/posts_list.html' %}
+
     $(window).resize(function(){
       var width = $(".pcard").width();
       $(".pcard").css("height", width + "px");
