@@ -5,8 +5,33 @@
 {% endblock menu_top %}
 
 {% block content %}
-<div class="ui fluid container" style="background:white;height:300px;margin-top:50px;display:flex;align-items:center;justify-content:center;">
-  <h1>INTRO</h1>
+{% load static %}
+<style>
+  #intro {
+    width: 100%;
+    height: 400px;
+    /* margin-top:50px; */
+    /* background:lightblue url('{% static 'layout/intro_background.jpg'  %}') no-repeat fixed center; */
+    background: url("{% static 'layout/intro_background.jpg' %}");
+    background-repeat: repeat-x;
+    background-size: contain;
+    /* opacity: 0.5; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+  }
+</style>
+
+<!-- <div style="width:100%;background:white;height:300px;margin-top:50px;display:flex;align-items:center;justify-content:center;"> -->
+<div id="intro">
+  <h1 class="ui icon header" style="background:rgba(255, 255, 255, .5);padding:20px">
+    <i class="gem outline icon"></i>
+    <div class="content" style="font-size:40px;">
+      Get:ch
+      <div class="sub header">get your own style</div>
+    </div>
+  </h1>
 </div>
 
 <div class="ui text container" style="background:none;margin-top:20px;box-shadow: 0 0 10px rgba(0,0,0,0.1)">

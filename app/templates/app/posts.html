@@ -18,23 +18,27 @@
   }
 </style>
 
-<div class="ui text container" style="text-align:center;margin-top:70px">
 
-  <div class="ui basic fluid buttons">
-    <div class="ui button" onclick="load_posts('all')">All</div>
-    <div class="ui active button" onclick="load_posts('my')">My</div>
-    <!-- <a class="ui button" href="{% url 'discover' %}">All</a>
-    <a class="ui active button" href="{% url 'posts' %}">My</a> -->
-  </div>
+<div class="ui text container" style="text-align:center;margin-top:80px">
 
-  <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right">
-    <a class="ui icon button" href="{% url 'posting' %}">
-      <i class="edit outline icon"></i>
+  <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right;">
+    <div class="mypostonly ui toggle checkbox" style="float:left;background:none;margin-top:5px;">
+      <input type="checkbox" id="mypostonly">
+      <label for="mypostonly">My posts only</label>
+    </div>
+
+    <div class="ui icon tiny basic buttons">
+      <button class="ui button" onclick="reload_posts(-1)"><i class="minus icon"></i></button>
+      <button class="ui button" onclick="reload_posts(1)"><i class="plus icon"></i></button>
+    </div>
+    <a class="ui icon tiny basic button" href="{% url 'posting' %}">
+      <i class="pencil alternate icon"></i>
     </a>
+
+    <div style="clear:both;"></div>
   </div>
 
-
-  <div class="ui four doubling cards" id="posts_cards"></div>
+  <div class="ui cards" id="posts_cards"></div>
 </div>
 {% endblock content %}
 
@@ -44,6 +48,11 @@
   {{ block.super }}
 
   <script>
+    var ncols = 4;
+    var ncols_max = 6;
+    var ncols_min = 1;
+    var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
+
     $(window).resize(function(){
       var width = $(".pcard").width();
       $(".pcard").css("height", width + "px");
@@ -58,10 +67,36 @@
     };
 
     function load_posts(type) {
-      var url = "{% url 'posts_list' %}?type=" + type
+      var url = "{% url 'posts_sub' %}?type=" + type;
+      $('#posts_cards').attr('class', "ui cards " + ncols_matcher[ncols]);
       $('#posts_cards').html('').load(url, function() {
         $(window).trigger('resize');
       });
     };
+
+    function reload_posts(step) {
+      if (step > 0) {
+        ncols = Math.min(ncols+step, ncols_max);
+
+      } else if (step < 0) {
+        ncols = Math.max(ncols+step, ncols_min);
+      }
+
+      $('#posts_cards').attr('class', "ui cards " + ncols_matcher[ncols]);
+      $(window).trigger('resize');
+    }
+
+    $(document).ready(function(){
+      load_posts('{{ type }}');
+    })
+
+    $('.mypostonly.checkbox').checkbox({
+      onChecked: function() {
+        load_posts('my');
+      },
+      onUnchecked: function() {
+        load_posts('all');
+      }
+    });
   </script>
 {% endblock js %}

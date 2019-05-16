@@ -46,20 +46,6 @@ class CommentPostActionsView(View):
             return JsonResponse({'success':False})
 
 
-# def commentpost_actions(request):
-#     if request.method=='GET':
-#         pk = request.GET.get('pk', None)
-#         action = request.GET.get('actoin', None)
-#
-#         if action=='edit':
-#             pass
-#
-#         elif action=='delete':
-#             commentpost = CommentPost.objects.get(pk=pk)
-#             commentpost.delete()
-#             return redirect(commentpost)
-
-
 # @login_required
 def commenting_post(request, pk):
     if request.method=='POST':
@@ -74,26 +60,25 @@ def commenting_post(request, pk):
 
 
 def posts(request):
-    # posts_all = Post.objects.order_by('-created_at')
-    return render(request, 'app/posts.html')#, {'posts_all':posts_all})
+    if request.method=='GET':
+        type = request.GET.get('type', 'all')
+        return render(request, 'app/posts.html', {'type':type})
 
 
-def posts_list(request):
+def posts_sub(request):
     if request.method=='GET':
         type = request.GET.get('type', None)
 
         if type is not None:
             posts = Post.objects
 
-            # all
             if type=='all':
                 posts = posts.all()
 
-            # my
             elif type=='my':
                 posts = posts.filter(user__email=request.user.email)
 
-            return render(request, 'app/posts_list.html', {'posts':posts.order_by('-created_at')})
+            return render(request, 'app/posts_sub.html', {'posts':posts.order_by('-created_at')})
 
 
 @login_required
