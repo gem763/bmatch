@@ -5,18 +5,6 @@
 {% endblock menu_top %}
 
 {% block content %}
-<style>
-  .pcard {
-    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
-    cursor: pointer;
-    overflow: hidden;
-  }
-
-  .pcard:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
-  }
-</style>
-
 
 {% load static %}
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
@@ -24,14 +12,38 @@
 
 <div class="ui text container segments" style="margin-top:70px;">
   <div class="ui padded segment">
-    <div class="ui header">Suggestions for you</div>
+    <div class="content" style="background:none;">
+      <div class="ui medium header" style="background:none;margin:0;float:left;">
+        <i class="compass outline icon"></i>
+        <div class="content">
+          Discover your fashion style
+          <div class="sub header">내 패션 취향 대모험</div>
+        </div>
+      </div>
+
+      <div class="ui icon tiny basic buttons" style="float:right;background:none;">
+        <button class="ui button" onclick="reload_posts(1)"><i class="minus icon"></i></button>
+        <button class="ui button" onclick="reload_posts(-1)"><i class="plus icon"></i></button>
+      </div>
+
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+
+
+  <div class="ui padded segment">
+    <div class="ui header">
+      <div class="content">
+        <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
+        Suggestions for you
+      </div>
+    </div>
+
     <div class="content">
       <div class="ui four doubling cards">
-        {% if suggestions %}
-          {% for brand in suggestions %}
-            {% include "app/brand_card.html" with brand=brand %}
-          {% endfor %}
-        {% endif %}
+        {% for brand in suggestions %}
+          {% include "app/brand_card.html" with brand=brand %}
+        {% endfor %}
       </div>
 
       <br>
@@ -40,16 +52,17 @@
   </div>
 
   <div class="ui padded segment">
-    <div class="ui header">Hot trend now</div>
+    <div class="ui header">
+      <div class="content">
+        Hot trend now
+      </div>
+    </div>
+
     <div class="content">
       <div class="ui four doubling cards">
-        {% if hottrendnow %}
-          {% for post in hottrendnow %}
-            <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
-              <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
-            </div>
-          {% endfor %}
-        {% endif %}
+        {% for post in hottrendnow %}
+          {% include "app/brand_card.html" with post=post %}
+        {% endfor %}
       </div>
 
       <br>
@@ -62,7 +75,11 @@
 
 
   <div class="ui padded segment">
-    <div class="ui header">Social keywords</div>
+    <div class="ui header">
+      <div class="content">
+        Social keywords
+      </div>
+    </div>
     <div class="content">
       <div id="wordcloud" style="text-align:center"></div>
     </div>
@@ -83,19 +100,6 @@
   <script src="{% static 'quantlab/bcard.js' %}"></script>
 
   <script>
-    $(window).resize(function(){
-      var width = $(".pcard").width();
-      $(".pcard").css("height", width + "px");
-      $(".pcard_img").css({"width":width + "px", "height":width + "px"});
-    });
-
-    $(window).trigger('resize');
-
-    function pcard_click(pcard) {
-      var url = $(pcard).attr("href");
-      window.location.assign(url);
-    };
-
     $(document).ready(function(){
       WordCloud({
         container: "#wordcloud",

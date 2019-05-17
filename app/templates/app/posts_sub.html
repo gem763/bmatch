@@ -1,5 +1,6 @@
 {% for post in posts %}
-  <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)" style="margin:none;">
+  <!-- <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)" style="margin:none;">
     <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
-  </div>
+  </div> -->
+  {% include "app/brand_card.html" with post=post %}
 {% endfor %}

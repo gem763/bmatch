@@ -1,3 +1,4 @@
+{% if brand %}
 <div class="bcard card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="bcard_click(this)">
 
   <div class="bcard_base">
@@ -41,3 +42,11 @@
   {% endif %}
 
 </div>
+{% endif %}
+
+
+{% if post %}
+<div class="bcard card" href="{% url 'post_detail' post.pk %}" onclick="bcard_click(this)">
+  <img class="bcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
+</div>
+{% endif %}
