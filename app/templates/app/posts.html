@@ -28,8 +28,8 @@
     </div>
 
     <div class="ui icon tiny basic buttons">
-      <button class="ui button" onclick="reload_posts(-1)"><i class="minus icon"></i></button>
-      <button class="ui button" onclick="reload_posts(1)"><i class="plus icon"></i></button>
+      <button class="ui button" onclick="reload_posts(1)"><i class="minus icon"></i></button>
+      <button class="ui button" onclick="reload_posts(-1)"><i class="plus icon"></i></button>
     </div>
     <a class="ui icon tiny basic button" href="{% url 'posting' %}">
       <i class="pencil alternate icon"></i>
@@ -38,7 +38,7 @@
     <div style="clear:both;"></div>
   </div>
 
-  <div class="ui cards" id="posts_cards"></div>
+  <div class="ui cards" id="posts_cards" style="background:none;"></div>
 </div>
 {% endblock content %}
 
@@ -87,6 +87,9 @@
     }
 
     $(document).ready(function(){
+      if ($(window).width() < 500) {
+        ncols = 3;
+      }
       load_posts('{{ type }}');
     })
 

@@ -1,35 +1,27 @@
-<style>
-  #searcher {
-    position: fixed;
-    top: -10px !important;
-  }
-</style>
+<div id="searcher" style="background:white;width:100%;height:100%;padding:10px;position:absolute;left:0;bottom:100%;transform:translate(0%,0%);">
 
-<div class="ui modal" id="searcher">
-  <i class="close icon"></i>
-  <div class="ui icon header">
-    <i class="search icon"></i>
-    브랜드를 검색해보세요
+  <div id="search-hider" class="ui icon compact big button" style="background:none;float:left;">
+    <i class="arrow up icon"></i>
   </div>
-  <div class="content">
-    <div class="ui fluid huge category search">
-      <div class="ui fluid icon input">
-        <input class="prompt" type="text" placeholder="Search...">
-        <i class="search icon"></i>
+
+  <form class="ui form" action="{% url 'discover' %}" method="get" style="background:none;margin-left:50px;">
+    <div class="ui fluid search" style="background:none;">
+      <div class="ui fluid transparent input" style="position:relative;height:40px;font-size:20px;">
+        {% if brands.qry %}
+          <input class="bsearch prompt" type="text" value="{{ brands.qry }}" name="q" oninput="show_submit(this)">
+        {% else %}
+          <input class="bsearch prompt" type="text" placeholder="Search" name="q" oninput="show_submit(this)">
+        {% endif %}
+
+        <!-- <button class="bsearch-submit ui icon compact button" type="submit" style="background:transparent;opacity:0;height:30px;position:absolute;right:0%;top:50%;transform:translate(0%,-50%)"> -->
+        <!-- <button class="bsearch-submit ui icon compact large button" type="submit" style="background:none;opacity:0;position:absolute;right:0%;top:50%;transform:translate(0%,-50%)"> -->
+        <button class="bsearch-submit ui icon compact big button" type="submit" style="background:none;opacity:0;">
+          <i class="search icon"></i>
+        </button>
+
       </div>
       <div class="results"></div>
     </div>
-    <br>
-    <div class="ui center aligned container">
-      <div class="description">
-        <p>예. Adidas<p>
-      </div>
-    </div>
-  </div>
-  <div class="actions">
-    <div class="ui red basic cancel button">
-      <i class="remove icon"></i>
-      Close
-    </div>
-  </div>
+  </form>
+
 </div>

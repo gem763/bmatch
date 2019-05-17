@@ -11,10 +11,17 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
 
   <style>
-    @media screen and (max-width: 800px) {
-      .hide-footer {
-        display: none;
+    @media only screen and (max-width: 500px) {
+      /* .top-wide.item {
+        display: none !important;
       }
+
+      .top-narrow.item {
+        display: block !important;
+      } */
+      /* .hide-footer {
+        display: none;
+      } */
     }
 
     body {
@@ -56,6 +63,19 @@
   <script src="/static/semantic/semantic.min.js"></script>
 
   <script>
+    $("#search-shower").click(function() {
+      $("#searcher").css({"animation":"searcher_show 0.2s forwards"});
+      $("input.bsearch.prompt").focus();
+    });
+
+    $("input.bsearch.prompt").focusout(function() {
+      $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
+    });
+
+    $("#search-hider").click(function() {
+      $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
+    });
+
     function show_submit(input) {
       var bsearch_submit = $(input).siblings(".bsearch-submit")
 

@@ -19,6 +19,7 @@
 
 
 {% load static %}
+<link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
 <link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
 
 <div class="ui text container segments" style="margin-top:70px;">
@@ -26,8 +27,8 @@
     <div class="ui header">Suggestions for you</div>
     <div class="content">
       <div class="ui four doubling cards">
-        {% if brands.suggest %}
-          {% for brand in brands.suggest %}
+        {% if suggestions %}
+          {% for brand in suggestions %}
             {% include "app/brand_card.html" with brand=brand %}
           {% endfor %}
         {% endif %}
@@ -42,8 +43,8 @@
     <div class="ui header">Hot trend now</div>
     <div class="content">
       <div class="ui four doubling cards">
-        {% if brands.posts %}
-          {% for post in brands.posts %}
+        {% if hottrendnow %}
+          {% for post in hottrendnow %}
             <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
               <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
             </div>
@@ -63,7 +64,7 @@
   <div class="ui padded segment">
     <div class="ui header">Social keywords</div>
     <div class="content">
-      <div id="wordcloud_discover" style="text-align:center"></div>
+      <div id="wordcloud" style="text-align:center"></div>
     </div>
   </div>
 </div>
@@ -97,9 +98,9 @@
 
     $(document).ready(function(){
       WordCloud({
-        container: "#wordcloud_discover",
-        data: {{ brands.hottrend.simwords | safe }},
-        width: $("#wordcloud_discover").width(),
+        container: "#wordcloud",
+        data: {{ socialwords | safe }},
+        width: $("#wordcloud").width(),
         height: 600
       });
     })

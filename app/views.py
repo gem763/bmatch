@@ -349,10 +349,22 @@ class SaveWorldcupView(View):
             return JsonResponse({'success':False})
 
 
-class DiscoverView(AjaxListView):
+
+def discover(request):
+    brands = Brand.objects.all()
+    suggestions = random.sample(list(brands), 8)
+    hottrendnow = Post.objects.all().order_by('-created_at')[:16]
+
+    # 현재는 Social keywords 가 특정 브랜드로 들어가 있는데,
+    # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
+    socialwords = _simwords('crocs', min=0.5, topn=100, amp=10)
+    return render(request, 'app/discover.html', {'suggestions':suggestions, 'hottrendnow':hottrendnow, 'socialwords':socialwords})
+
+
+class LibraryView(AjaxListView):
     context_object_name = 'brands'
-    template_name = 'app/discover.html'
-    page_template = 'app/discover_page.html'
+    template_name = 'app/library.html'
+    page_template = 'app/library_page.html'
     qry = None
     page = None
 
@@ -363,9 +375,6 @@ class DiscoverView(AjaxListView):
 
         all = None
         simbrands = None
-        suggest = None
-        posts = None
-        hottrend = None
 
         # 쿼리가 없는 경우 (discover 초기 페이지)
         if self.qry is None:
@@ -391,11 +400,6 @@ class DiscoverView(AjaxListView):
             else:
                 simbrands = _simbrands(qry=self.qry, top_min=60, bottom_max=10, n_max=20)
 
-        # 현재는 hot trend가 특정 브랜드로 들어가 있는데,
-        # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
-        hottrend_test = 'crocs'
-        hottrend = Brand.objects.get(name=hottrend_test)
-        hottrend.simwords = _simwords(hottrend_test, min=0.5, topn=100, amp=10)
 
         return {
             'qry': self.qry,
@@ -403,9 +407,6 @@ class DiscoverView(AjaxListView):
             # 'search_helper':search_helper,
             'all': all,
             'simbrands': simbrands,
-            'suggest': random.sample(list(all), 8),
-            'posts': Post.objects.all().order_by('-created_at')[:16],
-            'hottrend': hottrend
         }
 
 

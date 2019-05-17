@@ -31,8 +31,8 @@ urlpatterns = [
 
 
     path('', v.home, name='home'),
-    path('discover/', v.DiscoverView.as_view(), name='discover'),
-    path('library/', v.DiscoverView.as_view(template_name='app/discover_20190514.html'), name='library'),
+    path('discover/', v.discover, name='discover'),
+    path('library/', v.LibraryView.as_view(), name='library'),
     # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),
