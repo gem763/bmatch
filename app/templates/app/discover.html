@@ -4,13 +4,16 @@
   {% include "app/menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
 
-{% block content %}
 
+{% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
 <link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
 
-<div class="ui text container segments" style="margin-top:70px;">
+
+<div class="ui text container segments">
+   <!-- style="margin-top:70px;"> -->
+
   <div class="ui padded segment">
     <div class="content" style="background:none;">
       <div class="ui medium header" style="background:none;margin:0;float:left;">
@@ -21,7 +24,7 @@
         </div>
       </div>
 
-      <div class="ui icon tiny basic buttons" style="float:right;background:none;">
+      <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;">
         <button class="ui button" onclick="reload_posts(1)"><i class="minus icon"></i></button>
         <button class="ui button" onclick="reload_posts(-1)"><i class="plus icon"></i></button>
       </div>

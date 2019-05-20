@@ -40,6 +40,7 @@ urlpatterns = [
     path('db_update/<category>/', v.db_update),
     # path('rating/', v.rating),
     path('rating/', v.RatingView.as_view(), name='rating'),
+    path('myfavorite/', v.myfavorite, name='myfavorite'),
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
     path('brands/<bname>/identity/', v.identity, name='identity'),
     # path('brand/<brand_name>/interest/trend/', interest_trend, name='interest_trend'),

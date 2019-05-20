@@ -144,6 +144,10 @@ def brand_detail(request, bname):
     return render(request, 'app/brand_detail.html', {'brand':brand})
 
 
+def myfavorite(request):
+    candidates = list(Brand.objects.all())[:10]
+    return render(request, 'app/myfavorite.html', {'candidates':candidates})
+
 def rating(request):
     howmany = 10
     bnames = list(Brand.objects.values_list('name', flat=True))

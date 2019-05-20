@@ -1,0 +1,57 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with rating_act="active" %}
+{% endblock menu_top %}
+
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
+
+<div class="ui text container segments">
+  <div class="ui padded segment" style="height:80vh;">
+    <div class="content" style="background:yellow;width:100%;height:100%;">
+      <table class="ui very basic celled table" style="height:100%;">
+        <tbody>
+          <tr>
+            <td class="sixteen wide">
+              <!-- <div class="ui one cards"> -->
+              {% for candidate in candidates %}
+                {% include "app/brand_card.html" with brand=candidate %}
+                <br>
+              {% endfor %}
+              <!-- </div> -->
+            </td>
+            <!-- <td class="ten wide">Approved</td>
+            <td class="three wide">None</td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% load static %}
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script src="{% static 'quantlab/bcard.js' %}"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.your-class').slick({
+        dots: true,
+        infinite: true,
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        vertical: true,
+        verticalSwiping: true
+      });
+    });
+  </script>
+{% endblock js %}
