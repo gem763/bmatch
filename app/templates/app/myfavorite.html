@@ -148,14 +148,18 @@
     $(document).ready(function(){
       $('.bcards').slick({
         dots: false,
+        // rows: 1,
+        // slidesPerRow: 5,
         arrows: false,
         infinite: true,
         slidesToShow: 10,
-        // slidesToScroll: 5,
+        slidesToScroll: 2,
         vertical: true,
         verticalSwiping: true,
         swipeToSlide: true,
-        centerMode: true
+        centerMode: true,
+        // centerPadding: "100px",
+        focusOnSelect: true
         // lazyLoad: 'ondemand'
       });
 
