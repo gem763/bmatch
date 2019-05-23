@@ -25,8 +25,8 @@
       </div>
 
       <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;">
-        <button class="ui button" onclick="reload_posts(1)"><i class="minus icon"></i></button>
-        <button class="ui button" onclick="reload_posts(-1)"><i class="plus icon"></i></button>
+        <button class="ui button" onclick="resize_cards(1)"><i class="minus icon"></i></button>
+        <button class="ui button" onclick="resize_cards(-1)"><i class="plus icon"></i></button>
       </div>
 
       <div style="clear:both;"></div>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="content">
-      <div class="ui four doubling cards">
+      <div class="bcards ui four cards">
         {% for brand in suggestions %}
           {% include "app/brand_card.html" with brand=brand %}
         {% endfor %}
@@ -62,7 +62,7 @@
     </div>
 
     <div class="content">
-      <div class="ui four doubling cards">
+      <div class="bcards ui four cards">
         {% for post in hottrendnow %}
           {% include "app/brand_card.html" with post=post %}
         {% endfor %}
@@ -110,7 +110,25 @@
         width: $("#wordcloud").width(),
         height: 600
       });
-    })
+    });
+
+
+    var ncols = 4;
+    var ncols_max = 6;
+    var ncols_min = 1;
+    var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
+
+    function resize_cards(step) {
+      if (step > 0) {
+        ncols = Math.min(ncols+step, ncols_max);
+
+      } else if (step < 0) {
+        ncols = Math.max(ncols+step, ncols_min);
+      }
+
+      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
+      $(window).trigger('resize');
+    }
 
   </script>
 {% endblock js %}

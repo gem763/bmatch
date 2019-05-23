@@ -145,7 +145,12 @@ def brand_detail(request, bname):
 
 
 def myfavorite(request):
-    candidates = list(Brand.objects.all())[:10]
+    _candidates = list(Brand.objects.all())[:40]
+    random.shuffle(_candidates)
+    n = int(len(_candidates)/2)
+    left = _candidates[:n]
+    right = _candidates[n:]
+    candidates = {'left':left, 'right':right}
     return render(request, 'app/myfavorite.html', {'candidates':candidates})
 
 def rating(request):

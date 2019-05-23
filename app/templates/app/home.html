@@ -36,20 +36,44 @@
 </div>
 
 <div class="ui text container" style="background:none;margin-top:20px;box-shadow: 0 0 10px rgba(0,0,0,0.1)">
-  <div class="ui fluid three item labeled icon menu">
+  <div class="ui fluid three item menu">
     <a class="item" href="{% url 'discover' %}">
-      <i class="compass outline icon"></i>
-      discover your style
+      <div class="ui icon tiny header">
+        <i class="compass outline icon"></i>
+        <div class="content">
+          Style discovery
+          <div class="sub header">스타일 대모험</div>
+        </div>
+      </div>
     </a>
+
     <a class="item" href="{% url 'rating' %}">
-      <i class="heart outline icon"></i>
-      brands worldcup
+      <div class="ui icon tiny header">
+        <i class="heart outline icon"></i>
+        <div class="content">
+          Brand fit
+          <div class="sub header">이상형 월드컵</div>
+        </div>
+      </div>
     </a>
+
     <a class="item" href="{% url 'me' %}">
-      <i class="user outline icon"></i>
-      my identity
+      <div class="ui icon tiny header">
+        <i class="user outline icon"></i>
+        <div class="content">
+          Tailored recommend
+          <div class="sub header">맞춤형 제안</div>
+        </div>
+      </div>
     </a>
   </div>
+</div>
+
+<div class="ui text container">
+  <br>
+  <a href="{% url 'posts' %}">see all posts</a><br>
+  <a href="{% url 'library' %}">see brand library</a><br>
+  <a href="{% url 'myfavorite' %}">choose my favorite brand</a>
 </div>
 {% endblock content %}
 

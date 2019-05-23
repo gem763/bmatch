@@ -8,20 +8,9 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
-<!-- <style>
-  .pcard {
-    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
-    cursor: pointer;
-    overflow: hidden;
-  }
-
-  .pcard:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
-  }
-</style> -->
 
 
-<div class="ui text container" style="text-align:center;margin-top:80px">
+<div class="ui text container" style="text-align:center;margin-top:20px">
 
   <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right;">
     <div class="mypostonly ui toggle checkbox" style="float:left;background:none;margin-top:5px;">
@@ -30,8 +19,8 @@
     </div>
 
     <div class="ui icon tiny basic buttons">
-      <button class="ui button" onclick="reload_posts(1)"><i class="minus icon"></i></button>
-      <button class="ui button" onclick="reload_posts(-1)"><i class="plus icon"></i></button>
+      <button class="ui button" onclick="resize_cards(1)"><i class="minus icon"></i></button>
+      <button class="ui button" onclick="resize_cards(-1)"><i class="plus icon"></i></button>
     </div>
     <a class="ui icon tiny basic button" href="{% url 'posting' %}">
       <i class="pencil alternate icon"></i>
@@ -40,7 +29,7 @@
     <div style="clear:both;"></div>
   </div>
 
-  <div class="ui cards" id="posts_cards" style="background:none;"></div>
+  <div class="bcards ui cards" style="background:none;"></div>
 </div>
 {% endblock content %}
 
@@ -55,28 +44,15 @@
     var ncols_min = 1;
     var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
 
-    // $(window).resize(function(){
-    //   var width = $(".pcard").width();
-    //   $(".pcard").css("height", width + "px");
-    //   $(".pcard_img").css({"width":width + "px", "height":width + "px"});
-    // });
-    //
-    // $(window).trigger('resize');
-    //
-    // function pcard_click(pcard) {
-    //   var url = $(pcard).attr("href");
-    //   window.location.assign(url);
-    // };
-
     function load_posts(type) {
       var url = "{% url 'posts_sub' %}?type=" + type;
-      $('#posts_cards').attr('class', "ui cards " + ncols_matcher[ncols]);
-      $('#posts_cards').html('').load(url, function() {
+      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
+      $('.bcards').html('').load(url, function() {
         $(window).trigger('resize');
       });
     };
 
-    function reload_posts(step) {
+    function resize_cards(step) {
       if (step > 0) {
         ncols = Math.min(ncols+step, ncols_max);
 
@@ -84,7 +60,7 @@
         ncols = Math.max(ncols+step, ncols_min);
       }
 
-      $('#posts_cards').attr('class', "ui cards " + ncols_matcher[ncols]);
+      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
       $(window).trigger('resize');
     }
 
