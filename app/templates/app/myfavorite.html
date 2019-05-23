@@ -11,6 +11,8 @@
     /* box-shadow: 0 0 10px rgba(0,0,0,0.15) !important; */
     cursor: pointer;
     overflow: hidden;
+    background: orange !important;
+    /* padding: 0 !important; */
   }
 
   .bcard:hover {
@@ -19,8 +21,9 @@
 
   .bcard_img {
     object-fit: contain;
-    margin: auto;
-    border-radius: 4px !important;
+    /* margin: 0 !important; */
+    border-radius: 10px !important;
+    background: yellow;
   }
 
   .bcard-selected {
@@ -39,8 +42,31 @@
 
   .slick-container {
     position: relative;
-    /* background: yellow !important; */
+    /* background: none !important; */
     padding:0px !important;
+    /* background-image: linear-gradient(to top, rgba(255,0,0,0), rgba(255,0,0,1)) !important; */
+  }
+
+  .slick-container:before {
+    position: absolute;
+    top: 0;
+    height: 30%;
+    width: 100%;
+    content: "";
+    background: linear-gradient(to bottom, rgba(255,255,255, 1) 0%, rgba(255,255,255, 0) 100%);
+    pointer-events: none; /* so the text is still selectable */
+    z-index: 10;
+  }
+
+  .slick-container:after {
+    position: absolute;
+    bottom: 0;
+    height: 30%;
+    width: 100%;
+    content: "";
+    background: linear-gradient(to top, rgba(255,255,255, 1) 0%, rgba(255,255,255, 0) 100%);
+    pointer-events: none; /* so the text is still selectable */
+    z-index: 10;
   }
 
   .bcards {
@@ -48,8 +74,8 @@
     position: absolute !important;
     width: 100% !important;
     margin: 0 !important;
-    top: 50px;
-    bottom: 50px;
+    top: 0px;
+    bottom: 0px;
     overflow: hidden;
   }
 
@@ -57,8 +83,14 @@
   .slick-arrow {
     background: none !important;
     position: absolute;
-    left: 50%;
-    transform: translate(-50%,0%);
+    width: 80% !important;
+    left: 50% !important;
+    transform: translate(-50%,0%) !important;
+    z-index: 100;
+    box-shadow: none !important;
+    /* border-radius: 10px !important;
+    border: none !important; */
+
   }
 
   .slick-arrow.up {
@@ -85,32 +117,32 @@
       <table class="ui very basic celled unstackable table" style="height:100%;">
         <tbody>
           <tr>
-            <td class="slick-container three wide">
-              <div class="bcards left ui cards">
+            <td class="slick-container four wide">
+              <div class="bcards left">
                 {% for brand in candidates.left %}
-                <div class="bcard card" bname="{{ brand.name }}">
+                <!-- <div class="bcard card" bname="{{ brand.name }}"> -->
                   <img class="bcard_img" src="{{ brand.logo.url }}">
                   <!-- <img class="bcard_img" data-lazy="{{ brand.logo.url }}" alt="{{ brand.name }}"> -->
-                </div>
+                <!-- </div> -->
                 {% endfor %}
               </div>
 
-              <div class="slick-arrow up left ui icon small compact button">
-                <i class="angle up icon"></i>
+              <div class="slick-arrow up left ui icon big compact button">
+                <i class="chevron circle up icon"></i>
               </div>
 
-              <div class="slick-arrow down left ui icon small compact button">
-                <i class="angle down icon"></i>
+              <div class="slick-arrow down left ui icon big compact button">
+                <i class="chevron circle down icon"></i>
               </div>
             </td>
 
-            <td class="ten wide center aligned" style="position:relative;background:none;">
+            <td class="eight wide center aligned" style="position:relative;background:none;">
               <div class="bcard-selected card" style="position:absolute;width:90%;background:none;top:50%;transform:translate(0%,-50%);" href="{% url 'brand_detail' candidates.left.0.name %}" onclick="bcard_click(this)">
                 <img class="bcard-selected-img" src="{{ candidates.left.0.logo.url }}">
               </div>
             </td>
 
-            <td class="slick-container three wide">
+            <td class="slick-container four wide">
               <div class="bcards right ui cards">
                 {% for brand in candidates.right %}
                 <div class="bcard card" bname="{{ brand.name }}">
@@ -120,12 +152,12 @@
                 {% endfor %}
               </div>
 
-              <div class="slick-arrow up right ui icon small compact button">
-                <i class="angle up icon"></i>
+              <div class="slick-arrow up right ui icon big compact button">
+                <i class="chevron circle up icon"></i>
               </div>
 
-              <div class="slick-arrow down right ui icon small compact button">
-                <i class="angle down icon"></i>
+              <div class="slick-arrow down right ui icon big compact button">
+                <i class="chevron circle down icon"></i>
               </div>
             </td>
 
@@ -148,8 +180,6 @@
     $(document).ready(function(){
       $('.bcards').slick({
         dots: false,
-        // rows: 1,
-        // slidesPerRow: 5,
         arrows: false,
         infinite: true,
         slidesToShow: 10,
@@ -187,6 +217,9 @@
 
       $('.bcard-selected').attr('href', href);
       $('.bcard-selected-img').attr('src', src);
+
+      console.log($(this).width());
+      console.log($(this).height());
     });
 
     function bcard_click(bcard) {
