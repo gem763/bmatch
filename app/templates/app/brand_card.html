@@ -2,7 +2,7 @@
 <div class="bcard card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="bcard_click(this)">
 
   <div class="bcard_base">
-    <img class="bcard_img" src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+    <img class="bcard_img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;">
     <div class="bcard_like" onclick="toggle_like(event, this)">
       {% load ctags %}
       {% if user.is_authenticated and user.email|liked:brand.name %}
@@ -47,6 +47,8 @@
 
 {% if post %}
 <div class="bcard card" href="{% url 'post_detail' post.pk %}" onclick="bcard_click(this)">
-  <img class="bcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
+  <div class="bcard_base">
+    <img class="bcard_img" src="{{ post.image.url }}" style="object-fit:cover;">
+  </div>
 </div>
 {% endif %}
