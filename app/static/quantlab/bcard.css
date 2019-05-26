@@ -1,5 +1,4 @@
 .bcard {
-  /* box-shadow: 0 0 10px 1px gainsboro !important; */
   box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
   cursor: pointer;
   overflow: hidden;
@@ -7,8 +6,6 @@
 
 .bcard:hover {
   box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
-  /* box-shadow: 0 0 10px 5px gainsboro !important; */
-  /* background: yellow !important; */
 }
 
 .bcard_img {
@@ -19,7 +16,6 @@
   right: 0;
   width: 100%;
   height: 100%;
-  /* border-radius: 4px !important; */
 }
 
 .bcard_base {
@@ -33,19 +29,31 @@
   position: absolute;
   top: 5%;
   left: 5%;
-  /* font-size: calc(15px); */
+  width: 15%;
+  height: 15%;
+  background: none;
 }
 
 .bcard_like:hover {
-  animation: heartbeat 0.7s infinite;
+  /* animation: heartbeat 0.7s infinite; */
+  transform: scale( 1.3 );
 }
 
 .bcard_like_icon {
-  opacity: 1 !important;
+  background: none;
+  width: 100%;
+  height: 100%;
 }
 
-.bcard_dontlike_icon {
-  opacity: 0.5 !important;
+.bcard_like_icon[state='like'] {
+  opacity: 1;
+  fill: orange;
+  stroke-width: 1;
+}
+
+.bcard_like_icon[state='dontlike'] {
+  opacity: 0.5;
+  fill: none;
   color: gainsboro;
 }
 

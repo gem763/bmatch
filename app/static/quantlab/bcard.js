@@ -30,19 +30,21 @@ function bcard_click(bcard) {
 
 function toggle_like(event, obj) {
   event.stopPropagation();
-  var icon = $(obj).children(".icon");
+  var icon = $(obj).children(".bcard_like_icon");
   var state = icon.attr("state");
   var bname = $(obj).parents(".bcard").attr("bname");
   var data;
 
   if (state=="like") {
-    icon.attr({"state":"dontlike", "class":"bcard_dontlike_icon outline heart icon"});
-    icon.css({"opacity":0.5, "color":"gainsboro"});
+    // icon.attr({"state":"dontlike", "class":"bcard_dontlike_icon outline heart icon"});
+    icon.attr({"state":"dontlike"});
+    // icon.css({"opacity":0.5, "color":"gainsboro"});
     data = {dontlike:bname};
 
   } else {
-    icon.attr({"state":"like", "class":"bcard_like_icon yellow heart icon"});
-    icon.css({"opacity": 1, "color": ""});
+    // icon.attr({"state":"like", "class":"bcard_like_icon yellow heart icon"});
+    icon.attr({"state":"like"});
+    // icon.css({"opacity": 1, "color": ""});
     data = {like:bname};
   };
 
@@ -59,3 +61,5 @@ function toggle_like(event, obj) {
     }
   });
 };
+
+feather.replace()
