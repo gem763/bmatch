@@ -43,6 +43,8 @@
     </div>
 
     <div class="content">
+      <!-- <div class="ui star rating" data-max-rating="1" style="width:50px;height:50px;font-size:20px;"></div> -->
+
       <div class="bcards ui four cards">
         {% for brand in suggestions %}
           {% include "app/brand_card.html" with brand=brand %}
@@ -130,5 +132,6 @@
       $(window).trigger('resize');
     }
 
+    // $('.ui.rating').rating();
   </script>
 {% endblock js %}

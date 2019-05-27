@@ -1,14 +1,14 @@
-$(window).resize(function(){
-  var width = $(".bcard").width();
-  $(".bcard").css("height", width + "px");
-  $(".bcard_img").css({"width":width + "px", "height":width + "px"});
-  $(".bcard_like").css("font-size", width*0.15);
-  $(".bcard_more_btn").css("font-size", width*0.1);
-  $(".bcard_stat_value").css("font-size", width*0.2);
-  $(".bcard_stat_label").css("font-size", width*0.07);
-});
-
-$(window).trigger('resize');
+// $(window).resize(function(){
+//   var width = $(".bcard").width();
+//   $(".bcard").css("height", width + "px");
+//   $(".bcard_img").css({"width":width + "px", "height":width + "px"});
+//   $(".bcard_like").css("font-size", width*0.15);
+//   $(".bcard_more_btn").css("font-size", width*0.1);
+//   $(".bcard_stat_value").css("font-size", width*0.2);
+//   $(".bcard_stat_label").css("font-size", width*0.07);
+// });
+//
+// $(window).trigger('resize');
 
 function bcard_more(event, icon) {
   event.stopPropagation();
@@ -30,19 +30,21 @@ function bcard_click(bcard) {
 
 function toggle_like(event, obj) {
   event.stopPropagation();
-  var icon = $(obj).children(".icon");
+  var icon = $(obj).children(".bcard_like_icon");
   var state = icon.attr("state");
   var bname = $(obj).parents(".bcard").attr("bname");
   var data;
 
   if (state=="like") {
-    icon.attr({"state":"dontlike", "class":"bcard_dontlike_icon outline heart icon"});
-    icon.css({"opacity":0.5, "color":"gainsboro"});
+    // icon.attr({"state":"dontlike", "class":"bcard_dontlike_icon outline heart icon"});
+    icon.attr({"state":"dontlike"});
+    // icon.css({"opacity":0.5, "color":"gainsboro"});
     data = {dontlike:bname};
 
   } else {
-    icon.attr({"state":"like", "class":"bcard_like_icon yellow heart icon"});
-    icon.css({"opacity": 1, "color": ""});
+    // icon.attr({"state":"like", "class":"bcard_like_icon yellow heart icon"});
+    icon.attr({"state":"like"});
+    // icon.css({"opacity": 1, "color": ""});
     data = {like:bname};
   };
 
@@ -59,3 +61,5 @@ function toggle_like(event, obj) {
     }
   });
 };
+
+feather.replace()
