@@ -45,6 +45,7 @@ class Brand(models.Model):
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
     # identity = models.TextField(default='{}', blank=True, null=True)
     # cluster = models.CharField(max_length=50, blank=True, null=True)
+    # fan = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
     def __str__(self):
         return self.name
@@ -60,6 +61,7 @@ class Profile(models.Model):
     likes = models.TextField(blank=True, null=True)
     initial_awared = models.TextField(blank=True, null=True)
     # awareness = models.TextField(blank=True, null=True, default='{}')
+    interest = models.ManyToManyField(Brand, blank=True, default='')
 
     def __str__(self):
         return self.user.email

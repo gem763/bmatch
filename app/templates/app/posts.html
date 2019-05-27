@@ -44,11 +44,9 @@
       var url = "{% url 'posts_sub' %}?type=" + type;
       $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
       $('.blocks').html('').load(url, function() {
-        // $(window).trigger('resize');
         $('.block').fadeIn('slow');
+        // resize_block(0);
       });
-
-      // $('.blocks').html('').load(url);
     };
 
 

@@ -11,7 +11,7 @@
 // $(window).trigger('resize');
 
 
-var ncols = 3;
+var ncols = 4;
 var ncols_max = 6;
 var ncols_min = 1;
 var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
@@ -75,3 +75,14 @@ function toggle_like(event, obj) {
     }
   });
 };
+
+
+$(document).ready(function(){
+  $(".block").transition({
+    animation  : 'fade',
+    duration   : '1s',
+    onComplete : function() {
+      // console.log(1);
+    }
+  });
+})

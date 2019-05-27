@@ -62,6 +62,8 @@ def commenting_post(request, pk):
 def posts(request):
     if request.method=='GET':
         type = request.GET.get('type', 'all')
+        interest = Profile.objects.get(user__email=request.user.email).values('name')
+        print(interest)
         return render(request, 'app/posts.html', {'type':type})
 
 

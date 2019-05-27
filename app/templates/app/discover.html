@@ -29,6 +29,8 @@
         <button class="ui button" onclick="resize_block(-1)"><i class="plus icon"></i></button>
       </div>
 
+      <div class="ui icon compact button" onclick=""><i class="sliders horizontal icon"></i></div>
+
       <div style="clear:both;"></div>
     </div>
   </div>
@@ -113,13 +115,13 @@
         height: 600
       });
 
-      $(".blocks").ready(function() {
-        $(".block").each(function() {
-          $(this).fadeIn("slow");
-        });
-      });
-
-      resize_block(0);
+      // $(".blocks").ready(function() {
+      //   $(".block").each(function() {
+      //     $(this).fadeIn("slow");
+      //   });
+      // });
     });
+
+    resize_block(0);
   </script>
 {% endblock js %}
