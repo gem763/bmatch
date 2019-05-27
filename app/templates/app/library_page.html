@@ -1,12 +1,12 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
 
 {% load el_pagination_tags %}
 
 {% if brands.all %}
   {% lazy_paginate 40,10 brands.all as all %}
   {% for brand in all %}
-    {% include "app/brand_card.html" with brand=brand %}
+    {% include "app/block.html" with brand=brand %}
   {% endfor %}
   {% show_more %}
 {% endif %}
@@ -14,7 +14,7 @@
 {% if brands.simbrands.top %}
   <!-- {% lazy_paginate brands.simbrands.top as recommend %} -->
   {% for brand in recommend %}
-    {% include "app/brand_card.html" with brand=brand %}
+    {% include "app/block.html" with brand=brand %}
   {% endfor %}
   <!-- {% show_more %} -->
 {% endif %}
@@ -23,7 +23,7 @@
   <div class="ui horizontal divider header">Not Recommend</div>
   <!-- {% lazy_paginate brands.simbrands.bottom as not_recommend %} -->
   {% for brand in not_recommend %}
-    {% include "app/brand_card.html" with brand=brand %}
+    {% include "app/block.html" with brand=brand %}
   {% endfor %}
   <!-- {% show_more %} -->
 {% endif %}
@@ -31,4 +31,4 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{% static 'semantic/semantic.min.js' %}"></script>
-<script src="{% static 'quantlab/bcard.js' %}"></script>
+<script src="{% static 'quantlab/block.js' %}"></script>

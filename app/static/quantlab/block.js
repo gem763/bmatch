@@ -10,42 +10,56 @@
 //
 // $(window).trigger('resize');
 
-function bcard_more(event, icon) {
+
+var ncols = 3;
+var ncols_max = 6;
+var ncols_min = 1;
+var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
+
+function resize_block(step) {
+  if (step > 0) {
+    ncols = Math.min(ncols+step, ncols_max);
+
+  } else if (step < 0) {
+    ncols = Math.max(ncols+step, ncols_min);
+  }
+
+  $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
+}
+
+
+function block_more(event, icon) {
   event.stopPropagation();
-  $(icon).siblings(".bcard_cover").css({"animation":"bcard_more 0.5s forwards"});
+  $(icon).siblings(".block-cover").css({"animation":"block-more 0.5s forwards"});
 };
 
-function bcard_cover_mouseleave(bcard_cover) {
-  $(bcard_cover).css({"animation":"bcard_less 0.5s forwards"});
+function block_cover_mouseleave(block_cover) {
+  $(block_cover).css({"animation":"block-less 0.5s forwards"});
 };
 
-function bcard_cover_click(event, bcard_cover) {
+function block_cover_click(event, block_cover) {
   event.stopPropagation();
 };
 
-function bcard_click(bcard) {
-  var url = $(bcard).attr("href");
+function block_click(block) {
+  var url = $(block).attr("href");
   window.location.assign(url); //.replace()로 하면 history가 저장 안된다
 };
 
 function toggle_like(event, obj) {
   event.stopPropagation();
-  var icon = $(obj).children(".bcard_like_icon");
+  var icon = $(obj).children(".block-like-icon");
   var state = icon.attr("state");
-  var bname = $(obj).parents(".bcard").attr("bname");
+  var bname = $(obj).parents(".block").attr("bname");
   var data;
 
   if (state=="like") {
-    // icon.attr({"state":"dontlike", "class":"bcard_dontlike_icon outline heart icon"});
     icon.attr({"state":"dontlike"});
-    // icon.css({"opacity":0.5, "color":"gainsboro"});
-    data = {dontlike:bname};
+    data = { dontlike:bname };
 
   } else {
-    // icon.attr({"state":"like", "class":"bcard_like_icon yellow heart icon"});
     icon.attr({"state":"like"});
-    // icon.css({"opacity": 1, "color": ""});
-    data = {like:bname};
+    data = { like:bname };
   };
 
   $.ajax({
@@ -61,9 +75,3 @@ function toggle_like(event, obj) {
     }
   });
 };
-
-$(".bcard").ready(function() {
-  $(".bcard").fadeIn("slow");
-});
-
-feather.replace()

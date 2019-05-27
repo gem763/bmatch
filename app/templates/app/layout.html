@@ -60,9 +60,11 @@
 
 
   {% block js %}
+  {% load static %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/static/semantic/semantic.min.js"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- <script src="https://unpkg.com/feather-icons"></script> -->
+  <script src="{% static 'js/feather.js' %}"></script>
 
   <script>
     $("#search-shower").click(function() {
@@ -187,6 +189,8 @@
       //     $('#top-hidden').transition('fade out');
       //   }
       // });
+      
+      feather.replace()
 
     });
   </script>

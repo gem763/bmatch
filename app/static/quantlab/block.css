@@ -1,14 +1,14 @@
-.bcard {
+.block {
   box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
   cursor: pointer;
   overflow: hidden;
 }
 
-.bcard:hover {
+.block:hover {
   box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
 }
 
-.bcard_img {
+.block-img {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -18,14 +18,14 @@
   height: 100%;
 }
 
-.bcard_base {
+.block-base {
   background: none;
   width: 100%;
   padding-top: 100%;
   position: relative;
 }
 
-.bcard_like {
+.block-like {
   position: absolute;
   top: 5%;
   left: 5%;
@@ -34,12 +34,12 @@
   background: none;
 }
 
-.bcard_like:hover {
+.block-like:hover {
   /* animation: heartbeat 0.7s infinite; */
   transform: scale( 1.3 );
 }
 
-.bcard_like_icon {
+.block-like-icon {
   background: none;
   width: 100%;
   height: 100%;
@@ -48,35 +48,35 @@
   position: absolute;
 }
 
-.bcard_like_icon[state='like'] {
+.block-like-icon[state='like'] {
   opacity: 1;
   fill: orange;
   stroke-width: 1;
 }
 
-.bcard_like_icon[state='dontlike'] {
+.block-like-icon[state='dontlike'] {
   opacity: 0.5;
   fill: none;
   color: gainsboro;
 }
 
-.bcard_more_btn:hover {
+.block-more-btn:hover {
   background: rgba(220, 220, 220, .2) !important;
 }
 
-.bcard_more_btn {
+.block-more-btn {
   position: absolute;
   right: 2%;
   bottom: 2%;
   background: transparent !important;
 }
 
-.bcard_more_icon {
+.block-more-icon {
   color: gainsboro;
   opacity: 0.8;
 }
 
-.bcard_cover {
+.block-cover {
   position: absolute;
   top: 100%;
   left: 0;
@@ -92,26 +92,26 @@
   /* pointer-events: none; */
 }
 
-.bcard_cover .row {
+.block-cover .row {
   padding: 5px !important;
 }
 
-.bcard_score {
+.block-score {
   line-height: 100%;
 }
 
-@keyframes heartbeat
+/* @keyframes heartbeat
 {
   0%   { transform: scale( 1.3 ); }
   100% { transform: scale( 1 );   }
-}
+} */
 
-@keyframes bcard_more {
+@keyframes block-more {
   /* 0% { opacity:0 } */
   100% { opacity:1; top:30%; }
 }
 
-@keyframes bcard_less {
+@keyframes block-less {
   0% { opacity:1; top:30%; }
   /* 100% { opacity:0; top:100%; } */
 }

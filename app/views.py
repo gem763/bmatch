@@ -78,6 +78,7 @@ def posts_sub(request):
             elif type=='my':
                 posts = posts.filter(user__email=request.user.email)
 
+            # print(posts)
             return render(request, 'app/posts_sub.html', {'posts':posts.order_by('-created_at')})
 
 

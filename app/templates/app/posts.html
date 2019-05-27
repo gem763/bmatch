@@ -7,7 +7,7 @@
 
 {% block content %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
 
 
 <div class="ui text container" style="text-align:center;margin-top:20px">
@@ -19,8 +19,8 @@
     </div>
 
     <div class="ui icon tiny basic buttons">
-      <button class="ui button" onclick="resize_cards(1)"><i class="minus icon"></i></button>
-      <button class="ui button" onclick="resize_cards(-1)"><i class="plus icon"></i></button>
+      <button class="ui button" onclick="resize_block(1)"><i class="minus icon"></i></button>
+      <button class="ui button" onclick="resize_block(-1)"><i class="plus icon"></i></button>
     </div>
     <a class="ui icon tiny basic button" href="{% url 'posting' %}">
       <i class="pencil alternate icon"></i>
@@ -29,40 +29,28 @@
     <div style="clear:both;"></div>
   </div>
 
-  <div class="bcards ui cards" style="background:none;"></div>
+  <div class="blocks ui cards" style="background:none;"></div>
 </div>
 {% endblock content %}
 
 
 {% block js %}
   {{ block.super }}
-
-  <script src="{% static 'quantlab/bcard.js' %}"></script>
+  <script src="{% static 'quantlab/block.js' %}"></script>
   <script>
     var ncols = 4;
-    var ncols_max = 6;
-    var ncols_min = 1;
-    var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
 
     function load_posts(type) {
       var url = "{% url 'posts_sub' %}?type=" + type;
-      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
-      $('.bcards').html('').load(url, function() {
-        $(window).trigger('resize');
+      $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
+      $('.blocks').html('').load(url, function() {
+        // $(window).trigger('resize');
+        $('.block').fadeIn('slow');
       });
+
+      // $('.blocks').html('').load(url);
     };
 
-    function resize_cards(step) {
-      if (step > 0) {
-        ncols = Math.min(ncols+step, ncols_max);
-
-      } else if (step < 0) {
-        ncols = Math.max(ncols+step, ncols_min);
-      }
-
-      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
-      $(window).trigger('resize');
-    }
 
     $(document).ready(function(){
       if ($(window).width() < 500) {

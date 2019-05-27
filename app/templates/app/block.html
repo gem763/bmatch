@@ -1,0 +1,61 @@
+{% load ctags %}
+{% if brand %}
+<div class="block card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="block_click(this)" style="display:none;">
+
+  <div class="block-base">
+    <img class="block-img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;">
+    <div class="block-like" onclick="toggle_like(event, this)">
+      {% if user.is_authenticated and user.email|liked:brand.name %}
+        <i class="block-like-icon" data-feather="star" style="" state="like"></i>
+      {% else %}
+        <i class="block-like-icon" data-feather="star" style="" state="dontlike"></i>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if type == "more" %}
+  <div class="block-more">
+    <button class="block-more-btn ui compact icon button" onclick="block_more(event, this)">
+      <i class="block-more-icon ellipsis horizontal icon"></i>
+    </button>
+
+    <div class="block-cover" onclick="block_cover_click(event, this)" onmouseleave="block_cover_mouseleave(this)">
+      <div class="ui centered grid">
+        {% if brand.score %}
+        <div class="row">
+          <div class="block-score">
+            <span class="block-stat-value">{{ brand.score }}</span><br>
+            <span class="block-stat-label">유사도 %</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+          <button class="ui mini compact labeled icon basic button" onclick="compare(this)">
+            <i class="exchange icon"></i>
+            COMPARE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endif %}
+
+
+{% if post %}
+<div class="block card" href="{% url 'post_detail' post.pk %}" onclick="block_click(this)" style="display:none;">
+  <div class="block-base">
+    <img class="block-img" src="{{ post.image.url }}" style="object-fit:cover;">
+    <div class="block-like" onclick="toggle_like(event, this)">
+      {% if user.is_authenticated %}
+        <i class="block-like-icon" data-feather="star" style="" state="like"></i>
+      {% else %}
+        <i class="block-like-icon" data-feather="star" style="" state="dontlike"></i>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}

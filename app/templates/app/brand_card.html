@@ -1,15 +1,13 @@
 {% if brand %}
-<div class="bcard card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="bcard_click(this)">
+<div class="bcard card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="bcard_click(this)" style="display:none;">
 
   <div class="bcard_base">
     <img class="bcard_img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;">
     <div class="bcard_like" onclick="toggle_like(event, this)">
       {% load ctags %}
       {% if user.is_authenticated and user.email|liked:brand.name %}
-        <!-- <i class="bcard_like_icon yellow heart icon" state="like"></i> -->
         <i class="bcard_like_icon" data-feather="star" style="" state="like"></i>
       {% else %}
-        <!-- <i class="bcard_dontlike_icon outline heart icon" state="dontlike"></i> -->
         <i class="bcard_like_icon" data-feather="star" style="" state="dontlike"></i>
       {% endif %}
     </div>
@@ -48,7 +46,7 @@
 
 
 {% if post %}
-<div class="bcard card" href="{% url 'post_detail' post.pk %}" onclick="bcard_click(this)">
+<div class="bcard card" href="{% url 'post_detail' post.pk %}" onclick="bcard_click(this)" style="display:none;">
   <div class="bcard_base">
     <img class="bcard_img" src="{{ post.image.url }}" style="object-fit:cover;">
     <div class="bcard_like" onclick="toggle_like(event, this)">

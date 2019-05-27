@@ -8,7 +8,7 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
-<link rel="stylesheet" type="text/css" href="{% static 'quantlab/bcard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
 
 
 <div class="ui text container segments">
@@ -25,8 +25,8 @@
       </div>
 
       <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;">
-        <button class="ui button" onclick="resize_cards(1)"><i class="minus icon"></i></button>
-        <button class="ui button" onclick="resize_cards(-1)"><i class="plus icon"></i></button>
+        <button class="ui button" onclick="resize_block(1)"><i class="minus icon"></i></button>
+        <button class="ui button" onclick="resize_block(-1)"><i class="plus icon"></i></button>
       </div>
 
       <div style="clear:both;"></div>
@@ -45,9 +45,9 @@
     <div class="content">
       <!-- <div class="ui star rating" data-max-rating="1" style="width:50px;height:50px;font-size:20px;"></div> -->
 
-      <div class="bcards ui four cards">
+      <div class="blocks ui cards">
         {% for brand in suggestions %}
-          {% include "app/brand_card.html" with brand=brand %}
+          {% include "app/block.html" with brand=brand %}
         {% endfor %}
       </div>
 
@@ -64,9 +64,9 @@
     </div>
 
     <div class="content">
-      <div class="bcards ui four cards">
+      <div class="blocks ui cards">
         {% for post in hottrendnow %}
-          {% include "app/brand_card.html" with post=post %}
+          {% include "app/block.html" with post=post %}
         {% endfor %}
       </div>
 
@@ -98,11 +98,11 @@
   <script src="{% static 'js/d3.layout.cloud.js' %}"></script>
   <script src="{% static 'js/wordcloud.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+  <script src="{% static 'quantlab/block.js' %}"></script>
 
   <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@4"></script>
 
-  <script src="{% static 'quantlab/bcard.js' %}"></script>
 
   <script>
     $(document).ready(function(){
@@ -112,26 +112,14 @@
         width: $("#wordcloud").width(),
         height: 600
       });
+
+      $(".blocks").ready(function() {
+        $(".block").each(function() {
+          $(this).fadeIn("slow");
+        });
+      });
+
+      resize_block(0);
     });
-
-
-    var ncols = 4;
-    var ncols_max = 6;
-    var ncols_min = 1;
-    var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
-
-    function resize_cards(step) {
-      if (step > 0) {
-        ncols = Math.min(ncols+step, ncols_max);
-
-      } else if (step < 0) {
-        ncols = Math.max(ncols+step, ncols_min);
-      }
-
-      $('.bcards').attr('class', "bcards ui cards " + ncols_matcher[ncols]);
-      $(window).trigger('resize');
-    }
-
-    // $('.ui.rating').rating();
   </script>
 {% endblock js %}
