@@ -44,13 +44,7 @@
     </div>
 
     <div class="content">
-      <!-- <div class="ui star rating" data-max-rating="1" style="width:50px;height:50px;font-size:20px;"></div> -->
-
-      <div class="blocks ui cards" id="suggestions">
-        <!-- {% for brand in suggestions %}
-          {% include "app/block.html" with brand=brand %}
-        {% endfor %} -->
-      </div>
+      <div id="suggestions"></div>
 
       <br>
       <a href="{% url 'library' %}">see brand library</a>
@@ -65,7 +59,7 @@
     </div>
 
     <div class="content">
-      <div class="blocks ui cards" id="hottrendnow"></div>
+      <div id="hottrendnow"></div>
 
       <br>
       <a href="{% url 'posting' %}">posting</a>

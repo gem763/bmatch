@@ -42,7 +42,8 @@ function resize_blocks(step) {
 
 
 function load_blocks(where, url) {
-  resize_blocks(0);
+  // resize_blocks(0);
+  url = url + '&ncols=' + ncols_matcher[ncols];
   $(where).html('').load(url);
 };
 

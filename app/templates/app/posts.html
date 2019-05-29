@@ -26,7 +26,7 @@
     <div style="clear:both;"></div>
   </div>
 
-  <div class="blocks ui cards" id="posts"></div>
+  <div id="posts"></div>
 </div>
 {% endblock content %}
 
@@ -34,20 +34,14 @@
 {% block js %}
   {{ block.super }}
   <script>
-    var url = "{% url 'blocks' %}?type=posts&screen={{ screen }}";
-    load_blocks('#posts', url);
-
+    load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen={{ screen }}");
 
     $('.mypostonly.checkbox').checkbox({
       onChecked: function() {
-        // url = "{% url 'posts_sub' %}?type=my";
-        url = "{% url 'blocks' %}?type=posts&screen=my";
-        load_blocks('#posts', url);
+        load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen=my");
       },
       onUnchecked: function() {
-        // url = "{% url 'posts_sub' %}?type=all";
-        url = "{% url 'blocks' %}?type=posts&screen=all";
-        load_blocks('#posts', url);
+        load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen=all");
       }
     });
   </script>

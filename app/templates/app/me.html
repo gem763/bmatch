@@ -5,7 +5,7 @@
 {% endblock menu_top %}
 
 {% block content %}
-<style>
+<!-- <style>
   .pcard {
     box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
     cursor: pointer;
@@ -15,7 +15,7 @@
   .pcard:hover {
     box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
   }
-</style>
+</style> -->
 
 <div class="ui text container segments">
    <!-- style="margin-top:70px;"> -->
@@ -76,13 +76,7 @@
   <div class="detailsec ui padded segment">
     <div class="ui header">My posts</div>
     <div class="content">
-      <div class="ui four doubling cards">
-        {% for post in myposts %}
-          <div class="pcard card" href="{% url 'post_detail' post.pk %}" onclick="pcard_click(this)">
-            <img class="pcard_img" src="{{ post.image.url }}" style="object-fit:cover;margin:auto;">
-          </div>
-        {% endfor %}
-      </div>
+      <div id="myposts"></div>
 
       <br>
       <a href="{% url 'posting' %}">posting</a>
@@ -186,18 +180,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
   <script>
-    $(window).resize(function(){
-      var width = $(".pcard").width();
-      $(".pcard").css("height", width + "px");
-      $(".pcard_img").css({"width":width + "px", "height":width + "px"});
-    });
+    load_blocks('#myposts', "{% url 'blocks' %}?type=posts&screen=my");
 
-    $(window).trigger('resize');
-
-    function pcard_click(pcard) {
-      var url = $(pcard).attr("href");
-      window.location.assign(url);
-    };
+    // $(window).resize(function(){
+    //   var width = $(".pcard").width();
+    //   $(".pcard").css("height", width + "px");
+    //   $(".pcard_img").css({"width":width + "px", "height":width + "px"});
+    // });
+    //
+    // $(window).trigger('resize');
+    //
+    // function pcard_click(pcard) {
+    //   var url = $(pcard).attr("href");
+    //   window.location.assign(url);
+    // };
 
 
     $('#profile_image').dimmer({

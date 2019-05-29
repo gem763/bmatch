@@ -71,16 +71,24 @@ def blocks(request):
     if request.method=='GET':
         type = request.GET.get('type', None) # brand, post
         screen = request.GET.get('screen', 'all') # all, my
-        opt = request.GET.get('opt', None) # more
+        # opt = request.GET.get('opt', None) # more
+        ncols = request.GET.get('ncols', 'four')
+        bname = request.GET.get('bname', None)
 
         try:
-            if type=='brands':
-                pass
+            ctx = {'type':type, 'ncols':ncols}
+
+            if type=='simbrands':
+                simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
+                ctx['sims'] = simbrands['top']
+                ctx['diffs'] = simbrands['bottom']
+                # print(simbrands['top'])
+                return render(request, 'app/simblocks.html', ctx)
 
             elif type=='suggestions':
                 brands = Brand.objects.all()
-                suggestions = random.sample(list(brands), 8)
-                return render(request, 'app/blocks.html', {'type':type, 'blocks':suggestions})
+                ctx['blocks'] = random.sample(list(brands), 8)
+                return render(request, 'app/baseblocks.html', ctx)
 
             elif type=='posts':
                 posts = Post.objects
@@ -91,12 +99,12 @@ def blocks(request):
                 elif screen=='my':
                     posts = posts.filter(user__email=request.user.email)
 
-                posts = posts.order_by('-created_at')
-                return render(request, 'app/blocks.html', {'type':type, 'blocks':posts})
+                ctx['blocks'] = posts.order_by('-created_at')
+                return render(request, 'app/baseblocks.html', ctx)
 
             elif type=='hottrendnow':
-                hottrendnow = Post.objects.order_by('-created_at')[:16]
-                return render(request, 'app/blocks.html', {'type':type, 'blocks':hottrendnow})
+                ctx['blocks'] = Post.objects.order_by('-created_at')[:16]
+                return render(request, 'app/baseblocks.html', ctx)
 
         except:
             return HttpResponse('Something wrong')
@@ -176,7 +184,7 @@ def db_update(request, category):
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
-    brand.simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
+    # brand.simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
     brand.simwords = _simwords(bname, min=0.5, topn=100, amp=10)
     brand.identity = _identity(bname=bname)
     return render(request, 'app/brand_detail.html', {'brand':brand})

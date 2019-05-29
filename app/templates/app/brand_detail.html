@@ -4,7 +4,7 @@
 {% block style %}
   {{ block.super }}
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
-  <link rel="stylesheet" href="{% static 'quantlab/bcard.css' %}">
+  <!-- <link rel="stylesheet" href="{% static 'quantlab/bcard.css' %}"> -->
 
   <style>
     .axis {
@@ -92,12 +92,14 @@
   <!-- chartjs 바차트의 rounded bar를 만들어주는 플러그인
   https://github.com/jedtrow/Chart.js-Rounded-Bar-Charts -->
   <script src="{% static 'js/Chart.roundedBarCharts.min.js' %}"></script>
-  <script src="{% static 'quantlab/bcard.js' %}"></script>
+  <!-- <script src="{% static 'quantlab/bcard.js' %}"></script> -->
   <!-- <script src="{% static 'js/d3-components-0.0.5.js' %}"></script> -->
   <!-- <script src="{% static 'js/RadarChart.js' %}"></script> -->
   <script src="{% static 'js/radarChart.js' %}"></script>
 
   <script>
+    load_blocks('#similarity', "{% url 'blocks' %}?type=simbrands&bname={{ brand.name }}");
+
     function append_table_row(id, query_data){
       var btn = document.createElement('button');
       btn.className = "ui green mini compact right aligned button";
