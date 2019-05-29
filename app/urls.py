@@ -58,11 +58,13 @@ urlpatterns = [
     path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
     path('posts/', v.posts, name='posts'),
-    path('posts/sub/', v.posts_sub, name='posts_sub'),
+    # path('posts/sub/', v.posts_sub, name='posts_sub'),
     path('posts/posting/', v.posting, name='posting'),
     path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
     path('posts/detail/<pk>/commenting/', v.commenting_post, name='commenting_post'),
     path('commentpost_actions/', v.CommentPostActionsView.as_view(), name='commentpost_actions'),
+
+    path('blocks/', v.blocks, name='blocks'),
 
     # path('search/<qry>/', v.search, name='search'),
 

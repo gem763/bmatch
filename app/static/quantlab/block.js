@@ -11,12 +11,25 @@
 // $(window).trigger('resize');
 
 
-var ncols = 4;
-var ncols_max = 6;
-var ncols_min = 1;
+var ncols;
 var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
+var ncols_keys = Object.keys(ncols_matcher).map(function(key){ return Number(key) });
+var ncols_max = Math.max.apply(null, ncols_keys);
+var ncols_min = Math.min.apply(null, ncols_keys);
+var window_width = $(window).width();
 
-function resize_block(step) {
+if (window_width < 400) {
+  ncols = 2;
+
+} else if (window_width < 500) {
+  ncols = 3;
+
+} else {
+  ncols = 4;
+}
+
+
+function resize_blocks(step) {
   if (step > 0) {
     ncols = Math.min(ncols+step, ncols_max);
 
@@ -27,6 +40,16 @@ function resize_block(step) {
   $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
 }
 
+
+function load_blocks(where, url) {
+  resize_blocks(0);
+  $(where).html('').load(url);
+};
+
+
+function load_block(img) {
+  $(img).parents('.block').css('opacity', 1);
+}
 
 function block_more(event, icon) {
   event.stopPropagation();
@@ -77,12 +100,11 @@ function toggle_like(event, obj) {
 };
 
 
-$(document).ready(function(){
-  $(".block").transition({
-    animation  : 'fade',
-    duration   : '1s',
-    onComplete : function() {
-      // console.log(1);
-    }
-  });
-})
+// $(document).ready(function(){
+//   $(".block").transition({
+//     animation  : 'fade',
+//     duration   : '1s',
+//     onComplete : function() {
+//     }
+//   });
+// })

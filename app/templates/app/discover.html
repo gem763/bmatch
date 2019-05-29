@@ -8,7 +8,6 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
-<link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
 
 
 <div class="ui text container segments">
@@ -25,8 +24,8 @@
       </div>
 
       <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;">
-        <button class="ui button" onclick="resize_block(1)"><i class="minus icon"></i></button>
-        <button class="ui button" onclick="resize_block(-1)"><i class="plus icon"></i></button>
+        <button class="ui button" onclick="resize_blocks(1)"><i class="minus icon"></i></button>
+        <button class="ui button" onclick="resize_blocks(-1)"><i class="plus icon"></i></button>
       </div>
 
       <div class="ui icon compact button" onclick=""><i class="sliders horizontal icon"></i></div>
@@ -47,10 +46,10 @@
     <div class="content">
       <!-- <div class="ui star rating" data-max-rating="1" style="width:50px;height:50px;font-size:20px;"></div> -->
 
-      <div class="blocks ui cards">
-        {% for brand in suggestions %}
+      <div class="blocks ui cards" id="suggestions">
+        <!-- {% for brand in suggestions %}
           {% include "app/block.html" with brand=brand %}
-        {% endfor %}
+        {% endfor %} -->
       </div>
 
       <br>
@@ -66,11 +65,7 @@
     </div>
 
     <div class="content">
-      <div class="blocks ui cards">
-        {% for post in hottrendnow %}
-          {% include "app/block.html" with post=post %}
-        {% endfor %}
-      </div>
+      <div class="blocks ui cards" id="hottrendnow"></div>
 
       <br>
       <a href="{% url 'posting' %}">posting</a>
@@ -100,13 +95,15 @@
   <script src="{% static 'js/d3.layout.cloud.js' %}"></script>
   <script src="{% static 'js/wordcloud.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
-  <script src="{% static 'quantlab/block.js' %}"></script>
 
   <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@4"></script>
 
 
   <script>
+    load_blocks('#suggestions', "{% url 'blocks' %}?type=suggestions");
+    load_blocks('#hottrendnow', "{% url 'blocks' %}?type=hottrendnow");
+
     $(document).ready(function(){
       WordCloud({
         container: "#wordcloud",
@@ -114,14 +111,9 @@
         width: $("#wordcloud").width(),
         height: 600
       });
-
-      // $(".blocks").ready(function() {
-      //   $(".block").each(function() {
-      //     $(this).fadeIn("slow");
-      //   });
-      // });
     });
 
-    resize_block(0);
+
+
   </script>
 {% endblock js %}

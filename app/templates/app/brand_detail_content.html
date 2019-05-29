@@ -54,15 +54,6 @@
             <div class="metabutton ui compact mini button">{{ brand.origin }}</div>
             <a class="metabutton ui compact icon mini button" href="//{{ brand.website }}" target="_blank"><i class="home icon"></i></a>
           </div>
-
-          <!-- <div class="extra">
-            <div class="ui mini compact button">
-              test1
-            </div>
-            <div class="ui mini compact button">
-              test2
-            </div>
-          </div> -->
         </div>
 
       </div>
@@ -137,7 +128,7 @@
     <div class="content">
       <div class="ui four doubling brandlist cards">
         {% for sbrand in brand.simbrands.top %}
-          {% include "app/brand_card.html" with brand=sbrand type='more' %}
+          {% include "app/brand_card.html" with brand=sbrand opt='more' %}
         {% endfor %}
       </div>
     </div>
@@ -148,7 +139,7 @@
     <div class="content">
       <div class="ui four doubling brandlist cards">
         {% for sbrand in brand.simbrands.bottom %}
-          {% include "app/brand_card.html" with brand=sbrand type='more' %}
+          {% include "app/brand_card.html" with brand=sbrand opt='more' %}
         {% endfor %}
       </div>
     </div>

@@ -1,0 +1,21 @@
+{% if type == 'brands' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block opt=opt %}
+  {% endfor %}
+
+{% elif type == 'suggestions' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block %}
+  {% endfor %}
+
+{% elif type == 'posts' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with post=block %}
+  {% endfor %}
+
+{% elif type == 'hottrendnow' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with post=block %}
+  {% endfor %}
+
+{% endif %}

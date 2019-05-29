@@ -5,10 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  {% load static %}
   {% block style %}
   <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
   <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,800" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+  <link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
+  <!-- onload에서 불러오는 함수가 있기 때문에, 요거는 맨 앞에 위치 -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{% static 'quantlab/block.js' %}"></script>
 
   <style>
     @media only screen and (max-width: 500px) {
@@ -60,8 +65,6 @@
 
 
   {% block js %}
-  {% load static %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/static/semantic/semantic.min.js"></script>
   <!-- <script src="https://unpkg.com/feather-icons"></script> -->
   <script src="{% static 'js/feather.js' %}"></script>
@@ -189,7 +192,7 @@
       //     $('#top-hidden').transition('fade out');
       //   }
       // });
-      
+
       feather.replace()
 
     });

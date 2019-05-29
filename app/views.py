@@ -61,27 +61,62 @@ def commenting_post(request, pk):
 
 def posts(request):
     if request.method=='GET':
-        type = request.GET.get('type', 'all')
-        interest = Profile.objects.get(user__email=request.user.email).values('name')
-        print(interest)
-        return render(request, 'app/posts.html', {'type':type})
+        screen = request.GET.get('screen', 'all')
+        # interest = Profile.objects.get(user__email=request.user.email).values('name')
+        # print(interest)
+        return render(request, 'app/posts.html', {'screen':screen})
 
 
-def posts_sub(request):
+def blocks(request):
     if request.method=='GET':
-        type = request.GET.get('type', None)
+        type = request.GET.get('type', None) # brand, post
+        screen = request.GET.get('screen', 'all') # all, my
+        opt = request.GET.get('opt', None) # more
 
-        if type is not None:
-            posts = Post.objects
+        try:
+            if type=='brands':
+                pass
 
-            if type=='all':
-                posts = posts.all()
+            elif type=='suggestions':
+                brands = Brand.objects.all()
+                suggestions = random.sample(list(brands), 8)
+                return render(request, 'app/blocks.html', {'type':type, 'blocks':suggestions})
 
-            elif type=='my':
-                posts = posts.filter(user__email=request.user.email)
+            elif type=='posts':
+                posts = Post.objects
 
-            # print(posts)
-            return render(request, 'app/posts_sub.html', {'posts':posts.order_by('-created_at')})
+                if screen=='all':
+                    posts = posts.all()
+
+                elif screen=='my':
+                    posts = posts.filter(user__email=request.user.email)
+
+                posts = posts.order_by('-created_at')
+                return render(request, 'app/blocks.html', {'type':type, 'blocks':posts})
+
+            elif type=='hottrendnow':
+                hottrendnow = Post.objects.order_by('-created_at')[:16]
+                return render(request, 'app/blocks.html', {'type':type, 'blocks':hottrendnow})
+
+        except:
+            return HttpResponse('Something wrong')
+
+
+
+# def posts_sub(request):
+#     if request.method=='GET':
+#         type = request.GET.get('type', None)
+#
+#         if type is not None:
+#             posts = Post.objects
+#
+#             if type=='all':
+#                 posts = posts.all()
+#
+#             elif type=='my':
+#                 posts = posts.filter(user__email=request.user.email)
+#
+#             return render(request, 'app/posts_sub.html', {'posts':posts.order_by('-created_at')})
 
 
 @login_required
@@ -363,14 +398,10 @@ class SaveWorldcupView(View):
 
 
 def discover(request):
-    brands = Brand.objects.all()
-    suggestions = random.sample(list(brands), 8)
-    hottrendnow = Post.objects.all().order_by('-created_at')[:16]
-
     # 현재는 Social keywords 가 특정 브랜드로 들어가 있는데,
     # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
     socialwords = _simwords('crocs', min=0.5, topn=100, amp=10)
-    return render(request, 'app/discover.html', {'suggestions':suggestions, 'hottrendnow':hottrendnow, 'socialwords':socialwords})
+    return render(request, 'app/discover.html', {'socialwords':socialwords})
 
 
 class LibraryView(AjaxListView):

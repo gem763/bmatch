@@ -1,9 +1,9 @@
 {% load ctags %}
 {% if brand %}
-<div class="block card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="block_click(this)" style="display:none;">
+<div class="block card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="block_click(this)">
 
   <div class="block-base">
-    <img class="block-img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;">
+    <img class="block-img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;" onload="load_block(this)">
     <div class="block-like" onclick="toggle_like(event, this)">
       {% if user.is_authenticated and user.email|liked:brand.name %}
         <i class="block-like-icon" data-feather="star" style="" state="like"></i>
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  {% if type == "more" %}
+  {% if opt == "more" %}
   <div class="block-more">
     <button class="block-more-btn ui compact icon button" onclick="block_more(event, this)">
       <i class="block-more-icon ellipsis horizontal icon"></i>
@@ -46,9 +46,9 @@
 
 
 {% if post %}
-<div class="block card" href="{% url 'post_detail' post.pk %}" onclick="block_click(this)" style="display:none;">
+<div class="block card" href="{% url 'post_detail' post.pk %}" onclick="block_click(this)">
   <div class="block-base">
-    <img class="block-img" src="{{ post.image.url }}" style="object-fit:cover;">
+    <img class="block-img" src="{{ post.image.url }}" style="object-fit:cover;" onload="load_block(this)">
     <div class="block-like" onclick="toggle_like(event, this)">
       {% if user.is_authenticated %}
         <i class="block-like-icon" data-feather="star" style="" state="like"></i>

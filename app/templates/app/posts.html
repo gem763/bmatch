@@ -7,9 +7,6 @@
 
 {% block content %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
-
-
 <div class="ui text container" style="text-align:center;margin-top:20px">
 
   <div style="background:none;margin-top:10px;margin-bottom:10px;text-align:right;">
@@ -19,8 +16,8 @@
     </div>
 
     <div class="ui icon tiny basic buttons">
-      <button class="ui button" onclick="resize_block(1)"><i class="minus icon"></i></button>
-      <button class="ui button" onclick="resize_block(-1)"><i class="plus icon"></i></button>
+      <button class="ui button" onclick="resize_blocks(1)"><i class="minus icon"></i></button>
+      <button class="ui button" onclick="resize_blocks(-1)"><i class="plus icon"></i></button>
     </div>
     <a class="ui icon tiny basic button" href="{% url 'posting' %}">
       <i class="pencil alternate icon"></i>
@@ -29,40 +26,28 @@
     <div style="clear:both;"></div>
   </div>
 
-  <div class="blocks ui cards" style="background:none;"></div>
+  <div class="blocks ui cards" id="posts"></div>
 </div>
 {% endblock content %}
 
 
 {% block js %}
   {{ block.super }}
-  <script src="{% static 'quantlab/block.js' %}"></script>
   <script>
-    var ncols = 4;
+    var url = "{% url 'blocks' %}?type=posts&screen={{ screen }}";
+    load_blocks('#posts', url);
 
-    function load_posts(type) {
-      var url = "{% url 'posts_sub' %}?type=" + type;
-      $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
-      $('.blocks').html('').load(url, function() {
-        $('.block').fadeIn('slow');
-        // resize_block(0);
-      });
-    };
-
-
-    $(document).ready(function(){
-      if ($(window).width() < 500) {
-        ncols = 3;
-      }
-      load_posts('{{ type }}');
-    })
 
     $('.mypostonly.checkbox').checkbox({
       onChecked: function() {
-        load_posts('my');
+        // url = "{% url 'posts_sub' %}?type=my";
+        url = "{% url 'blocks' %}?type=posts&screen=my";
+        load_blocks('#posts', url);
       },
       onUnchecked: function() {
-        load_posts('all');
+        // url = "{% url 'posts_sub' %}?type=all";
+        url = "{% url 'blocks' %}?type=posts&screen=all";
+        load_blocks('#posts', url);
       }
     });
   </script>
