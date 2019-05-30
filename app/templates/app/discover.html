@@ -10,10 +10,10 @@
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
 
 
-<div class="ui text container segments">
+<div class="ui text container segments" style="border:none;">
    <!-- style="margin-top:70px;"> -->
 
-  <div class="ui padded segment">
+  <div class="ui padded segment" style="background:white;border:none;">
     <div class="content" style="background:none;">
       <div class="ui medium header" style="background:none;margin:0;float:left;">
         <i class="compass outline icon"></i>
@@ -23,9 +23,13 @@
         </div>
       </div>
 
-      <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;">
-        <button class="ui button" onclick="resize_blocks(1)"><i class="minus icon"></i></button>
-        <button class="ui button" onclick="resize_blocks(-1)"><i class="plus icon"></i></button>
+      <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;border:none;">
+        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(1)">
+          <i class="large zoom-out icon"></i>
+        </div>
+        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(-1)">
+          <i class="large zoom-in icon"></i>
+        </div>
       </div>
 
       <!-- <div class="ui icon compact button" onclick=""><i class="sliders horizontal icon"></i></div> -->
@@ -35,7 +39,7 @@
   </div>
 
 
-  <div class="ui padded segment">
+  <div class="ui padded segment" style="border:none;">
     <div class="ui header">
       <div class="content">
         <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
@@ -51,7 +55,7 @@
     </div>
   </div>
 
-  <div class="ui padded segment">
+  <div class="ui padded segment" style="border:none;">
     <div class="ui header">
       <div class="content">
         Hot trend now
@@ -70,7 +74,7 @@
   </div>
 
 
-  <div class="ui padded segment">
+  <div class="ui padded segment" style="border:none;">
     <div class="ui header">
       <div class="content">
         Social keywords

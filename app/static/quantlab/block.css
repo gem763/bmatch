@@ -35,23 +35,24 @@
   opacity: 0;
   position: absolute;
   top: 0;
-  /* left: 0; */
-  /* bottom: 0; */
+  left: 0;
+  bottom: 0;
   right: 0;
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   background: none;
   transition: opacity 0.2s;
+  /* text-align: center; */
 }
 
 .block-aware-icon {
   background: none;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
   position: absolute;
-  color: orange;
+  color: rgba(248,0,0,1);
   stroke-width: 3;
 }
 
@@ -80,7 +81,7 @@
 
 .block-like-icon[state='like'] {
   opacity: 1;
-  fill: orange;
+  fill: rgba(248,0,0,1);
   stroke-width: 1;
 }
 

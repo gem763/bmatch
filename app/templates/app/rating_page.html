@@ -5,15 +5,15 @@
     margin:auto !important;
   }
 
-  .check.icon {
+  .rating.heart.icon {
     position:absolute;
     transform:translate(-50%, -50%);
-    top:20%;
+    top:50%;
     left:50%;
     opacity:0;
-    color:orange;
-    -moz-text-stroke:1px #000;
-    -webkit-text-stroke:1px #000;
+    color: rgba(248,0,0,1);
+    /* -moz-text-stroke:1px #000; */
+    /* -webkit-text-stroke:1px #000; */
   }
 
   .ui.segment img {
@@ -53,7 +53,8 @@
     {% for brand in pair|of_name %}
     <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0" onclick="like_this_more(this)" onmouseover="worldcup_mouseover(this)" onmouseout="worldcup_mouseout(this)">
       <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
-      <i class="huge check icon"></i>
+      <i class="rating massive heart outline icon"></i>
+      <!-- <i class="huge check icon"></i> -->
     </div>
     {% endfor %}
   </div><br>

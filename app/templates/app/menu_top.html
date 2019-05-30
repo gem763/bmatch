@@ -44,7 +44,7 @@
   <div class="ui text container" style="background:none;position:relative;">
     <div class="ui secondary icon compact menu" style="background:none;height:60px;width:100%;">
       <a class="item" style="padding:8px;" href="{% url 'home' %}">
-        <i class="large gem outline icon"></i>
+        <i class="large dot circle icon"></i>
         <div style="margin-left:5px;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:25px">Get:ch</div>
       </a>
 
@@ -53,15 +53,15 @@
 
       <div class="right menu">
         <a class="item" id="search-shower" style="border-radius:20px;margin:1px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <i class="search icon"></i>
+          <i class="large search icon" style="font-weight:lighter;"></i>
         </a>
 
         <a class="item {{ discover_act }}" href="{% url 'discover' %}" style="border-radius:20px;margin:1px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <i class="compass outline icon" style="background:none;"></i>
+          <i class="large road icon" style="background:none;"></i>
         </a>
 
         <a class="item {{ rating_act }}" href="{% url 'rating' %}" style="border-radius:20px;margin:1px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <i class="heart outline icon"></i>
+          <i class="large heart icon" style="margin-top:3px;"></i>
         </a>
 
         {% if user.is_authenticated %}
@@ -70,7 +70,7 @@
         </a>
         {% else %}
         <a class="loginbutton item {{ me_act }}" style="border-radius:20px;margin:1px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="user outline icon"></i>
+          <i class="large user outline icon"></i>
         </a>
         {% endif %}
 

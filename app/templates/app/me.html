@@ -17,9 +17,9 @@
   }
 </style> -->
 
-<div class="ui text container segments" style="margin-top:10px;">
+<div class="ui text container segments" style="margin-top:10px;border:none;">
 
-  <div class="detailsec ui padded center aligned segment">
+  <div class="detailsec ui padded center aligned segment" style="border:none;">
     <div class="ui centered circular blurring dimmable image" id="profile_image">
       <div class="ui dimmer">
         <div class="content">
@@ -63,7 +63,7 @@
   </div>
 
 
-  <div class="detailsec ui padded segment">
+  <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">My favorite</div>
     <div class="content">
       {% include "app/block.html" with brand=myfavorite %}
@@ -72,7 +72,7 @@
   </div>
 
 
-  <div class="detailsec ui padded segment">
+  <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">My posts</div>
     <div class="content">
       <div id="myposts"></div>
@@ -86,7 +86,7 @@
     <br>
   </div>
 
-  <div class="detailsec ui padded segment">
+  <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">Brand awareness</div>
     <div class="content">
       <canvas id="myawareness" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
@@ -95,7 +95,7 @@
   </div>
 
 
-  <div class="detailsec ui padded segment">
+  <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">My identity</div>
     <div class="content">
       <canvas id="bid" width="200" height="200" style="max-width:350px;max-height:350px;margin-left:auto;margin-right:auto"></canvas>
@@ -103,7 +103,7 @@
     <br>
   </div>
 
-  <div class="detailsec ui padded right aligned segment">
+  <div class="detailsec ui padded right aligned segment" style="border:none;">
     <a class="ui teal labeled icon button" href="{% url 'account_logout' %}">
       <i class="sign-out icon"></i>
       나가기

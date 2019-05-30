@@ -19,13 +19,13 @@ var ncols_min = Math.min.apply(null, ncols_keys);
 var window_width = $(window).width();
 
 if (window_width < 400) {
-  ncols = 2;
+  ncols = 3;
 
 } else if (window_width < 500) {
   ncols = 3;
 
 } else {
-  ncols = 4;
+  ncols = 3;
 }
 
 
