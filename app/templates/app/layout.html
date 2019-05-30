@@ -13,6 +13,8 @@
   <link rel="stylesheet" type="text/css" href="{% static 'quantlab/block.css' %}">
   <!-- onload에서 불러오는 함수가 있기 때문에, 요거는 맨 앞에 위치 -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{% static 'semantic/semantic.min.js' %}"></script>
+  <script src="{% static 'js/feather.js' %}"></script>
   <script src="{% static 'quantlab/block.js' %}"></script>
 
   <style>
@@ -65,11 +67,9 @@
 
 
   {% block js %}
-  <script src="/static/semantic/semantic.min.js"></script>
-  <!-- <script src="https://unpkg.com/feather-icons"></script> -->
-  <script src="{% static 'js/feather.js' %}"></script>
-
   <script>
+
+
     $("#search-shower").click(function() {
       $("#searcher").css({"animation":"searcher_show 0.2s forwards"});
       $("input.bsearch.prompt").focus();
@@ -193,7 +193,7 @@
       //   }
       // });
 
-      feather.replace()
+
 
     });
   </script>

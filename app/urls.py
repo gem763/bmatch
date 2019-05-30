@@ -55,7 +55,10 @@ urlpatterns = [
 
     path('profiling/', v.profiling, name='profiling'),
     path('save_worldcup/', v.SaveWorldcupView.as_view(), name='save_worldcup'),
-    path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
+    # path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
+
+    path('update_likes/', v.UpdateLikesView.as_view(), name='update_likes'),
+    path('update_myfavorite/', v.UpdateMyfavoriteView.as_view(), name='update_myfavorite'),
 
     path('posts/', v.posts, name='posts'),
     # path('posts/sub/', v.posts_sub, name='posts_sub'),

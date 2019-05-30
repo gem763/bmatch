@@ -5,7 +5,8 @@
 {% endblock menu_top %}
 
 {% block content %}
-<div class="ui text container segments" style="margin-top:70px;">
+{% load ctags %}
+<div class="ui text container segments" style="margin-top:10px;">
 
   <div class="ui segment">
     <div class="ui secondary icon menu" style="background:none;">
@@ -28,7 +29,14 @@
         </a>
 
         <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="star outline icon"></i>
+          <!-- <i class="star outline icon"></i> -->
+          {% if user.is_authenticated and user|likes_this:post %}
+            <i class="star orange icon" style="stroke-width:1px !important;"></i>
+            <!-- <i class="block-like-icon" data-feather="star" style="" state="like"></i> -->
+          {% else %}
+            <i class="star outline icon"></i>
+            <!-- <i class="block-like-icon" data-feather="star" style="" state="dontlike"></i> -->
+          {% endif %}
         </a>
 
         <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
@@ -104,6 +112,8 @@
   {{ block.super }}
 
   <script>
+  feather.replace();
+
   function empty() {
     var x = document.getElementById("id_comment").value;
     if (x == "") {

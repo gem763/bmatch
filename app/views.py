@@ -248,11 +248,12 @@ def profiling(request):
 
 def me(request):
     profile = Profile.objects.get(user__email=request.user.email)
+    myfavorite = profile.myfavorite
     idty_all = _identity(weights=profile.weights())
     myidentity = profile.identify(idty_all)
     myawareness = dict(profile.awareness())
     myposts = Post.objects.filter(user__email=request.user.email).order_by('-created_at')
-    return render(request, 'app/me.html', {'myidentity':myidentity, 'myawareness':myawareness, 'myposts':myposts})
+    return render(request, 'app/me.html', {'myfavorite':myfavorite, 'myidentity':myidentity, 'myawareness':myawareness, 'myposts':myposts})
 
 
 def sharing(request):
@@ -364,27 +365,72 @@ def _in_bnames(qry, brands):
     return None
 
 
-class SaveLikeView(View):
+class UpdateMyfavoriteView(View):
     def get(self, request):
         try:
-            like = request.GET.get('like', None)
-            dontlike = request.GET.get('dontlike', None)
+            bname = request.GET.get('bname', None)
+            if bname is not None:
+                brand = Brand.objects.get(name=bname)
+                profile = Profile.objects.get(user__email=request.user.email)
+                profile.myfavorite = brand
+                profile.save()
+                return JsonResponse({'success':True})
+
+        except:
+            return JsonResponse({'success':False})
+
+
+class UpdateLikesView(View):
+    def get(self, request):
+        try:
+            type = request.GET.get('type', None)
+            _like = request.GET.get('like', None)
+            _dontlike = request.GET.get('dontlike', None)
             profile = Profile.objects.get(user__email=request.user.email)
-            likes_list = profile.get_likes()
+
+            if type=='brand':
+                like = Brand.objects.get(name=_like) if _like is not None else None
+                dontlike = Brand.objects.get(name=_dontlike) if _dontlike is not None else None
+                likes = profile.brand_likes
+
+            elif type=='post':
+                like = Post.objects.get(pk=_like) if _like is not None else None
+                dontlike = Post.objects.get(pk=_dontlike) if _dontlike is not None else None
+                likes = profile.post_likes
 
             if (like is not None) and (dontlike is None):
-                likes_list.append(like)
+                likes.add(like)
 
             elif (like is None) and (dontlike is not None):
-                if dontlike in likes_list:
-                    likes_list.remove(dontlike)
+                likes.remove(dontlike)
 
-            profile.likes = ','.join(set(likes_list))
-            profile.save()
             return JsonResponse({'success':True})
 
         except:
             return JsonResponse({'success':False})
+
+
+# class SaveLikeView(View):
+#     def get(self, request):
+#         try:
+#             like = request.GET.get('like', None)
+#             dontlike = request.GET.get('dontlike', None)
+#             profile = Profile.objects.get(user__email=request.user.email)
+#             likes_list = profile.get_likes2()
+#
+#             if (like is not None) and (dontlike is None):
+#                 likes_list.append(like)
+#
+#             elif (like is None) and (dontlike is not None):
+#                 if dontlike in likes_list:
+#                     likes_list.remove(dontlike)
+#
+#             profile.likes = ','.join(set(likes_list))
+#             profile.save()
+#             return JsonResponse({'success':True})
+#
+#         except:
+#             return JsonResponse({'success':False})
 
 
 class SaveWorldcupView(View):
@@ -434,7 +480,8 @@ class LibraryView(AjaxListView):
 
             elif self.page=='like':
                 profile = Profile.objects.get(user__email=self.request.user.email)
-                all = brands.filter(name__in=profile.get_likes()).order_by('name')
+                all = profile.get_likes('brand').order_by('name')
+                # all = brands.filter(name__in=profile.get_likes2()).order_by('name')
 
             else:
                 _regex = r'^[' + self.page.replace(' ', '') + ']'

@@ -11,7 +11,7 @@
     /* box-shadow: 0 0 10px rgba(0,0,0,0.15) !important; */
     cursor: pointer;
     overflow: hidden;
-    background: orange !important;
+    background: none !important;
     /* padding: 0 !important; */
   }
 
@@ -19,7 +19,7 @@
     object-fit: contain;
     /* margin: 0 !important; */
     border-radius: 10px !important;
-    background: yellow;
+    background: none;
   }
 
   .bcard-selected {
@@ -116,10 +116,10 @@
             <td class="slick-container four wide">
               <div class="bcards left">
                 {% for brand in candidates.left %}
-                <!-- <div class="bcard card" bname="{{ brand.name }}"> -->
+                <div class="bcard card" bname="{{ brand.name }}">
                   <img class="bcard_img" src="{{ brand.logo.url }}">
                   <!-- <img class="bcard_img" data-lazy="{{ brand.logo.url }}" alt="{{ brand.name }}"> -->
-                <!-- </div> -->
+                </div>
                 {% endfor %}
               </div>
 
@@ -213,9 +213,10 @@
 
       $('.bcard-selected').attr('href', href);
       $('.bcard-selected-img').attr('src', src);
+      this_is_myfavorite(bname);
 
-      console.log($(this).width());
-      console.log($(this).height());
+      // console.log($(this).width());
+      // console.log($(this).height());
     });
 
     function bcard_click(bcard) {
@@ -234,5 +235,23 @@
     });
 
     $(window).trigger('resize');
+
+
+    function this_is_myfavorite(bname) {
+      var data = { bname:bname };
+
+      $.ajax({
+        url: '/update_myfavorite/',
+        async: true,
+        type: 'GET',
+        data: data,
+        dataType: 'json',
+        success: function(jqXHR) {
+          if (!jqXHR.success) {
+            alert("데이터를 처리하는데 문제가 발생하였습니다.");
+          };
+        }
+      });
+    }
   </script>
 {% endblock js %}

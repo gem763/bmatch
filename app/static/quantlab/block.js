@@ -49,6 +49,7 @@ function load_blocks(where, url) {
 
 
 function load_block(img) {
+  feather.replace();
   $(img).parents('.block').css('opacity', 1);
 }
 
@@ -74,20 +75,37 @@ function toggle_like(event, obj) {
   event.stopPropagation();
   var icon = $(obj).children(".block-like-icon");
   var state = icon.attr("state");
-  var bname = $(obj).parents(".block").attr("bname");
+  // var bname = $(obj).parents(".block").attr("bname");
+
+  var what;
+  var type;
   var data;
+
+  if ($(obj).parents(".block").is("[bname]")) {
+    type = 'brand';
+    what = $(obj).parents(".block").attr("bname");
+
+  } else if ($(obj).parents(".block").is("[post-id]")) {
+    type = 'post';
+    what = $(obj).parents(".block").attr("post-id");
+  }
 
   if (state=="like") {
     icon.attr({"state":"dontlike"});
-    data = { dontlike:bname };
+    data = { type:type, dontlike:what };
 
   } else {
     icon.attr({"state":"like"});
-    data = { like:bname };
+    data = { type:type, like:what };
   };
 
+  update_likes(data);
+};
+
+function update_likes(data) {
   $.ajax({
-    url: '/save_like/', //{% url 'save_like' %}, js파일에서 장고 템플릿은 안먹힌다
+    // url: '/save_like/', //{% url 'save_like' %}, js파일에서 장고 템플릿은 안먹힌다
+    url: '/update_likes/',
     async: true,
     type: 'GET',
     data: data,
@@ -98,14 +116,4 @@ function toggle_like(event, obj) {
       };
     }
   });
-};
-
-
-// $(document).ready(function(){
-//   $(".block").transition({
-//     animation  : 'fade',
-//     duration   : '1s',
-//     onComplete : function() {
-//     }
-//   });
-// })
+}

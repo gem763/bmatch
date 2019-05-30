@@ -55,19 +55,50 @@ class Brand(models.Model):
         # return {i['key']:i['value'] for i in json.loads(self.identity)}
 
 
+
+class Post(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
+    # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
+
+    def get_absolute_url(self):
+        url = reverse_lazy('post_detail', kwargs={'pk':self.pk})
+        return url
+
+    # def delete(self, *args, **kwargs):
+    #     self.image.delete()
+    #     # self.filtered_image.delete()
+    #     super(Photo, self).delete(*args, **kwargs)
+
+
+
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     worldcup = models.TextField(blank=True, null=True, default='{}')
     likes = models.TextField(blank=True, null=True)
     initial_awared = models.TextField(blank=True, null=True)
     # awareness = models.TextField(blank=True, null=True, default='{}')
-    interest = models.ManyToManyField(Brand, blank=True, default='')
+    brand_likes = models.ManyToManyField(Brand, blank=True)
+    post_likes = models.ManyToManyField(Post, blank=True)
+    myfavorite = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL, related_name='myfavorite_set')
 
     def __str__(self):
         return self.user.email
 
-    def get_likes(self):
+    def get_likes2(self):
         return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
+
+    def get_likes(self, type):
+        if type=='brand':
+            return self.brand_likes.all()
+
+        elif type=='post':
+            return self.post_likes.all()
 
     def get_worldcupped(self):
         worldcupped = []
@@ -77,7 +108,8 @@ class Profile(models.Model):
 
 
     def get_awared(self):
-        _likes = self.get_likes()
+        # _likes = self.get_likes()
+        _likes = self.get_likes('brand').values_list('name', flat=True)
         _worldcupped = self.get_worldcupped()
         awared = set(_likes) | _worldcupped
         return awared
@@ -100,11 +132,13 @@ class Profile(models.Model):
 
     def _weighting(self, like=1, morelike=1):
         weights = {}
+        likes = self.get_likes('brand').values_list('name', flat=True)
         for pair,selected in json.loads(self.worldcup).items():
             for b in pair.split('-'):
                 add = 1
                 if b==selected: add += like
-                if b in self.get_likes(): add += morelike
+                if b in likes: add += morelike
+                # if b in self.get_likes(): add += morelike
                 weights[b] = weights[b] + add if b in weights else add
         return weights
 
@@ -135,26 +169,6 @@ class Profile(models.Model):
 
         return {k:int(v) for k,v in zip(keys, x)}
 
-
-
-class Post(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
-    # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
-    content = models.TextField(max_length=500, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
-
-    def get_absolute_url(self):
-        url = reverse_lazy('post_detail', kwargs={'pk':self.pk})
-        return url
-
-    # def delete(self, *args, **kwargs):
-    #     self.image.delete()
-    #     # self.filtered_image.delete()
-    #     super(Photo, self).delete(*args, **kwargs)
 
 
 
