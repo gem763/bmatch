@@ -10,6 +10,10 @@
   box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
 }
 
+.block:hover .block-aware {
+  opacity: 1;
+}
+
 .block-img {
   position: absolute;
   top: 0;
@@ -25,6 +29,30 @@
   width: 100%;
   padding-top: 100%;
   position: relative;
+}
+
+.block-aware {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  /* left: 0; */
+  /* bottom: 0; */
+  right: 0;
+  width: 50%;
+  height: 50%;
+  background: none;
+  transition: opacity 0.2s;
+}
+
+.block-aware-icon {
+  background: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  color: orange;
+  stroke-width: 3;
 }
 
 .block-like {

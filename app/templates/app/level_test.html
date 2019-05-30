@@ -1,0 +1,25 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with rating_act="active" %}
+{% endblock menu_top %}
+
+
+{% block content %}
+<style>
+</style>
+
+{% load static %}
+<div class="ui text container" style="text-align:center;margin-top:20px">
+  <div id="level-test"></div>
+</div>
+{% endblock content %}
+
+
+{% load static %}
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    load_blocks('#level-test', "{% url 'blocks' %}?type=leveltest");
+  </script>
+{% endblock js %}

@@ -1,5 +1,17 @@
 {% load ctags %}
 {% if brand %}
+
+{% if opt == 'leveltest' %}
+<div class="block card" bname="{{ brand.name }}" awared="no" href="{% url 'brand_detail' brand.name %}" onclick="block_awared(this)">
+  <div class="block-base">
+    <img class="block-img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;" onload="load_block(this)">
+    <div class="block-aware">
+      <i class="block-aware-icon" data-feather="check"></i>
+    </div>
+  </div>
+</div>
+
+{% else %}
 <div class="block card" bname="{{ brand.name }}" href="{% url 'brand_detail' brand.name %}" onclick="block_click(this)">
 
   <div class="block-base">
@@ -42,6 +54,7 @@
   {% endif %}
 
 </div>
+{% endif %}
 {% endif %}
 
 

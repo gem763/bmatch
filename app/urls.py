@@ -57,6 +57,7 @@ urlpatterns = [
     path('save_worldcup/', v.SaveWorldcupView.as_view(), name='save_worldcup'),
     # path('save_like/', v.SaveLikeView.as_view(), name='save_like'),
 
+    path('level_test/', v.level_test, name='level_test'),
     path('update_likes/', v.UpdateLikesView.as_view(), name='update_likes'),
     path('update_myfavorite/', v.UpdateMyfavoriteView.as_view(), name='update_myfavorite'),
 

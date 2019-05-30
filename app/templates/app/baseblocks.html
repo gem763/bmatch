@@ -4,6 +4,11 @@
       {% include "app/block.html" with brand=block opt=opt %}
     {% endfor %}
 
+  {% elif type == 'leveltest' %}
+    {% for block in blocks %}
+      {% include "app/block.html" with brand=block opt='leveltest' %}
+    {% endfor %}
+
   {% elif type == 'suggestions' %}
     {% for block in blocks %}
       {% include "app/block.html" with brand=block %}

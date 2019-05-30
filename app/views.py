@@ -85,6 +85,11 @@ def blocks(request):
                 # print(simbrands['top'])
                 return render(request, 'app/simblocks.html', ctx)
 
+            elif type=='leveltest':
+                brands = Brand.objects.all()
+                ctx['blocks'] = random.sample(list(brands), 20)
+                return render(request, 'app/baseblocks.html', ctx)
+
             elif type=='suggestions':
                 brands = Brand.objects.all()
                 ctx['blocks'] = random.sample(list(brands), 8)
@@ -198,6 +203,11 @@ def myfavorite(request):
     right = _candidates[n:]
     candidates = {'left':left, 'right':right}
     return render(request, 'app/myfavorite.html', {'candidates':candidates})
+
+
+def level_test(request):
+    return render(request, 'app/level_test.html')
+
 
 def rating(request):
     howmany = 10

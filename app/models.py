@@ -86,6 +86,7 @@ class Profile(models.Model):
     brand_likes = models.ManyToManyField(Brand, blank=True)
     post_likes = models.ManyToManyField(Post, blank=True)
     myfavorite = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL, related_name='myfavorite_set')
+    level_tested = models.ManyToManyField(Brand, blank=True, related_name='leveltested_set')
 
     def __str__(self):
         return self.user.email

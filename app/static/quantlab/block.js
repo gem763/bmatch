@@ -71,6 +71,20 @@ function block_click(block) {
   window.location.assign(url); //.replace()로 하면 history가 저장 안된다
 };
 
+function block_awared(block) {
+  var awared = $(block).attr('awared');
+  var block_aware = $(block).children('.block-base').children('.block-aware');
+
+  if (awared=='yes') {
+    $(block).attr('awared', 'no');
+    block_aware.css('opacity', 0);
+
+  } else {
+    $(block).attr('awared', 'yes');
+    block_aware.css('opacity', 1);
+  }
+};
+
 function toggle_like(event, obj) {
   event.stopPropagation();
   var icon = $(obj).children(".block-like-icon");
