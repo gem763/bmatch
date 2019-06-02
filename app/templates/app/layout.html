@@ -18,22 +18,27 @@
   <script src="{% static 'quantlab/block.js' %}"></script>
 
   <style>
-    @media only screen and (max-width: 500px) {
-      /* .top-wide.item {
-        display: none !important;
-      }
-
-      .top-narrow.item {
-        display: block !important;
-      } */
-      /* .hide-footer {
-        display: none;
-      } */
+    .body-content {
+      border: none !important;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1) !important;
     }
 
     body {
       padding-top:60px;
       background: whitesmoke;
+    }
+
+    @media only screen and (max-width: 500px) {
+      .body-content {
+        border: none !important;
+        box-shadow: none !important;
+        /* box-shadow: 0 0 10px rgba(0,0,0,0.1) !important; */
+      }
+
+      body {
+        padding-top:60px;
+        background: white;
+      }
     }
 
     * {

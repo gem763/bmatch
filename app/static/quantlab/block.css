@@ -1,9 +1,24 @@
+.blocks {
+  background: none !important;
+  /* position: relative; */
+  /* padding: 10px !important; */
+}
+
+.block-container {
+  background: none;
+  padding: 1% !important;
+}
+
 .block {
   box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
   transition: opacity 1s !important;
+  /* margin: 0px !important; */
+  /* position: absolute;
+  width: calc(100%/3 - 50px) !important; */
+  /* background: orange !important; */
 }
 
 .block:hover {

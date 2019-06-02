@@ -11,22 +11,22 @@
 // $(window).trigger('resize');
 
 
-var ncols;
+var ncols = 3;
 var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
 var ncols_keys = Object.keys(ncols_matcher).map(function(key){ return Number(key) });
 var ncols_max = Math.max.apply(null, ncols_keys);
 var ncols_min = Math.min.apply(null, ncols_keys);
 var window_width = $(window).width();
 
-if (window_width < 400) {
-  ncols = 3;
-
-} else if (window_width < 500) {
-  ncols = 3;
-
-} else {
-  ncols = 3;
-}
+// if (window_width < 400) {
+//   ncols = 3;
+//
+// } else if (window_width < 500) {
+//   ncols = 3;
+//
+// } else {
+//   ncols = 3;
+// }
 
 
 function resize_blocks(step) {
@@ -37,7 +37,8 @@ function resize_blocks(step) {
     ncols = Math.max(ncols+step, ncols_min);
   }
 
-  $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
+  // $('.blocks').attr('class', "blocks ui cards " + ncols_matcher[ncols]);
+  $('.blocks').attr('class', "blocks ui " + ncols_matcher[ncols] + " column grid");
 }
 
 

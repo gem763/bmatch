@@ -1,4 +1,5 @@
-<div class="blocks ui cards {{ ncols }}" style="background:none;">
+<!-- <div class="blocks ui cards {{ ncols }}" style="background:none;"> -->
+<div class="blocks ui {{ ncols }} column grid">
   {% if type == 'simbrands' %}
     {% for block in blocks %}
       {% include "app/block.html" with brand=block opt=opt %}

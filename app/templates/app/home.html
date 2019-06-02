@@ -21,6 +21,34 @@
     justify-content: center;
     /* padding-top: 50px; */
   }
+
+  .home-guide {
+    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+    cursor: pointer;
+  }
+
+  .home-guide:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  }
+
+  .home-guide .square {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+  }
+
+  .home-guide .square .square-sub {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
 <!-- <div style="width:100%;background:white;height:300px;margin-top:50px;display:flex;align-items:center;justify-content:center;"> -->
@@ -35,8 +63,54 @@
   </h1>
 </div>
 
-<div class="ui text container" style="background:none;margin-top:20px;box-shadow: 0 0 10px rgba(0,0,0,0.1);width:36vw;">
-  <div class="ui fluid three item menu" style="height:12vw;">
+<div class="ui text container" style="background:none;margin-top:20px;">
+  <div class="ui three cards" style="background:none;">
+
+    <div class="home-guide card" href="{% url 'discover' %}">
+      <div class="square">
+        <div class="square-sub">
+          <div class="ui icon small header">
+            <i class="road icon"></i>
+            <div class="content">
+              Style discovery
+              <div class="sub header">스타일 대모험</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-guide card" href="{% url 'rating' %}">
+      <div class="square">
+        <div class="square-sub">
+          <div class="ui icon small header">
+            <i class="heart icon"></i>
+            <div class="content">
+              Brand fit
+              <div class="sub header">이상형 월드컵</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-guide card" href="{% url 'me' %}">
+      <div class="square">
+        <div class="square-sub">
+          <div class="ui icon small header">
+            <i class="user outline icon"></i>
+            <div class="content">
+              Tailored recommend
+              <div class="sub header">맞춤형 제안</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- box-shadow: 0 0 10px rgba(0,0,0,0.1);width:36vw;"> -->
+  <!-- <div class="ui fluid three item menu" style="height:12vw;">
     <a class="item" href="{% url 'discover' %}">
       <div class="ui icon tiny header">
         <i class="road icon"></i>
@@ -66,7 +140,7 @@
         </div>
       </div>
     </a>
-  </div>
+  </div> -->
 </div>
 
 <div class="ui text container">
@@ -81,5 +155,9 @@
 {% block js %}
   {{ block.super }}
   <script>
+    $('.home-guide').click(function() {
+      var url = $(this).attr("href");
+      window.location.assign(url); 
+    })
   </script>
 {% endblock js %}
