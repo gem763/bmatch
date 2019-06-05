@@ -1,7 +1,8 @@
 .blocks {
-  background: none !important;
-  /* position: relative; */
-  /* padding: 10px !important; */
+  background: none;
+  padding-top: 5px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
 }
 
 .block-container {
@@ -10,19 +11,15 @@
 }
 
 .block {
-  box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15) !important;
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
   transition: opacity 1s !important;
-  /* margin: 0px !important; */
-  /* position: absolute;
-  width: calc(100%/3 - 50px) !important; */
-  /* background: orange !important; */
 }
 
 .block:hover {
-  box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
 }
 
 .block:hover .block-aware {
@@ -57,7 +54,6 @@
   height: 100%;
   background: none;
   transition: opacity 0.2s;
-  /* text-align: center; */
 }
 
 .block-aware-icon {

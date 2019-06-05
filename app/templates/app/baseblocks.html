@@ -1,29 +1,4 @@
 <!-- <div class="blocks ui cards {{ ncols }}" style="background:none;"> -->
 <div class="blocks ui {{ ncols }} column grid">
-  {% if type == 'simbrands' %}
-    {% for block in blocks %}
-      {% include "app/block.html" with brand=block opt=opt %}
-    {% endfor %}
-
-  {% elif type == 'leveltest' %}
-    {% for block in blocks %}
-      {% include "app/block.html" with brand=block opt='leveltest' %}
-    {% endfor %}
-
-  {% elif type == 'suggestions' %}
-    {% for block in blocks %}
-      {% include "app/block.html" with brand=block %}
-    {% endfor %}
-
-  {% elif type == 'posts' %}
-    {% for block in blocks %}
-      {% include "app/block.html" with post=block %}
-    {% endfor %}
-
-  {% elif type == 'hottrendnow' %}
-    {% for block in blocks %}
-      {% include "app/block.html" with post=block %}
-    {% endfor %}
-
-  {% endif %}
+  {% include page_template %}
 </div>

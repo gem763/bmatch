@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.conf import settings
 from chartjs.views.lines import BaseLineChartView
 from el_pagination.views import AjaxListView
+# from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
 from app.models import Brand, Profile, Option, Post, CommentPost
@@ -67,6 +68,86 @@ def posts(request):
         return render(request, 'app/posts.html', {'screen':screen})
 
 
+def suggestions():
+    brands = Brand.objects.all()
+    return random.sample(list(brands), 9)
+
+
+def hottrendnow():
+    return Post.objects.order_by('-created_at')[:15]
+
+
+def allbrands():
+    return Brand.objects.order_by('name')[:]
+
+
+def blocks2(request):
+    template = 'app/baseblocks.html'
+    page_template = 'app/baseblocks_page.html'
+    screen_0 = 'all'
+    ncols_0 = 'four'
+
+    type = request.GET.get('type', None)
+    screen = request.GET.get('screen', screen_0)
+    ncols = request.GET.get('ncols', ncols_0)
+    bname = request.GET.get('bname', None)
+
+    ctx = {'page_template':page_template, 'type':type, 'ncols':ncols}
+
+    try:
+        if type=='allbrands':
+            ctx['blocks'] = allbrands()
+
+        elif type=='simbrands':
+            pass
+
+        elif type=='leveltest':
+            pass
+
+        elif type=='suggestions':
+            ctx['blocks'] = suggestions()
+
+        elif type=='posts':
+            pass
+
+        elif type=='hottrendnow':
+            ctx['blocks'] = hottrendnow()
+
+        else:
+            type*2
+
+    except:
+        ctx['err'] = 'Something wrong'
+
+
+    return render(request, template, ctx)
+
+
+
+class BlocksView(AjaxListView):
+    context_object_name = 'ctx'
+    template_name = 'app/baseblocks.html'
+    page_template = 'app/baseblocks_page.html'
+    screen_0 = 'all'
+    ncols_0 = 'four'
+
+    def get_queryset(self):
+        type = self.request.GET.get('type', None)
+        screen = self.request.GET.get('screen', self.screen_0)
+        ncols = self.request.GET.get('ncols', self.ncols_0)
+        bname = self.request.GET.get('bname', None)
+
+        ctx = {'type':type, 'ncols':ncols}
+
+        try:
+            pass
+
+        except:
+            ctx['err'] = 'Something wrong'
+
+        return ctx
+
+
 def blocks(request):
     if request.method=='GET':
         type = request.GET.get('type', None) # brand, post
@@ -113,23 +194,6 @@ def blocks(request):
 
         except:
             return HttpResponse('Something wrong')
-
-
-
-# def posts_sub(request):
-#     if request.method=='GET':
-#         type = request.GET.get('type', None)
-#
-#         if type is not None:
-#             posts = Post.objects
-#
-#             if type=='all':
-#                 posts = posts.all()
-#
-#             elif type=='my':
-#                 posts = posts.filter(user__email=request.user.email)
-#
-#             return render(request, 'app/posts_sub.html', {'posts':posts.order_by('-created_at')})
 
 
 @login_required
@@ -265,12 +329,6 @@ def me(request):
     myposts = Post.objects.filter(user__email=request.user.email).order_by('-created_at')
     return render(request, 'app/me.html', {'myfavorite':myfavorite, 'myidentity':myidentity, 'myawareness':myawareness, 'myposts':myposts})
 
-
-def sharing(request):
-    return render(request, 'app/sharing.html')
-
-def analysis(request):
-    return render(request, 'app/analysis.html')
 
 
 def _simbrands(qry=None, bname=None, top_min=50, bottom_max=0, n_max=20):
@@ -466,6 +524,10 @@ def discover(request):
     # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
     socialwords = _simwords('crocs', min=0.5, topn=100, amp=10)
     return render(request, 'app/discover.html', {'socialwords':socialwords})
+
+
+def library(request):
+    return render(request, 'app/library.html')
 
 
 class LibraryView(AjaxListView):

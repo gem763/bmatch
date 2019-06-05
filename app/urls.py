@@ -32,7 +32,8 @@ urlpatterns = [
 
     path('', v.home, name='home'),
     path('discover/', v.discover, name='discover'),
-    path('library/', v.LibraryView.as_view(), name='library'),
+    path('library/', v.library, name='library'),
+    # path('library/', v.LibraryView.as_view(), name='library'),
     # path('discover/', discover),
     #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),
@@ -49,9 +50,7 @@ urlpatterns = [
     # path('bnames/', v.bnames, name='bnames'),
     #path('brands/<bname>/identities/', identities, name='identities'),
 
-    path('analysis/', v.analysis),
     path('me/', v.me, name='me'),
-    path('sharing/', v.sharing, name='sharing'),
 
     path('profiling/', v.profiling, name='profiling'),
     path('save_worldcup/', v.SaveWorldcupView.as_view(), name='save_worldcup'),
@@ -69,6 +68,7 @@ urlpatterns = [
     path('commentpost_actions/', v.CommentPostActionsView.as_view(), name='commentpost_actions'),
 
     path('blocks/', v.blocks, name='blocks'),
+    path('blocks2/', v.blocks2, name='blocks2'),
 
     # path('search/<qry>/', v.search, name='search'),
 

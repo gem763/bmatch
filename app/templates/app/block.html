@@ -22,9 +22,9 @@
     <img class="block-img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:contain;" onload="load_block(this)">
     <div class="block-like" onclick="toggle_like(event, this)">
       {% if user.is_authenticated and user|likes_this:brand %}
-        <i class="block-like-icon" data-feather="star" style="" state="like"></i>
+        <i class="block-like-icon" data-feather="star" state="like"></i>
       {% else %}
-        <i class="block-like-icon" data-feather="star" style="" state="dontlike"></i>
+        <i class="block-like-icon" data-feather="star" state="dontlike"></i>
       {% endif %}
     </div>
   </div>

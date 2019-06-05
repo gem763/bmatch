@@ -1,0 +1,34 @@
+{% if type == 'allbrands' %}
+  {% load el_pagination_tags %}
+  {% lazy_paginate 40,10 blocks %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block %}
+  {% endfor %}
+  {% show_more %}
+
+{% elif type == 'simbrands' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block opt=opt %}
+  {% endfor %}
+
+{% elif type == 'leveltest' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block opt='leveltest' %}
+  {% endfor %}
+
+{% elif type == 'suggestions' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with brand=block %}
+  {% endfor %}
+
+{% elif type == 'posts' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with post=block %}
+  {% endfor %}
+
+{% elif type == 'hottrendnow' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with post=block %}
+  {% endfor %}
+
+{% endif %}
