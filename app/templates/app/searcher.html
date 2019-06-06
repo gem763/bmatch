@@ -1,27 +1,36 @@
 <div id="searcher" style="background:white;width:100%;height:100%;padding:10px;position:absolute;left:0;bottom:100%;transform:translate(0%,0%);">
 
-  <div id="search-hider" class="ui icon compact big button" style="background:none;float:left;">
+  <!-- <div id="search-hider" class="ui icon compact big button" style="background:none;float:left;">
     <i class="arrow up icon"></i>
-  </div>
+  </div> -->
 
-  <form class="ui form" action="{% url 'library' %}" method="get" style="background:none;margin-left:50px;">
+  <!-- <form class="ui form" action="{% url 'library' %}" method="get" style="background:yellow;margin-left:50px;"> -->
+  <div style="background:none;">
     <div class="ui fluid search" style="background:none;">
-      <div class="ui fluid transparent input" style="position:relative;height:40px;font-size:20px;">
+      <div class="ui fluid transparent left icon input" style="position:relative;height:40px;font-size:20px;">
+        <i class="search icon"></i>
+
         {% if brands.qry %}
           <input class="bsearch prompt" type="text" value="{{ brands.qry }}" name="q" oninput="show_submit(this)">
         {% else %}
           <input class="bsearch prompt" type="text" placeholder="Search" name="q" oninput="show_submit(this)">
         {% endif %}
 
-        <!-- <button class="bsearch-submit ui icon compact button" type="submit" style="background:transparent;opacity:0;height:30px;position:absolute;right:0%;top:50%;transform:translate(0%,-50%)"> -->
-        <!-- <button class="bsearch-submit ui icon compact large button" type="submit" style="background:none;opacity:0;position:absolute;right:0%;top:50%;transform:translate(0%,-50%)"> -->
-        <button class="bsearch-submit ui icon compact big button" type="submit" style="background:none;opacity:0;">
+        <!-- <button class="bsearch-submit ui icon compact big button" type="submit" style="background:none;opacity:0;">
           <i class="search icon"></i>
-        </button>
+        </button> -->
+
+        <a id="show-library" class="ui icon compact big button" style="background:none;opacity:1;" href="{% url 'blocks2' %}?type=allbrands">
+          <i class="th icon"></i>
+        </a>
+
+        <div id="search-hider" class="ui icon compact big button" style="background:none;opacity:1;">
+          <i class="arrow up icon"></i>
+        </div>
 
       </div>
       <div class="results"></div>
     </div>
-  </form>
+  </div>
 
 </div>

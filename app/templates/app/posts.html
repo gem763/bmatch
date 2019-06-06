@@ -34,14 +34,14 @@
 {% block js %}
   {{ block.super }}
   <script>
-    load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen={{ screen }}");
+    load_blocks('#posts', "{% url 'blocks2' %}?type=posts&screen={{ screen }}");
 
     $('.mypostonly.checkbox').checkbox({
       onChecked: function() {
-        load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen=my");
+        load_blocks('#posts', "{% url 'blocks2' %}?type=posts&screen=my");
       },
       onUnchecked: function() {
-        load_blocks('#posts', "{% url 'blocks' %}?type=posts&screen=all");
+        load_blocks('#posts', "{% url 'blocks2' %}?type=posts&screen=all");
       }
     });
   </script>

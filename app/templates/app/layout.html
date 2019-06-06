@@ -121,7 +121,8 @@
         templates: {
           standard: function(response){
             htmls = $.map(response.results, function(item) {
-                      var whereto = "{% url 'library' %}?q=" + item.title;
+                      // var whereto = "{% url 'library' %}?q=" + item.title;
+                      var whereto = "/brands/" + item.bname;
                       var html = '<a class="result" style="height:100px" href="' + whereto + '">';
                       html += '<div class="image" style="height:80px;width:80px;">'
                             + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'

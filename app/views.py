@@ -81,11 +81,24 @@ def allbrands():
     return Brand.objects.order_by('name')[:]
 
 
+def allposts():
+    return Post.objects.order_by('-created_at')
+
+
+def myposts(email):
+    return Post.objects.filter(user__email=email).order_by('-created_at')
+
+
+def leveltest():
+    brands = Brand.objects.all()
+    return random.sample(list(brands), 20)
+
+
 def blocks2(request):
     template = 'app/baseblocks.html'
     page_template = 'app/baseblocks_page.html'
     screen_0 = 'all'
-    ncols_0 = 'four'
+    ncols_0 = 'three'
 
     type = request.GET.get('type', None)
     screen = request.GET.get('screen', screen_0)
@@ -97,24 +110,35 @@ def blocks2(request):
     try:
         if type=='allbrands':
             ctx['blocks'] = allbrands()
+            template = 'app/library.html'
+
+            if request.is_ajax():
+                template = page_template
 
         elif type=='simbrands':
-            pass
+            simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
+            ctx['sims'] = simbrands['top']
+            ctx['diffs'] = simbrands['bottom']
+            template = 'app/simblocks.html'
 
         elif type=='leveltest':
-            pass
+            ctx['blocks'] = leveltest()
 
         elif type=='suggestions':
             ctx['blocks'] = suggestions()
 
         elif type=='posts':
-            pass
+            if screen=='all':
+                ctx['blocks'] = allposts()
+
+            elif screen=='my':
+                ctx['blocks'] = myposts(request.user.email)
 
         elif type=='hottrendnow':
             ctx['blocks'] = hottrendnow()
 
         else:
-            type*2
+            pass
 
     except:
         ctx['err'] = 'Something wrong'
@@ -124,28 +148,28 @@ def blocks2(request):
 
 
 
-class BlocksView(AjaxListView):
-    context_object_name = 'ctx'
-    template_name = 'app/baseblocks.html'
-    page_template = 'app/baseblocks_page.html'
-    screen_0 = 'all'
-    ncols_0 = 'four'
-
-    def get_queryset(self):
-        type = self.request.GET.get('type', None)
-        screen = self.request.GET.get('screen', self.screen_0)
-        ncols = self.request.GET.get('ncols', self.ncols_0)
-        bname = self.request.GET.get('bname', None)
-
-        ctx = {'type':type, 'ncols':ncols}
-
-        try:
-            pass
-
-        except:
-            ctx['err'] = 'Something wrong'
-
-        return ctx
+# class BlocksView(AjaxListView):
+#     context_object_name = 'ctx'
+#     template_name = 'app/baseblocks.html'
+#     page_template = 'app/baseblocks_page.html'
+#     screen_0 = 'all'
+#     ncols_0 = 'four'
+#
+#     def get_queryset(self):
+#         type = self.request.GET.get('type', None)
+#         screen = self.request.GET.get('screen', self.screen_0)
+#         ncols = self.request.GET.get('ncols', self.ncols_0)
+#         bname = self.request.GET.get('bname', None)
+#
+#         ctx = {'type':type, 'ncols':ncols}
+#
+#         try:
+#             pass
+#
+#         except:
+#             ctx['err'] = 'Something wrong'
+#
+#         return ctx
 
 
 def blocks(request):
@@ -414,7 +438,7 @@ def _indexer(brands):
 
 def search_helper(request):
     helper = [
-        {'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand)}
+        {'title':brand.fullname_en, 'description':brand.fullname_kr, 'categories':brand.keywords, 'image':_imgurl(brand), 'bname':brand.name}
         for brand in Brand.objects.all()
     ]
     return JsonResponse(helper, safe=False)

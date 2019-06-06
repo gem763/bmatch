@@ -30,7 +30,8 @@
     <div style="clear:both;"></div>
   </div> -->
 
-  <div id="brands">1</div>
+  <!-- <div id="brands"></div> -->
+  {% include "app/baseblocks.html" %}
 </div>
 {% endblock content %}
 
@@ -38,8 +39,15 @@
 {% load static %}
 {% block js %}
   {{ block.super }}
+  <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+
   <script>
-    load_blocks('#brands', "{% url 'blocks2' %}?type=allbrands");
+    // load_blocks('#brands', "{% url 'blocks2' %}?type=allbrands");
+
+    $.endlessPaginate({
+      paginateOnScroll: true,
+      paginateOnScrollMargin: 100,
+    });
 
     function paginate(btn) {
       url = "{% url 'library' %}?p=" + $(btn).attr("page");
