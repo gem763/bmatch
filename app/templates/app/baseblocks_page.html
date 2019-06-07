@@ -1,10 +1,4 @@
 {% if type == 'allbrands' %}
-  <!-- {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'quantlab/blocks.css' %}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="{% static 'semantic/semantic.min.js' %}"></script>
-  <script src="{% static 'quantlab/blocks.js' %}"></script> -->
-
   {% load el_pagination_tags %}
   {% lazy_paginate 30,10 blocks %}
   {% for block in blocks %}

@@ -62,6 +62,7 @@ class Post(models.Model):
     # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    hashtags = models.ManyToManyField(Brand, blank=True)
 
     def __str__(self):
         return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)

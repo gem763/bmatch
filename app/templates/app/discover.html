@@ -55,8 +55,8 @@
     <div class="content">
       <div id="suggestions" style="background:none;"></div>
 
-      <br>
-      <a href="{% url 'library' %}">see brand library</a>
+      <!-- <br>
+      <a href="{% url 'library' %}">see brand library</a> -->
     </div>
   </div>
 
@@ -104,8 +104,8 @@
 
 
   <script>
-    load_blocks('#suggestions', "{% url 'blocks2' %}?type=suggestions");
-    load_blocks('#hottrendnow', "{% url 'blocks2' %}?type=hottrendnow");
+    load_blocks('#suggestions', "{% url 'blocks' %}?type=suggestions");
+    load_blocks('#hottrendnow', "{% url 'blocks' %}?type=hottrendnow");
 
     $(document).ready(function(){
       WordCloud({

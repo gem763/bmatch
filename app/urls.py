@@ -62,13 +62,14 @@ urlpatterns = [
 
     path('posts/', v.posts, name='posts'),
     # path('posts/sub/', v.posts_sub, name='posts_sub'),
-    path('posts/posting/', v.posting, name='posting'),
-    path('posts/detail/<pk>/', v.post_detail, name='post_detail'),
-    path('posts/detail/<pk>/commenting/', v.commenting_post, name='commenting_post'),
+    path('posts/newpost/', v.newpost, name='newpost'),
+    path('posts/detail/<int:pk>/', v.post_detail, name='post_detail'),
+    path('posts/detail/<int:pk>/edit/', v.editpost, name='editpost'),
+    path('posts/detail/<int:pk>/commenting/', v.commenting_post, name='commenting_post'),
     path('commentpost_actions/', v.CommentPostActionsView.as_view(), name='commentpost_actions'),
 
     path('blocks/', v.blocks, name='blocks'),
-    path('blocks2/', v.blocks2, name='blocks2'),
+    # path('blocks2/', v.blocks2, name='blocks2'),
 
     # path('search/<qry>/', v.search, name='search'),
 

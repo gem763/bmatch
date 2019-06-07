@@ -98,7 +98,7 @@
   <script src="{% static 'js/radarChart.js' %}"></script>
 
   <script>
-    load_blocks('#similarity', "{% url 'blocks2' %}?type=simbrands&bname={{ brand.name }}");
+    load_blocks('#similarity', "{% url 'blocks' %}?type=simbrands&bname={{ brand.name }}");
     $('.bookmark-dropdown').dropdown();
 
     function append_table_row(id, query_data){

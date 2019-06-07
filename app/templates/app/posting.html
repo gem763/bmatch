@@ -13,10 +13,11 @@
       <form class="ui form" method="post" action="" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <!-- {{ form.as_p }} -->
+
         <div class="field">
           <label>Image upload</label>
           <input id="id_image" type="file" name="image" onchange="upload_img(this)">
-          <!-- </input> -->
           <div style="background:none;text-align:center;margin-top:10px;display:none;">
             <img id="img_uploaded" src="#" alt="image uploaded" style="width:80%;height:auto;" />
           </div>
@@ -25,6 +26,11 @@
         <div class="field">
           <textarea id="id_content" name="content"></textarea>
         </div>
+
+        {{ form.hashtags }}
+        <!-- <div class="field">
+          <select id="id_hashtags" name="hashtags" multiple=""></select>
+        </div> -->
 
         <button class="ui button" type="submit">Save</button>
       </form>
@@ -38,6 +44,8 @@
   {{ block.super }}
 
   <script>
+    $('#id_hashtags').dropdown();
+
     function upload_img(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();

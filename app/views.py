@@ -94,7 +94,7 @@ def leveltest():
     return random.sample(list(brands), 20)
 
 
-def blocks2(request):
+def blocks(request):
     template = 'app/baseblocks.html'
     page_template = 'app/baseblocks_page.html'
     screen_0 = 'all'
@@ -143,91 +143,83 @@ def blocks2(request):
     except:
         ctx['err'] = 'Something wrong'
 
-
     return render(request, template, ctx)
 
 
 
-# class BlocksView(AjaxListView):
-#     context_object_name = 'ctx'
-#     template_name = 'app/baseblocks.html'
-#     page_template = 'app/baseblocks_page.html'
-#     screen_0 = 'all'
-#     ncols_0 = 'four'
-#
-#     def get_queryset(self):
-#         type = self.request.GET.get('type', None)
-#         screen = self.request.GET.get('screen', self.screen_0)
-#         ncols = self.request.GET.get('ncols', self.ncols_0)
-#         bname = self.request.GET.get('bname', None)
-#
-#         ctx = {'type':type, 'ncols':ncols}
+# def blocks(request):
+#     if request.method=='GET':
+#         type = request.GET.get('type', None) # brand, post
+#         screen = request.GET.get('screen', 'all') # all, my
+#         # opt = request.GET.get('opt', None) # more
+#         ncols = request.GET.get('ncols', 'four')
+#         bname = request.GET.get('bname', None)
 #
 #         try:
-#             pass
+#             ctx = {'type':type, 'ncols':ncols}
+#
+#             if type=='simbrands':
+#                 simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
+#                 ctx['sims'] = simbrands['top']
+#                 ctx['diffs'] = simbrands['bottom']
+#                 return render(request, 'app/simblocks.html', ctx)
+#
+#             elif type=='leveltest':
+#                 brands = Brand.objects.all()
+#                 ctx['blocks'] = random.sample(list(brands), 20)
+#                 return render(request, 'app/baseblocks.html', ctx)
+#
+#             elif type=='suggestions':
+#                 brands = Brand.objects.all()
+#                 ctx['blocks'] = random.sample(list(brands), 8)
+#                 return render(request, 'app/baseblocks.html', ctx)
+#
+#             elif type=='posts':
+#                 posts = Post.objects
+#
+#                 if screen=='all':
+#                     posts = posts.all()
+#
+#                 elif screen=='my':
+#                     posts = posts.filter(user__email=request.user.email)
+#
+#                 ctx['blocks'] = posts.order_by('-created_at')
+#                 return render(request, 'app/baseblocks.html', ctx)
+#
+#             elif type=='hottrendnow':
+#                 ctx['blocks'] = Post.objects.order_by('-created_at')[:16]
+#                 return render(request, 'app/baseblocks.html', ctx)
 #
 #         except:
-#             ctx['err'] = 'Something wrong'
-#
-#         return ctx
-
-
-def blocks(request):
-    if request.method=='GET':
-        type = request.GET.get('type', None) # brand, post
-        screen = request.GET.get('screen', 'all') # all, my
-        # opt = request.GET.get('opt', None) # more
-        ncols = request.GET.get('ncols', 'four')
-        bname = request.GET.get('bname', None)
-
-        try:
-            ctx = {'type':type, 'ncols':ncols}
-
-            if type=='simbrands':
-                simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
-                ctx['sims'] = simbrands['top']
-                ctx['diffs'] = simbrands['bottom']
-                # print(simbrands['top'])
-                return render(request, 'app/simblocks.html', ctx)
-
-            elif type=='leveltest':
-                brands = Brand.objects.all()
-                ctx['blocks'] = random.sample(list(brands), 20)
-                return render(request, 'app/baseblocks.html', ctx)
-
-            elif type=='suggestions':
-                brands = Brand.objects.all()
-                ctx['blocks'] = random.sample(list(brands), 8)
-                return render(request, 'app/baseblocks.html', ctx)
-
-            elif type=='posts':
-                posts = Post.objects
-
-                if screen=='all':
-                    posts = posts.all()
-
-                elif screen=='my':
-                    posts = posts.filter(user__email=request.user.email)
-
-                ctx['blocks'] = posts.order_by('-created_at')
-                return render(request, 'app/baseblocks.html', ctx)
-
-            elif type=='hottrendnow':
-                ctx['blocks'] = Post.objects.order_by('-created_at')[:16]
-                return render(request, 'app/baseblocks.html', ctx)
-
-        except:
-            return HttpResponse('Something wrong')
+#             return HttpResponse('Something wrong')
 
 
 @login_required
-def posting(request):
+def newpost(request):
     if request.method=='GET':
         form = PostForm()
         return render(request, 'app/posting.html', {'form':form})
 
     elif request.method=='POST':
         form = PostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            return redirect(obj)
+
+
+@login_required
+def editpost(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method=='GET':
+        form = PostForm(instance=post)
+        return render(request, 'app/posting.html', {'form':form})
+
+    elif request.method=='POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
 
         if form.is_valid():
             obj = form.save(commit=False)
