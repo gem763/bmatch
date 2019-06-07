@@ -99,6 +99,7 @@
 
   <script>
     load_blocks('#similarity', "{% url 'blocks2' %}?type=simbrands&bname={{ brand.name }}");
+    $('.bookmark-dropdown').dropdown();
 
     function append_table_row(id, query_data){
       var btn = document.createElement('button');

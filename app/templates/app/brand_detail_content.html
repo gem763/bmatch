@@ -35,10 +35,54 @@
 </div>
 
 
-<div class="ui fluid container" style="height:200px;background:white;margin-top:0px;">
+<!-- <div class="ui fluid container" style="height:200px;background:white;margin-top:0px;"> -->
+<div style="width:100%;height:200px;background:white;margin-top:10px;">
 
-  <div class="ui text container">
-    <div class="ui items" style="background:none;padding:20px;">
+  <div class="ui grid text container" style="background:none;height:100%;position:relative">
+    <!-- <div id="bookmark" class="ui icon compact big button"> -->
+    <div style="background:none;position:absolute;right:5%;top:15%;">
+      <div class="bookmark-dropdown ui dropdown">
+        <input type="hidden" name="filters">
+        <i class="bookmark big yellow icon"></i>
+        <!-- <div class="menu">
+          <div class="item" data-value="favorite">favorite</div>
+          <div class="item" data-value="interest">interest</div>
+          <div class="item" data-value="collection">collection</div>
+        </div> -->
+      </div>
+    </div>
+
+    <div class="six wide middle aligned column" style="background:none;">
+      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:160px;height:160px;">
+    </div>
+
+    <div class="ten wide middle aligned column" style="background:none;">
+      <div class="content" style="background:none;">
+        <div class="ui huge header" style="text-transform:capitalize;">
+          <div>
+            {{ brand.fullname_en }}
+            <div class="sub header">{{ brand.fullname_kr }}</div>
+          </div>
+        </div>
+
+        <div>
+          <!-- <span class="metabutton ui compact mini button">{{ brand.origin }}</span> -->
+          <span>{{ brand.origin }}</span>
+          <span>·</span>
+          <span>{{ brand.category }}</span>
+        </div>
+
+        <div>
+          <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
+        </div>
+
+        <div>
+          어쩌고저쩌고...
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="ui items" style="background:none;padding:20px;">
       <div class="item">
         <div class="ui image" style="width:160px;height:160px;">
           <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;">
@@ -57,7 +101,7 @@
         </div>
 
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- <div class="ui grid text container" style="background:none">
