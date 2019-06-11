@@ -4,7 +4,6 @@
   {% include "app/menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
 
-
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
@@ -13,7 +12,6 @@
   .body-content .segment {
     border: none !important;
   }
-
 </style>
 
 <div class="body-content ui text container segments">
@@ -71,7 +69,7 @@
       <div id="hottrendnow"></div>
 
       <br>
-      <a href="{% url 'posting' %}">posting</a>
+      <a href="{% url 'newpost' %}">posting</a>
 
       <br>
       <a href="{% url 'posts' %}">see all posts</a>

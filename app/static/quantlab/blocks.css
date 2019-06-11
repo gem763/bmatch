@@ -94,6 +94,7 @@
   opacity: 1;
   fill: rgba(248,0,0,1);
   stroke-width: 1;
+  color: gainsboro;
 }
 
 .block-like-icon[state='dontlike'] {

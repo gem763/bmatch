@@ -146,55 +146,7 @@ def blocks(request):
     return render(request, template, ctx)
 
 
-
-# def blocks(request):
-#     if request.method=='GET':
-#         type = request.GET.get('type', None) # brand, post
-#         screen = request.GET.get('screen', 'all') # all, my
-#         # opt = request.GET.get('opt', None) # more
-#         ncols = request.GET.get('ncols', 'four')
-#         bname = request.GET.get('bname', None)
-#
-#         try:
-#             ctx = {'type':type, 'ncols':ncols}
-#
-#             if type=='simbrands':
-#                 simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
-#                 ctx['sims'] = simbrands['top']
-#                 ctx['diffs'] = simbrands['bottom']
-#                 return render(request, 'app/simblocks.html', ctx)
-#
-#             elif type=='leveltest':
-#                 brands = Brand.objects.all()
-#                 ctx['blocks'] = random.sample(list(brands), 20)
-#                 return render(request, 'app/baseblocks.html', ctx)
-#
-#             elif type=='suggestions':
-#                 brands = Brand.objects.all()
-#                 ctx['blocks'] = random.sample(list(brands), 8)
-#                 return render(request, 'app/baseblocks.html', ctx)
-#
-#             elif type=='posts':
-#                 posts = Post.objects
-#
-#                 if screen=='all':
-#                     posts = posts.all()
-#
-#                 elif screen=='my':
-#                     posts = posts.filter(user__email=request.user.email)
-#
-#                 ctx['blocks'] = posts.order_by('-created_at')
-#                 return render(request, 'app/baseblocks.html', ctx)
-#
-#             elif type=='hottrendnow':
-#                 ctx['blocks'] = Post.objects.order_by('-created_at')[:16]
-#                 return render(request, 'app/baseblocks.html', ctx)
-#
-#         except:
-#             return HttpResponse('Something wrong')
-
-
-@login_required
+# @login_required
 def newpost(request):
     if request.method=='GET':
         form = PostForm()
@@ -210,7 +162,7 @@ def newpost(request):
             return redirect(obj)
 
 
-@login_required
+# @login_required
 def editpost(request, pk):
     post = get_object_or_404(Post, pk=pk)
 

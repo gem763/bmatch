@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'custom_user',
     # 'users',
     'app',
+
+    'widget_tweaks', 
 ]
 
 SOCIALACCOUNT_PROVIDERS = {

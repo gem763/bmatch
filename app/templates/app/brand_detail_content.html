@@ -36,9 +36,82 @@
 
 
 <!-- <div class="ui fluid container" style="height:200px;background:white;margin-top:0px;"> -->
-<div style="width:100%;height:200px;background:white;margin-top:10px;">
+<div style="width:100%;background:none;">
+  <div class="ui text container" style="background:none;position:relative;padding:20px;">
+    <div class="ui unstackable items" style="background:none;margin:0;">
+      <div class="item" style="background:none;">
+        <div class="image">
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:contain;">
+        </div>
 
-  <div class="ui grid text container" style="background:none;height:100%;position:relative">
+        <div class="middle aligned content">
+          <div class="ui huge header" style="text-transform:capitalize;">
+            <div>
+              {{ brand.fullname_en }}
+              <div class="sub header">
+                <div>{{ brand.fullname_kr }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="meta" style="font-size:13px;">
+            <span>{{ brand.origin }}</span>
+            <span>·</span>
+            <span>{{ brand.category }}</span>
+          </div>
+          <div class="description" style="font-size:13px;">
+            <p></p>
+          </div>
+          <div class="extra" style="font-size:13px;">
+            <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:none;position:absolute;transform:translate(-50%,-50%);right:-10px;top:30px;">
+      <div class="bookmark-dropdown top right pointing ui dropdown">
+        <input type="hidden" name="filters">
+        <i class="bookmark big icon" style="color:rgba(248,0,0,1)"></i>
+        <div class="menu">
+          <div class="item" data-value="favorite">favorite</div>
+          <div class="item" data-value="interest">interest</div>
+          <div class="item" data-value="collection">collection</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- <div class="six wide middle aligned column" style="background:none;">
+      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:160px;height:160px;">
+    </div>
+
+    <div class="ten wide middle aligned column" style="background:none;">
+      <div class="content" style="background:none;">
+        <div class="ui huge header" style="text-transform:capitalize;">
+          <div>
+            {{ brand.fullname_en }}
+            <div class="sub header">{{ brand.fullname_kr }}</div>
+          </div>
+        </div>
+
+        <div>
+          <span>{{ brand.origin }}</span>
+          <span>·</span>
+          <span>{{ brand.category }}</span>
+        </div>
+
+        <div>
+          <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
+        </div>
+
+        <div>
+          어쩌고저쩌고...
+        </div>
+      </div>
+    </div> -->
+
+
+  <!-- <div class="ui grid text container" style="background:none;height:100%;position:relative">
     <div style="background:none;position:absolute;right:5%;top:15%;z-index:100;">
       <div class="bookmark-dropdown top right pointing ui dropdown">
         <input type="hidden" name="filters">
@@ -65,7 +138,6 @@
         </div>
 
         <div>
-          <!-- <span class="metabutton ui compact mini button">{{ brand.origin }}</span> -->
           <span>{{ brand.origin }}</span>
           <span>·</span>
           <span>{{ brand.category }}</span>
@@ -80,77 +152,9 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="ui items" style="background:none;padding:20px;">
-      <div class="item">
-        <div class="ui image" style="width:160px;height:160px;">
-          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;">
-        </div>
-
-        <div class="content" style="background:none;padding-top:20px">
-          <h3 class="ui header" style="text-transform:capitalize;">
-            {{ brand.fullname_en }}
-            <div class="sub header">{{ brand.fullname_kr }}</div>
-          </h3>
-
-          <div class="meta">
-            <div class="metabutton ui compact mini button">{{ brand.origin }}</div>
-            <a class="metabutton ui compact icon mini button" href="//{{ brand.website }}" target="_blank"><i class="home icon"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div> -->
-  </div>
-
-  <!-- <div class="ui grid text container" style="background:none">
-    <div class="six wide column" style="background:none;padding:0">
-      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:200px;height:200px">
-    </div>
-
-    <div class="ten wide column">
-      <p>{{ brand.fullname_en }} ({{ brand.fullname_kr }})</p>
-      <p>{{ brand.origin }}</p>
-      <p>
-        <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
-      </p>
-    </div>
   </div> -->
 
 
-
-  <!-- <table class="ui selectable celled unstackable very compact small definition table">
-    <tbody>
-      <tr>
-        <td class="right aligned three wide">Name</td>
-        <td class="left aligend thirteen wide">{{ brand.fullname_en }} ({{ brand.fullname_kr }})</td>
-      </tr>
-
-      <tr>
-        <td class="right aligned">Origin</td>
-        <td class="left aligend">{{ brand.origin }}</td>
-      </tr>
-
-      <tr>
-        <td class="right aligned">Description</td>
-        <td class="left aligend">{{ brand.description }}</td>
-      </tr>
-
-      <tr>
-        <td class="right aligned">History</td>
-        <td class="left aligend">{{ brand.history }}</td>
-      </tr>
-
-      <tr>
-        <td class="right aligned">Website</td>
-        <td class="left aligned selectable">
-          <a href="//{{ brand.website }}" target="_blank">
-            {{ brand.website }}
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table> -->
 </div>
 
 
@@ -164,29 +168,6 @@
     </div>
     <br>
   </div>
-
-  <!-- <div class="detailsec ui padded segment">
-    <div class="ui header">Similar brands</div>
-    <div class="content">
-      <div class="ui four doubling brandlist cards">
-        {% for sbrand in brand.simbrands.top %}
-          {% include "app/brand_card.html" with brand=sbrand opt='more' %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
-  <div class="detailsec ui padded segment">
-    <div class="ui header">Different brands</div>
-    <div class="content">
-      <div class="ui four doubling brandlist cards">
-        {% for sbrand in brand.simbrands.bottom %}
-          {% include "app/brand_card.html" with brand=sbrand opt='more' %}
-        {% endfor %}
-      </div>
-    </div>
-  </div> -->
-
 
   <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">Similarity</div>
@@ -236,10 +217,6 @@
     <div class="ui header">Rating history</div>
     <div class="content"></div>
   </div>
-
-  <!-- <div class="detailsec ui padded segment">
-    {% include "app/brand_comment.html" %}
-  </div> -->
 
 </div>
 
