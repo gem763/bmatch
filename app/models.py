@@ -48,7 +48,7 @@ class Brand(models.Model):
     # fan = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.fullname_en.capitalize()
 
     # def get_id(self):
     #     return json.loads(self.identity)
