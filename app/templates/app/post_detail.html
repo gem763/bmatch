@@ -8,50 +8,83 @@
 {% load ctags %}
 <style>
   .hashtag-img:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 0 0px 5px rgba(0,0,0,0.08) !important;
+  }
+
+  .post-menu .item {
+    border-radius: 5px !important;
+    margin: 2px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* background: lightgreen !important; */
+  }
+
+  .overlay {
+    transition: all 0.5s ease;
+  }
+
+  .fixed.overlay {
+    position: fixed;
+    top: 80px !important;
+    /* margin-left: auto !important;
+    margin-right: auto !important; */
+    /* left: 0 !important;
+    right: 0 !important; */
+    /* transform: translateX(-50%) !important; */
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
   }
 </style>
 
-<div class="ui text container segments" style="margin-top:10px;">
+
+
+<div class="body-content ui text container segments" style="margin-top:10px;">
 
   <div class="ui segment">
-    <div class="ui secondary icon menu" style="background:none;">
-      <div class="item" style="background:none;padding:5px;">
-        {% include "app/user_avatar.html" with user=post.user %}
-      </div>
 
-      <div class="right compact menu">
+    <div class="overlay">
+      <div class="post-menu ui secondary icon menu" style="background:none;">
+        <div class="item" style="background:none;padding:5px;">
+          {% include "app/user_avatar.html" with user=post.user %}
+        </div>
 
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;" href="{% url 'editpost' pk=post.pk %}">
-          <i class="edit outline icon"></i>
-        </a>
+        <div class="right compact menu">
 
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="trash alternate outline icon"></i>
-        </a>
+          <a class="item" href="{% url 'editpost' pk=post.pk %}">
+            <i class="large edit outline icon"></i>
+          </a>
 
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="comment alternate outline icon"></i>
-        </a>
+          <a class="item">
+            <i class="large trash alternate outline icon"></i>
+          </a>
 
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <!-- <i class="star outline icon"></i> -->
-          {% if user.is_authenticated and user|likes_this:post %}
-            <i class="bookmark orange icon" style="stroke-width:1px !important;"></i>
-            <!-- <i class="block-like-icon" data-feather="star" style="" state="like"></i> -->
-          {% else %}
-            <i class="bookmark outline icon"></i>
-            <!-- <i class="block-like-icon" data-feather="star" style="" state="dontlike"></i> -->
-          {% endif %}
-        </a>
+          <a class="item">
+            <i class="large comment alternate outline icon"></i>
+          </a>
 
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="share alternate icon"></i>
-        </a>
+          <a class="item">
+            {% if user.is_authenticated and user|likes_this:post %}
+              <i class="large bookmark icon" style="color:rgba(248,0,0,1);stroke-width:1px !important;"></i>
+            {% else %}
+              <i class="large bookmark outline icon"></i>
+            {% endif %}
+          </a>
+
+          <a class="item">
+            <i class="large share alternate icon"></i>
+          </a>
+        </div>
       </div>
     </div>
 
   </div>
+
 
   <div class="ui very padded center aligned segment">
     <div class="content">
@@ -59,13 +92,13 @@
         <img src="{{ post.image.url }}" class="ui centered image">
       </div>
 
-      <div class="ui section divider" style="margin-left:25%;margin-right:25%;"></div>
+      <div class="ui section divider header" style="margin-left:25%;margin-right:25%;"></div>
 
       <div style="word-wrap:break-word;">
         <p>{{ post.content }}</p>
       </div>
 
-      <div class="ui hidden section divider"></div>
+      <div class="ui section divider" style="margin-left:25%;margin-right:25%;"></div>
 
       <div>
         <i class="big hashtag icon"></i>
@@ -83,36 +116,6 @@
   <div class="ui padded segment">
     {% include "app/post_comment.html" %}
   </div>
-
-
-  <div class="ui segment">
-    <div class="ui secondary icon menu" style="background:none;">
-
-      <div class="right compact menu">
-
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="edit outline icon"></i>
-        </a>
-
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="trash alternate outline icon"></i>
-        </a>
-
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="comment alternate outline icon"></i>
-        </a>
-
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="bookmark outline icon"></i>
-        </a>
-
-        <a class="item" style="border-radius:5px;margin:1px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;">
-          <i class="share alternate icon"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <div style="font-size:small;text-align:center;">
@@ -120,6 +123,8 @@
 </div>
 
 {% endblock content %}
+
+
 
 {% block js %}
   {{ block.super }}
@@ -133,5 +138,11 @@
       return false;
     }
   }
+
+  $('.overlay').visibility({
+    type: 'fixed',
+    offset: 15
+  });
+
   </script>
 {% endblock js %}
