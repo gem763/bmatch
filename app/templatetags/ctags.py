@@ -30,3 +30,9 @@ def likes_this(user, what):
     type = what.__class__.__name__.lower()
     likes = profile.get_likes(type)
     return (what in likes)
+
+
+@register.filter
+def post_likes_howmany(what):
+    pass
+    # print(what.post_likes_set.all())
