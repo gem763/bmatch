@@ -1,10 +1,15 @@
+<div class="ui header">
+  <div class="content">
+    Comments
+  </div>
+</div>
+
 <div class="ui comments">
-  <h4 class="ui header">
-    <i class="comment alternate outline icon"></i>
+  <!-- <h4 class="ui header">
     <div class="content">
       Comments
     </div>
-  </h4>
+  </h4> -->
 
   {% for comment in post.commentpost_set.all %}
     <div class="comment" comment-id="{{ comment.pk }}">
