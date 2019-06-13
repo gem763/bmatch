@@ -65,6 +65,7 @@ urlpatterns = [
     path('posts/newpost/', v.newpost, name='newpost'),
     path('posts/detail/<int:pk>/', v.post_detail, name='post_detail'),
     path('posts/detail/<int:pk>/edit/', v.editpost, name='editpost'),
+    path('posts/detail/<int:pk>/delete/', v.deletepost, name='deletepost'),
     path('posts/detail/<int:pk>/commenting/', v.commenting_post, name='commenting_post'),
     path('commentpost_actions/', v.CommentPostActionsView.as_view(), name='commentpost_actions'),
 

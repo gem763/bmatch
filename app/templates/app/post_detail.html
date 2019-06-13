@@ -40,6 +40,13 @@
     padding: 10px;
     border-radius: 5px;
   }
+
+  .post-like-icon[state='like'] {
+    color: rgba(248,0,0,1);
+  }
+
+  .post-like-icon[state='dontlike'] {
+  }
 </style>
 
 
@@ -56,29 +63,41 @@
 
         <div class="right compact menu">
 
+          {% if user.is_authenticated and user == post.user %}
           <a class="item" href="{% url 'editpost' pk=post.pk %}">
             <i class="large edit outline icon"></i>
           </a>
 
-          <a class="item">
+          <!-- 포스트 제거 경고 메시지 띄울것 -->
+          <a class="item" href="{% url 'deletepost' pk=post.pk %}">
             <i class="large trash alternate outline icon"></i>
           </a>
+          {% endif %}
 
           <a class="item">
+            <div class="share-dropdown top right pointing ui dropdown">
+              <i class="large share alternate icon"></i>
+              <div class="menu">
+                <div class="item" data-value="kakaotalk">kakaotalk</div>
+                <div class="item" data-value="facebook">facebook</div>
+                <div class="item" data-value="instagram">instagram</div>
+                <div class="item" data-value="linkurl">link url</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="item" href="#comment">
             <i class="large comment alternate outline icon"></i>
           </a>
 
-          <a class="item">
+          <a class="post-like item" onclick="toggle_like(this)">
             {% if user.is_authenticated and user|likes_this:post %}
-              <i class="large bookmark icon" style="color:rgba(248,0,0,1);stroke-width:1px !important;"></i>
+              <i class="post-like-icon large bookmark icon" state="like"></i>
             {% else %}
-              <i class="large bookmark outline icon"></i>
+              <i class="post-like-icon large bookmark outline icon" state="dontlike"></i>
             {% endif %}
           </a>
 
-          <a class="item">
-            <i class="large share alternate icon"></i>
-          </a>
         </div>
       </div>
     </div>
@@ -98,7 +117,7 @@
         <p>{{ post.content }}</p>
       </div>
 
-      <div class="ui section divider" style="margin-left:25%;margin-right:25%;"></div>
+      <div class="ui hidden section divider" style="margin-left:25%;margin-right:25%;"></div>
 
       <div>
         <i class="big hashtag icon"></i>
@@ -113,7 +132,7 @@
     </div>
   </div>
 
-  <div class="ui padded segment">
+  <div class="ui padded segment" id="comment">
     {% include "app/post_comment.html" %}
   </div>
 </div>
@@ -130,7 +149,8 @@
   {{ block.super }}
 
   <script>
-  feather.replace();
+  // feather.replace();
+  $('.share-dropdown').dropdown();
 
   function empty() {
     var x = document.getElementById("id_comment").value;
@@ -143,6 +163,50 @@
     type: 'fixed',
     offset: 15
   });
+
+
+  function toggle_like(obj) {
+    console.log(1);
+    var icon = $(obj).children(".post-like-icon");
+    var state = icon.attr("state");
+
+    var what = '{{ post.pk }}'
+    var type = 'post';
+    var data;
+
+    if (state=="like") {
+      icon.attr({
+        "state": "dontlike",
+        "class": "post-like-icon large bookmark outline icon"
+      });
+      data = { type:type, dontlike:what };
+
+    } else {
+      icon.attr({
+        "state": "like",
+        "class": "post-like-icon large bookmark icon"
+      });
+      data = { type:type, like:what };
+    };
+
+    update_likes(data);
+  };
+
+
+  function update_likes(data) {
+    $.ajax({
+      url: '/update_likes/',
+      async: true,
+      type: 'GET',
+      data: data,
+      dataType: 'json',
+      success: function(jqXHR) {
+        if (!jqXHR.success) {
+          alert("데이터를 처리하는데 문제가 발생하였습니다.");
+        };
+      }
+    });
+  }
 
   </script>
 {% endblock js %}

@@ -181,6 +181,22 @@ def editpost(request, pk):
             return redirect(obj)
 
 
+def deletepost(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method=='GET':
+        post.delete()
+        return HttpResponseRedirect(reverse('posts'))
+
+
+# def likepost(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#
+#     if request.method=='GET':
+#         post.delete()
+#         return HttpResponseRedirect(reverse('posts'))        
+
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'app/post_detail.html', {'post':post})
