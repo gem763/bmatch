@@ -24,7 +24,6 @@
 
         <div class="field">
           <label>Image upload</label>
-          <!-- <input id="id_image" type="file" name="image" onchange="upload_img(this)"> -->
           {% render_field form.image onchange="upload_img(this)" %}
           <div style="background:none;text-align:center;margin-top:10px;display:none;">
             <img id="img_uploaded" src="#" alt="image uploaded" style="width:80%;height:auto;" />
@@ -37,8 +36,8 @@
         </div>
 
         <div class="field">
-          <label>Hashtags</label>
-          {% render_field form.hashtags class="ui search dropdown" %}
+          <label>Related brands</label>
+          {% render_field form.brands_related class="ui search dropdown" %}
         </div>
 
         <button class="ui button" type="submit">Save</button>
@@ -53,7 +52,37 @@
   {{ block.super }}
 
   <script>
-    $('#id_hashtags').dropdown();
+    $("form").bind("keypress", function(e) {
+      if (e.keyCode == 13) {
+        return false;
+      }
+    });
+
+    $('#id_brands_related').dropdown({
+      onNoResults: function(searchValue) {
+        console.log(searchValue);
+      },
+      // onAdd: function(addedValue, addedText, $addedChoice) {
+      //   return false;
+      // },
+      // onChange: function(value, text, $choice) {
+      //   console.log(value);
+      //   console.log(text);
+      //   console.log($choice);
+      // },
+      // action: function(text, value) {
+      //   console.log($('.sizer').text());
+      //   if ($('.sizer').text() != '') {
+      //     $(this).dropdown('set selected', value);
+      //   }
+      // },
+      showOnFocus: false,
+      // allowAdditions: true,
+      fullTextSearch: true
+      // allowTab: false,
+      // forceSelection: false,
+      // selectOnKeydown: false
+    });
 
     function upload_img(input) {
       if (input.files && input.files[0]) {

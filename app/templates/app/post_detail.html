@@ -5,24 +5,13 @@
 {% endblock menu_top %}
 
 {% block content %}
-{% load ctags %}
 <style>
   .hashtag-img:hover {
     box-shadow: 0 0 0px 5px rgba(0,0,0,0.08) !important;
   }
 
-  /* .post-menu .item {
-    border-radius: 5px !important;
-    margin: 2px !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-  } */
-
-  .menu-item {
+  /* .menu-item { */
+  .post-menu .item {
     border-radius: 20px !important;
     margin: 1px !important;
     width: 40px !important;
@@ -30,61 +19,95 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    /* background: lightblue !important; */
+    position: relative;
   }
 
-  .menu-item-count {
+  .action-counter {
+    position: relative;
+    background: transparent !important;
     border-radius: 20px !important;
-    margin: 1px !important;
-    width: 80px !important;
+    /* width: 80px !important; */
     height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 0 0px 1px rgba(0,0,0,0.1) !important;
+    padding-top: 0 !important;
   }
 
-  .overlay {
+  .action-counter:hover {
+    background: rgba(220, 220, 220, .3) !important;
+  }
+
+  /* .overlay {
     transition: all 0.5s ease;
   }
 
   .fixed.overlay {
     position: fixed;
     top: 80px !important;
-    /* margin-left: auto !important;
-    margin-right: auto !important; */
-    /* left: 0 !important;
-    right: 0 !important; */
-    /* transform: translateX(-50%) !important; */
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     background: white;
     padding: 10px;
     border-radius: 5px;
+  } */
+
+  .action-icon {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: 50%;
+    left: 20px;
+    transform: translate(-50%, -50%);
   }
 
-  .post-like-icon[state='like'] {
-    color: rgba(248,0,0,1);
+  .action-icon-counter {
+    color: black;
+    background: none;
+    height: 40px;
+    padding-left: 15px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  .post-like-icon[state='dontlike'] {
+  [action="post_like"] .action-icon[state='add'] {
+    fill: rgba(248,0,0,1);
+    stroke-width: 2;
+    color: black;
+  }
+
+  [action="post_bookmark"] .action-icon[state='add'] {
+    fill: black;
+    stroke-width: 2;
+    color: black;
+  }
+
+  .brands-related .label {
+    color: white;
+    background: black;
+    font-weight: normal;
   }
 </style>
 
 
-
+{% load widget_tweaks %}
 <div class="body-content ui text container segments" style="margin-top:10px;">
 
-  <div class="ui segment">
+  <div class="ui padded segment">
 
-    <div class="overlay">
+    <!-- <div class="overlay"> -->
       <div class="post-menu ui secondary icon menu" style="background:none;">
         <div class="item" style="background:none;padding:5px;">
           {% include "app/user_avatar.html" with user=post.user %}
         </div>
 
         <div class="right compact menu">
+          <a class="item" action="post_like" onclick="toggle_action(this)">
+            {% include "app/action_icon.html" with action_type="like" obj=post %}
+          </a>
 
-          <a class="menu-item item">
+          <a class="item" action="post_collection" onclick="">
+            {% include "app/action_icon.html" with action_type="collection" obj=post %}
+          </a>
+
+          <a class="item">
             <div class="share-dropdown top right pointing ui dropdown">
               <i class="large share alternate icon"></i>
               <div class="menu">
@@ -96,33 +119,18 @@
             </div>
           </a>
 
-          <!-- <a class="item" href="#comment">
-            <i class="large comment alternate outline icon"></i>
-            <div class="floating ui teal circular mini label" style="transform:translate(-3px,3px)">3</div>
-          </a> -->
-
-          <a class="menu-item post-like item" onclick="toggle_like(this)">
-            {% if user.is_authenticated and user|likes_this:post %}
-              <i class="post-like-icon large bookmark icon" state="like"></i>
-            {% else %}
-              <i class="post-like-icon large bookmark outline icon" state="dontlike"></i>
-            {% endif %}
-            <!-- <div class="floating ui teal circular mini label" style="transform:translate(-3px,3px)">3</div> -->
-          </a>
-
-          <a class="menu-item-count item">
-            <i class="large star outline icon"></i>
-            125
+          <a class="item" action="post_bookmark" onclick="toggle_action(this)">
+            {% include "app/action_icon.html" with action_type="bookmark" obj=post %}
           </a>
 
         </div>
       </div>
-    </div>
+    <!-- </div> -->
 
   </div>
 
 
-  <div class="ui very padded center aligned segment">
+  <div class="ui padded center aligned segment">
     <div class="image">
       <img src="{{ post.image.url }}" class="ui centered image">
     </div>
@@ -131,31 +139,45 @@
 
     <div style="word-wrap:break-word;">
       <p>{{ post.content }}</p>
+
+      <div class="action-counter ui button" action="post_like" onclick="toggle_action(this)" style="margin-left:auto;margin-right:auto;">
+        {% include "app/action_icon.html" with action_type="like" obj=post counter='yes' %}
+      </div>
     </div>
 
+    <!-- <div style="background:yellow;"> -->
+
+    <!-- </div> -->
   </div>
 
 
   <div class="ui padded segment">
-    <div class="ui secondary icon compact menu" style="background:none;width:100%;">
+    <div class="post-menu ui secondary icon compact menu" style="background:none;width:100%;">
       {% if user.is_authenticated and user == post.user %}
-      <a class="menu-item item" href="{% url 'editpost' pk=post.pk %}">
+      <a class="item" href="{% url 'editpost' pk=post.pk %}">
         <i class="large edit outline icon"></i>
       </a>
       {% endif %}
 
       <div class="right compact menu">
-        <a class="menu-item item" href="">
-          <i class="large share alternate icon"></i>
+        <a class="item" action="post_collection" onclick="">
+          {% include "app/action_icon.html" with action_type="collection" obj=post %}
         </a>
 
-        <a class="menu-item item" href="">
-          <i class="large bookmark outline icon"></i>
+        <a class="item">
+          <div class="share-dropdown top right pointing ui dropdown">
+            <i class="large share alternate icon"></i>
+            <div class="menu">
+              <div class="item" data-value="kakaotalk">kakaotalk</div>
+              <div class="item" data-value="facebook">facebook</div>
+              <div class="item" data-value="instagram">instagram</div>
+              <div class="item" data-value="linkurl">link url</div>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item-count item" href="">
-          <i class="large star outline icon"></i>
-          125
+        <a class="item" action="post_bookmark" onclick="toggle_action(this)">
+          {% include "app/action_icon.html" with action_type="bookmark" obj=post %}
         </a>
       </div>
     </div>
@@ -168,6 +190,7 @@
   </div>
 
 
+  {% if post.brands_related.all %}
   <div class="ui padded segment">
     <div class="ui header">
       <div class="content">
@@ -177,28 +200,42 @@
     </div>
 
     <div class="content">
-      {% for hashtag in post.hashtags.all %}
-        <a href="{% url 'brand_detail' hashtag.name %}">
-          <img class="hashtag-img ui circular image" src="{{ hashtag.logo.url }}" alt="{{ hashtag.name }}" style="object-fit:cover;width:50px;height:50px;background:white;display:inline-block;box-shadow:0 0 5px rgba(0,0,0,0.15);margin:3px;">
+      <!-- {% for brand in post.brands_related.all %}
+        <a href="{% url 'brand_detail' brand.name %}">
+          <img class="hashtag-img ui circular image" src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="object-fit:cover;width:50px;height:50px;background:white;display:inline-block;box-shadow:0 0 5px rgba(0,0,0,0.15);margin:3px;">
         </a>
-      {% endfor %}
+      {% endfor %} -->
+
+      <div class="brands-related ui search dropdown selection multiple" style="border:none;background:none;">
+        {% for brand in post.brands_related.all %}
+          <a class="ui label" href="{% url 'brand_detail' brand.name %}">{{ brand }}</a>
+        {% endfor %}
+      </div>
     </div>
   </div>
+  {% endif %}
 
 
   <div class="ui padded segment" id="comment">
     {% include "app/post_comment.html" %}
   </div>
 
-  <div class="ui padded segment">
-    {% if user.is_authenticated and user == post.user %}
-    <a class="ui icon button" href="{% url 'deletepost' pk=post.pk %}">
-      <i class="large trash alternate outline icon"></i>
-    </a>
-    {% endif %}
+  <div class="ui right aligned segment">
+    <div class="post-master-dropdown ui icon top right pointing dropdown compact button" style="background:none;">
+      <i class="ellipsis horizontal icon"></i>
+      <div class="menu">
+        {% if user.is_authenticated and user == post.user %}
+        <div class="item" onclick="ask_delete_post('{{post.pk}}')">포스트 삭제하기</div>
+        {% endif %}
+        <div class="item">신고하기</div>
+        <div class="item">추가정보</div>
+      </div>
+    </div>
   </div>
 
 </div>
+
+{% include "app/more_info.html" %}
 
 <div style="font-size:small;text-align:center;">
   created at {{ post.created_at }}
@@ -212,14 +249,21 @@
   {{ block.super }}
 
   <script>
-  $('.share-dropdown').dropdown();
+  feather.replace();
 
-  function empty() {
-    var x = document.getElementById("id_comment").value;
-    if (x == "") {
-      return false;
-    }
-  }
+  $('.share-dropdown').dropdown();
+  $('.post-master-dropdown').dropdown({
+    direction: 'upward',
+    action: 'hide'
+  });
+
+  function ask_delete_post(post_pk) {
+    open_more_info('#delete-post', post_pk);
+  };
+
+  function ask_delete_commentpost(comment_pk) {
+    open_more_info('#delete-commentpost', comment_pk);
+  };
 
   // $('.overlay').visibility({
   //   type: 'fixed',
@@ -227,37 +271,31 @@
   // });
 
 
-  function toggle_like(obj) {
-    console.log(1);
-    var icon = $(obj).children(".post-like-icon");
-    var state = icon.attr("state");
+  function toggle_action(obj) {
+    var action = $(obj).attr("action");
+    // var icon = $(obj).children(".action-icon");
+    var icons = $('[action=' + action + ']').children(".action-icon");
+    var state = icons.attr("state");
 
-    var what = '{{ post.pk }}'
-    var type = 'post';
+    var what = '{{ post.pk }}';
     var data;
 
-    if (state=="like") {
-      icon.attr({
-        "state": "dontlike",
-        "class": "post-like-icon large bookmark outline icon"
-      });
-      data = { type:type, dontlike:what };
+    if (state=="add") {
+      icons.attr("state", "remove");
+      data = { action:action, remove:what };
 
-    } else {
-      icon.attr({
-        "state": "like",
-        "class": "post-like-icon large bookmark icon"
-      });
-      data = { type:type, like:what };
+    } else if (state=='remove') {
+      icons.attr("state", "add");
+      data = { action:action, add:what };
     };
 
-    update_likes(data);
+    update_actions(data);
   };
 
 
-  function update_likes(data) {
+  function update_actions(data) {
     $.ajax({
-      url: '/update_likes/',
+      url: '/actions/',
       async: true,
       type: 'GET',
       data: data,
@@ -269,6 +307,5 @@
       }
     });
   }
-
   </script>
 {% endblock js %}

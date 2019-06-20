@@ -1,0 +1,112 @@
+<style>
+  .more-info {
+    background: transparent;
+    position: fixed;
+    top: 100%;
+    width: 100%;
+    transition: top 0.5s;
+  }
+
+  .more-info .actions .button {
+    background: none;
+  }
+
+  .more-info .actions .button:hover {
+    background: rgba(220, 220, 220, .3) !important;
+  }
+
+  .more-info-container {
+    background: transparent;
+    padding: 20px;
+  }
+
+  .more-info .message {
+    box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+  }
+
+
+</style>
+
+<div class="more-info" id="delete-post">
+  <div class="more-info-container ui text container">
+    <div class="ui icon small floating message">
+      <i class="trash alternate icon"></i>
+      <!-- <i class="close icon"></i> -->
+      <div class="content">
+        <div class="header">
+          포스트를 삭제하시려구요?
+        </div>
+        <p>삭제한 포스트는 복구할 수 없어요, 신중신중..</p>
+      </div>
+      <div class="actions">
+        <!-- <a class="delete ui button" href="{% url 'deletepost' pk=post.pk %}">삭제</a> -->
+        <a class="delete ui button" onclick="delete_post(this)">삭제</a>
+        <a class="cancel ui button" onclick="close_more_info(this)">취소</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="more-info" id="delete-commentpost">
+  <div class="more-info-container ui text container">
+    <div class="ui icon small floating message">
+      <div class="content">
+        <div class="header">
+          댓글을 삭제합니다
+        </div>
+      </div>
+      <div class="actions">
+        <!-- <a class="delete ui button" href="{% url 'deletepost' pk=post.pk %}">삭제</a> -->
+        <a class="delete ui button" onclick="delete_commentpost(this)">삭제</a>
+        <a class="cancel ui button" onclick="close_more_info(this)">취소</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function delete_post(obj) {
+    var post_pk = $(obj).closest('.more-info').attr('pk');
+    var url = '/posts/' + post_pk + '/delete/'
+    window.location.assign(url);
+  };
+
+  function delete_commentpost(obj) {
+    var comment_pk = $(obj).closest('.more-info').attr('pk');
+
+    $.ajax({
+      url: {% url 'commentpost_actions' %},
+      async: true,
+      type: 'GET',
+      data: {
+        pk: comment_pk,
+        action: 'delete'
+      },
+      dataType: 'json',
+      success: function(jqXHR) {
+        if (!jqXHR.success) {
+          alert("데이터를 처리하는데 문제가 발생하였습니다.");
+        } else {
+          var ele = ".comment[comment-id='" + comment_pk + "']"
+          $(ele).remove();
+        };
+      }
+    });
+
+    close_more_info(obj);
+  };
+
+  function open_more_info(what, pk) {
+    var panel_h = $(what).height();
+    $(what).css('top', '-=' + panel_h + 'px');
+
+    if (pk) {
+      $(what).attr('pk', pk);
+    };
+  };
+
+  function close_more_info(obj) {
+    $(obj).closest('.more-info').css('top', '100%');
+  };
+</script>

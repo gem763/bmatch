@@ -5,31 +5,43 @@
 {% endblock menu_top %}
 
 {% block content %}
-<!-- <style>
-  .pcard {
-    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
-    cursor: pointer;
-    overflow: hidden;
-  }
-
-  .pcard:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
-  }
-</style> -->
 
 <div class="ui text container segments" style="margin-top:10px;border:none;">
 
-  <div class="detailsec ui padded center aligned segment" style="border:none;">
-    <div class="ui centered circular blurring dimmable image" id="profile_image">
-      <div class="ui dimmer">
-        <div class="content">
-          <div class="center">
-            <div class="ui inverted button">바꾸기</div>
+  <div class="detailsec ui very padded center aligned segment" style="border:none;">
+
+    <div class="ui middle aligned grid" style="background:none;">
+      <div class="seven wide right aligned column" style="background:none;">
+        <div class="ui centered circular blurring dimmable image" id="profile_image">
+          <div class="ui dimmer">
+            <div class="content">
+              <div class="center">
+                <div class="ui inverted button">바꾸기</div>
+              </div>
+            </div>
           </div>
+          <img class="ui centered circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:150px;height:150px;">
         </div>
       </div>
-      <img class="ui centered circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:150px;height:150px;">
+
+      <div class="two wide column" style="background:none;">
+        <i data-feather="aperture" style="width:50px;height:50px;"></i>
+      </div>
+
+      <div class="seven wide left aligned column" style="background:none">
+        <div class="ui centered circular blurring dimmable image" id="soulbrand_image">
+          <div class="ui dimmer">
+            <div class="content">
+              <div class="center">
+                <a class="ui inverted button" href="{% url 'myfavorite' %}">바꾸기</a>
+              </div>
+            </div>
+          </div>
+          <img class="ui centered circular image" src="{{ myfavorite.logo.url }}" style="object-fit:contain;width:150px;height:150px;">
+        </div>
+      </div>
     </div>
+
 
     <h2>{{ user.socialaccount_set.all.0.extra_data.name }}</h2>
     <p>
@@ -37,36 +49,13 @@
       {{ user.socialaccount_set.all.0.get_provider_display }} 아이디로 로그인
     </p>
 
-    <!-- <div class="ui horizontal segments">
-      <div class="ui segment">
-        <div class="ui small statistic">
-          <div class="value">39</div>
-          <div class="label">브랜드</div>
-        </div>
-      </div>
-
-      <div class="ui segment">
-        <div class="ui small statistic">
-          <div class="value">10</div>
-          <div class="label">포스트</div>
-        </div>
-      </div>
-
-      <div class="ui segment">
-        <div class="ui small statistic">
-          <div class="value">3</div>
-          <div class="label">커뮤니티</div>
-        </div>
-      </div>
-    </div> -->
-
   </div>
 
 
   <div class="detailsec ui padded segment" style="border:none;">
-    <div class="ui header">My favorite</div>
+    <div class="ui header">Soul brand</div>
     <div class="content">
-      {% include "app/block.html" with brand=myfavorite %}
+      <!-- include "app/block.html" with brand=myfavorite -->
     </div>
     <br>
   </div>
@@ -179,6 +168,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
   <script>
+    feather.replace();
     load_blocks('#myposts', "{% url 'blocks' %}?type=posts&screen=my");
 
     // $(window).resize(function(){
@@ -195,7 +185,7 @@
     // };
 
 
-    $('#profile_image').dimmer({
+    $('#profile_image, #soulbrand_image').dimmer({
       on: 'hover'
     });
 

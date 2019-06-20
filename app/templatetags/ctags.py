@@ -19,18 +19,27 @@ def of_name(namepair):
     return Brand.objects.filter(name__in=namepair)
 
 
+@register.filter
+def of_name2(bname):
+    return Brand.objects.get(name=bname)
+
 # @register.filter
-# def liked(user, brand):
+# def likes_this(user, what):
 #     profile = Profile.objects.get(user__email=user.email)
-#     return (brand.name in profile.get_likes2())
+#     type = what.__class__.__name__.lower()
+#     likes = profile.get_likes(type)
+#     return (what in likes)
+
 
 @register.filter
-def likes_this(user, what):
+def like_this(user, obj):
     profile = Profile.objects.get(user__email=user.email)
-    type = what.__class__.__name__.lower()
-    likes = profile.get_likes(type)
-    return (what in likes)
+    return profile.like_this(obj)
 
+@register.filter
+def bookmark_this(user, obj):
+    profile = Profile.objects.get(user__email=user.email)
+    return profile.bookmark_this(obj)
 
 @register.filter
 def post_likes_howmany(what):

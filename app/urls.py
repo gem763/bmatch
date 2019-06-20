@@ -33,13 +33,8 @@ urlpatterns = [
     path('', v.home, name='home'),
     path('discover/', v.discover, name='discover'),
     path('library/', v.library, name='library'),
-    # path('library/', v.LibraryView.as_view(), name='library'),
-    # path('discover/', discover),
-    #path('searched/', searched),
     path('searched/', v.BrandListView.as_view()),
-    #path('rating/', rating),
     path('db_update/<category>/', v.db_update),
-    # path('rating/', v.rating),
     path('rating/', v.RatingView.as_view(), name='rating'),
     path('myfavorite/', v.myfavorite, name='myfavorite'),
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
@@ -59,19 +54,18 @@ urlpatterns = [
     path('level_test/', v.level_test, name='level_test'),
     path('update_likes/', v.UpdateLikesView.as_view(), name='update_likes'),
     path('update_myfavorite/', v.UpdateMyfavoriteView.as_view(), name='update_myfavorite'),
+    path('actions/', v.ActionsView.as_view(), name='actions'), 
 
     path('posts/', v.posts, name='posts'),
     # path('posts/sub/', v.posts_sub, name='posts_sub'),
     path('posts/newpost/', v.newpost, name='newpost'),
-    path('posts/detail/<int:pk>/', v.post_detail, name='post_detail'),
-    path('posts/detail/<int:pk>/edit/', v.editpost, name='editpost'),
-    path('posts/detail/<int:pk>/delete/', v.deletepost, name='deletepost'),
-    path('posts/detail/<int:pk>/commenting/', v.commenting_post, name='commenting_post'),
+    path('posts/<int:pk>/', v.post_detail, name='post_detail'),
+    path('posts/<int:pk>/edit/', v.editpost, name='editpost'),
+    path('posts/<int:pk>/delete/', v.deletepost, name='deletepost'),
+    path('posts/<int:pk>/commenting/', v.commenting_post, name='commenting_post'),
     path('commentpost_actions/', v.CommentPostActionsView.as_view(), name='commentpost_actions'),
 
     path('blocks/', v.blocks, name='blocks'),
-    # path('blocks2/', v.blocks2, name='blocks2'),
-
     # path('search/<qry>/', v.search, name='search'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

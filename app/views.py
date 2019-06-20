@@ -189,14 +189,6 @@ def deletepost(request, pk):
         return HttpResponseRedirect(reverse('posts'))
 
 
-# def likepost(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#
-#     if request.method=='GET':
-#         post.delete()
-#         return HttpResponseRedirect(reverse('posts'))        
-
-
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'app/post_detail.html', {'post':post})
@@ -433,6 +425,20 @@ class UpdateMyfavoriteView(View):
             return JsonResponse({'success':False})
 
 
+class ActionsView(View):
+    def get(self, request):
+        try:
+            action = request.GET.get('action', None)
+            add = request.GET.get('add', None)
+            remove = request.GET.get('remove', None)
+            profile = Profile.objects.get(user__email=request.user.email)
+            profile.update_actions(action, add=add, remove=remove)
+            return JsonResponse({'success':True})
+
+        except:
+            return JsonResponse({'success':False})
+
+
 class UpdateLikesView(View):
     def get(self, request):
         try:
@@ -461,29 +467,6 @@ class UpdateLikesView(View):
 
         except:
             return JsonResponse({'success':False})
-
-
-# class SaveLikeView(View):
-#     def get(self, request):
-#         try:
-#             like = request.GET.get('like', None)
-#             dontlike = request.GET.get('dontlike', None)
-#             profile = Profile.objects.get(user__email=request.user.email)
-#             likes_list = profile.get_likes2()
-#
-#             if (like is not None) and (dontlike is None):
-#                 likes_list.append(like)
-#
-#             elif (like is None) and (dontlike is not None):
-#                 if dontlike in likes_list:
-#                     likes_list.remove(dontlike)
-#
-#             profile.likes = ','.join(set(likes_list))
-#             profile.save()
-#             return JsonResponse({'success':True})
-#
-#         except:
-#             return JsonResponse({'success':False})
 
 
 class SaveWorldcupView(View):

@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('image', 'content', 'hashtags', )
+        fields = ('image', 'content', 'brands_related', )
 
 
 class CommentPostForm(forms.ModelForm):

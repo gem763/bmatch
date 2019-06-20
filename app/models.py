@@ -45,7 +45,6 @@ class Brand(models.Model):
     logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
     # identity = models.TextField(default='{}', blank=True, null=True)
     # cluster = models.CharField(max_length=50, blank=True, null=True)
-    # fan = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
     def __str__(self):
         return self.fullname_en.capitalize()
@@ -62,7 +61,8 @@ class Post(models.Model):
     # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    hashtags = models.ManyToManyField(Brand, blank=True)
+    # hashtags = models.ManyToManyField(Brand, blank=True)
+    brands_related = models.ManyToManyField(Brand, blank=True)
 
     def __str__(self):
         return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
@@ -71,29 +71,78 @@ class Post(models.Model):
         url = reverse_lazy('post_detail', kwargs={'pk':self.pk})
         return url
 
-    # def delete(self, *args, **kwargs):
-    #     self.image.delete()
-    #     # self.filtered_image.delete()
-    #     super(Photo, self).delete(*args, **kwargs)
-
-
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     worldcup = models.TextField(blank=True, null=True, default='{}')
-    likes = models.TextField(blank=True, null=True)
     initial_awared = models.TextField(blank=True, null=True)
     # awareness = models.TextField(blank=True, null=True, default='{}')
-    brand_likes = models.ManyToManyField(Brand, blank=True)
-    post_likes = models.ManyToManyField(Post, blank=True)
+
+    brand_likes = models.ManyToManyField(Brand, blank=True, related_name='brand_likes_set')
+    post_likes = models.ManyToManyField(Post, blank=True, related_name='post_likes_set')
+    brand_bookmarks = models.ManyToManyField(Brand, blank=True, related_name='brand_bookmarks_set')
+    post_bookmarks = models.ManyToManyField(Post, blank=True, related_name='post_bookmarks_set')
+
     myfavorite = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL, related_name='myfavorite_set')
     level_tested = models.ManyToManyField(Brand, blank=True, related_name='leveltested_set')
 
     def __str__(self):
         return self.user.email
 
-    def get_likes2(self):
-        return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
+    # def get_likes2(self):
+    #     return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
+
+    def update_actions(self, action, add=None, remove=None):
+        if action=='brand_like':
+            pool = self.brand_likes
+            obj = Brand.objects
+
+        elif action=='brand_bookmark':
+            pool = self.brand_bookmarks
+            obj = Brand.objects
+
+        elif action=='post_like':
+            pool = self.post_likes
+            obj = Post.objects
+
+        elif action=='post_bookmark':
+            pool = self.post_bookmarks
+            obj = Post.objects
+
+        if (add is not None) and (remove is None):
+            pool.add(obj.get(pk=add))
+
+        elif (add is None) and (remove is not None):
+            pool.remove(obj.get(pk=remove))
+
+    def get_actions(self, action, pk=None):
+        if action=='brand_like':
+            actions = self.brand_likes
+
+        elif action=='brand_bookmark':
+            actions = self.brand_bookmarks
+
+        elif action=='post_like':
+            actions = self.post_likes
+
+        elif action=='post_bookmark':
+            actions = self.post_bookmarks
+
+        if pk is None:
+            return actions.all()
+
+        else:
+            return actions.get(pk=pk)
+
+    def like_this(self, obj):
+        type = obj.__class__.__name__.lower()
+        action = type + '_like'
+        return self.get_actions(action, pk=obj.pk) is not None
+
+    def bookmark_this(self, obj):
+        type = obj.__class__.__name__.lower()
+        action = type + '_bookmark'
+        return self.get_actions(action, pk=obj.pk) is not None
 
     def get_likes(self, type):
         if type=='brand':

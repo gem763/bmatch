@@ -1,64 +1,73 @@
-<div class="ui header">
+<style>
+  #id_comment:focus {
+    background: lightyellow !important;
+  }
+</style>
+
+<div class="ui header" style="background:none;">
   <div class="content">
     Comments
   </div>
 </div>
 
-<div class="ui comments">
-  <!-- <h4 class="ui header">
-    <div class="content">
-      Comments
-    </div>
-  </h4> -->
+<div class="ui comments" style="background:none;max-width:none;">
 
   {% for comment in post.commentpost_set.all %}
-    <div class="comment" comment-id="{{ comment.pk }}">
-      <a class="avatar">
+    <div class="comment" comment-id="{{ comment.pk }}" style="position:relative;background:none;padding:0;">
+      <!-- <a class="">
         {% include "app/user_avatar.html" with user=comment.user %}
-      </a>
+      </a> -->
 
-      <div class="content">
-        <a class="author">{{ comment.user.email }}</a>
-        <div class="metadata">
+      <!-- <div class="content"> -->
+
+        <div class="text" style="background:none;margin-top:0;">
+          <textarea readonly rows="1" class="other-comments" style="background:none;height:auto;width:100%;resize:none;overflow-y:hidden;border:none;padding-left:60px;padding-right:10px;padding-top:30px;padding-bottom:10px;line-height:1.3em;">{{ comment.content }}</textarea>
+        </div>
+
+        <div style="position:absolute;top:10px;left:10px;">
+          {% include "app/user_avatar.html" with user=comment.user %}
+        </div>
+
+        <!-- <a class="author" style="position:absolute;top:0;">{{ comment.user.email }}</a> -->
+        <div class="metadata" style="position:absolute;top:10px;left:55px;">
           <span class="date">{{ comment.created_at }}</span>
         </div>
-        <div class="text">{{ comment.content }}</div>
-        <div class="actions">
-          <a class="reply">Reply</a>
+
+        <div class="actions" style="position:absolute;top:10px;right:10px;">
+          <a class="like"><i class="star outline icon" style="width:15px;background:none;margin:0px;"></i></a>
+          <a class="reply"><i class="comment outline icon" style="width:15px;background:none;margin:0px;"></i></a>
           {% if user == comment.user %}
-          <a class="edit" onclick="edit_commentpost(this)">Edit</a>
-          <a class="delete" onclick="delete_commentpost('{{comment.pk}}')">Delete</a>
+          <a class="edit" onclick="edit_commentpost(this)"><i class="edit outline icon" style="width:15px;background:none;margin:0px;"></i></a>
+          <a class="delete" onclick="ask_delete_commentpost('{{comment.pk}}')"><i class="trash alternate outline icon" style="width:15px;background:none;margin:0px;"></i></a>
+          <!-- <a class="delete" onclick="delete_commentpost('{{comment.pk}}')"><i class="trash alternate outline icon" style="width:15px;background:none;margin:0px;"></i></a> -->
           {% endif %}
         </div>
-      </div>
+      <!-- </div> -->
     </div>
   {% endfor %}
 
-  {% if user.is_authenticated %}
-  <div class="comment" style="margin-top:30px;">
-    <!-- <a class="avatar" style="position:absolute;background:red;border-radius:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;" href="#"> -->
-    <a class="avatar" style="position:absolute;" href="#">
-      {% include "app/user_avatar.html" with user=user %}
-    </a>
-
-    <div class="content" style="background:none;">
-      <form class="ui reply form" method="post" action="{% url 'commenting_post' post.pk %}" style="background:none;margin-top:0px;">
-        {% csrf_token %}
-        <div class="field">
-          <textarea rows="2" id="id_comment" name="content" style="height:45px;padding-right:100px;"></textarea>
-        </div>
-        <button class="ui compact submit icon right floated button" onclick="return empty()">
-          <i class="paper plane outline icon"></i>
-        </button>
-      </form>
-      <br><br>
-    </div>
-  </div>
-
-  {% else %}
-  {% endif %}
-
 </div>
+
+
+{% if user.is_authenticated %}
+<form class="ui reply form" method="post" action="{% url 'commenting_post' post.pk %}" style="background:none;">
+  {% csrf_token %}
+  <div class="field" style="background:none;position:relative;">
+    <textarea rows="1" id="id_comment" name="content" style="resize:none;background:none;padding-left:60px;padding-right:60px;height:auto;overflow-y:hidden;border:none;min-height:50px;line-height:1.3em;" placeholder="Comment here" oninput="show_commenting(this)"></textarea>
+
+    <div style="position:absolute;top:10px;left:10px;">
+      {% include "app/user_avatar.html" with user=post.user %}
+    </div>
+
+    <!-- <button class="commenting ui compact submit icon button" onclick="return empty()" style="position:absolute;bottom:10px;right:10px;"> -->
+    <button class="commenting ui compact submit icon button" style="position:absolute;bottom:10px;right:10px;background:none;opacity:0;">
+      <i class="comment alternate large icon"></i>
+    </button>
+  </div>
+</form>
+
+{% else %}
+{% endif %}
 
 
 <div class="ui tiny edit_commentpost modal">
@@ -101,6 +110,42 @@
 </div>
 
 <script>
+  function show_commenting(textarea) {
+    var commenting = $(textarea).siblings(".commenting")
+
+    if (textarea.value.length > 0) {
+      commenting.css({
+        "opacity": 1,
+        "transition": "opacity 1s ease"
+      });
+    } else {
+      commenting.css({
+        "opacity": 0,
+        "transition": "opacity 1s ease"
+      });
+    }
+  };
+
+  function empty() {
+    var x = document.getElementById("id_comment").value;
+    if (x == "") {
+      return false;
+    }
+  }
+
+  $('#id_comment').each(function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  }).on('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  });
+
+  $('.other-comments').each(function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  });
+
   function edit_commentpost(edit_link) {
     $('.edit_commentpost.modal').modal('show');
     // console.log(1);

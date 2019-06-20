@@ -1,0 +1,27 @@
+{% load ctags %}
+
+{% if action_type == 'like' %}
+  {% if user.is_authenticated and user|like_this:obj %}
+    <i class="action-icon" state="add" data-feather="star"></i>
+  {% else %}
+    <i class="action-icon" state="remove" data-feather="star"></i>
+  {% endif %}
+
+{% elif action_type == 'bookmark' %}
+  {% if user.is_authenticated and user|bookmark_this:obj %}
+    <i class="action-icon" state="add" data-feather="bookmark"></i>
+  {% else %}
+    <i class="action-icon" state="remove" data-feather="bookmark"></i>
+  {% endif %}
+
+{% elif action_type == 'collection' %}
+  {% if user.is_authenticated and user|bookmark_this:obj %}
+    <i class="action-icon" state="add" data-feather="folder-plus"></i>
+  {% else %}
+    <i class="action-icon" state="remove" data-feather="folder-plus"></i>
+  {% endif %}
+{% endif %}
+
+{% if counter == 'yes' %}
+  <div class="action-icon-counter">1346352000</div>
+{% endif %}
