@@ -48,12 +48,13 @@
 {% load el_pagination_tags %}
 {% lazy_paginate 10,5 pairs %}
 {% for pair in pairs %}
-<div class="rating_pair" style="position:relative;width:100%;">
+<div class="rating_pair" style="position:relative;width:100%;background:lightgreen;margin-bottom:20px;height:180px;">
 
-  <div class="ui horizontal segments">
+  <div class="ui horizontal segments" style="border:none;box-shadow: 0 0 5px rgba(0,0,0,0.15) !important;">
     {% for brand in pair|of_name %}
-    <div class="ui center aligned segment" bname="{{ brand.name }}" selected="0" onclick="like_this_more(this)" onmouseover="worldcup_mouseover(this)" onmouseout="worldcup_mouseout(this)">
+    <div class="ui center aligned segment" style="position:relative;border:none;height:180px !important;" bname="{{ brand.name }}" selected="0" onclick="like_this_more(this)" onmouseover="worldcup_mouseover(this)" onmouseout="worldcup_mouseout(this)">
       <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+      <a href="{% url 'brand_detail' brand.name %}" style="position:absolute;bottom:0;right:0;">알아보기</a>
       <i class="rating massive heart outline icon"></i>
     </div>
     {% endfor %}
@@ -62,7 +63,9 @@
   <!-- include "app/block.html" with brand=pair.0|of_name2 -->
 
   <div class="rating_close"><i class="rating_close_icon close circular icon" onclick="remove_this_rating(this)"></i></div>
-  <img src="{% static 'layout/vs.png' %}" style="position:absolute;transform:translate(-50%,-50%);top:50%;left:50%;"></img>
+  <!-- <img src="{% static 'layout/vs.png' %}" style="position:absolute;transform:translate(-50%,-50%);top:50%;left:50%;"></img> -->
+  <!-- <i data-feather="zap" style="position:absolute;transform:translate(-50%,-50%);top:50%;left:50%;background:orange;"></i> -->
+  <i data-feather="zap" style="position:absolute;transform:translate(-50%,-50%);top:50%;left:50%;background:None;width:50px;height:50px;"></i>
 </div>
 {% endfor %}
 {% show_more %}
