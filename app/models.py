@@ -31,6 +31,12 @@ class Option(models.Model):
         return self.optname
 
 
+class Hashtag(models.Model):
+    hashtag = models.CharField(max_length=120)
+    def __str__(self):
+        return self.hashtag
+
+
 class Brand(models.Model):
     name = models.CharField(max_length=120)
     fullname_kr = models.CharField(max_length=120, blank=True, null=True)
@@ -52,7 +58,6 @@ class Brand(models.Model):
     # def get_id(self):
     #     return json.loads(self.identity)
         # return {i['key']:i['value'] for i in json.loads(self.identity)}
-
 
 
 class Post(models.Model):
@@ -247,3 +252,15 @@ class CommentPost(models.Model):
     def get_absolute_url(self):
         url = reverse_lazy('post_detail', kwargs={'pk':self.post.pk})
         return url
+
+
+# class Feed(models.Model):
+#     membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
+#     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     nlikes = models.IntegerField(default='0')
+#     content = models.TextField(max_length=1000, null=True, blank=True)
+#     hashtags = models.ManyToManyField(Hashtag, blank=True)
+#
+#     def __str__(self):
+#         return '{timestamp} {author}'.format(timestamp=self.timestamp, author=self.author)
