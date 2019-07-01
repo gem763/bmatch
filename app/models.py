@@ -79,6 +79,8 @@ class Post(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    profile_image = models.ImageField(default='')
+
     worldcup = models.TextField(blank=True, null=True, default='{}')
     initial_awared = models.TextField(blank=True, null=True)
     # awareness = models.TextField(blank=True, null=True, default='{}')
