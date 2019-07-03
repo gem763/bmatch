@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Brand, Profile, Option, Post, CommentBrand, CommentPost, Hashtag#, Feed
+from app.models import Brand, Profile, Option, Post, CommentBrand, CommentPost, Hashtag, Feed
 # from custom_user.admin import EmailUserAdmin
 # from .models import MyUser
 
@@ -16,9 +16,10 @@ from app.models import Brand, Profile, Option, Post, CommentBrand, CommentPost, 
 # admin.site.register(MyUser, MyUserAdmin)
 # Register your models here.
 
-# class FeedAdmin(admin.ModelAdmin):
-#     raw_id_fields = ('hashtags', 'membership', 'author', )
-#     readonly_fields = ('timestamp',)
+class FeedAdmin(admin.ModelAdmin):
+    # raw_id_fields = ('hashtags', 'membership', 'author', )
+    raw_id_fields = ('hashtags', 'author', )
+    readonly_fields = ('timestamp',)
 
 
 admin.site.register(Brand)
@@ -28,4 +29,4 @@ admin.site.register(Post)
 admin.site.register(CommentBrand)
 admin.site.register(CommentPost)
 admin.site.register(Hashtag)
-# admin.site.register(Feed, FeedAdmin)
+admin.site.register(Feed, FeedAdmin)

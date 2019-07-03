@@ -256,13 +256,18 @@ class CommentPost(models.Model):
         return url
 
 
-# class Feed(models.Model):
-#     membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
-#     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
-#     timestamp = models.DateTimeField(auto_now_add=True)
-#     nlikes = models.IntegerField(default='0')
-#     content = models.TextField(max_length=1000, null=True, blank=True)
-#     hashtags = models.ManyToManyField(Hashtag, blank=True)
-#
-#     def __str__(self):
-#         return '{timestamp} {author}'.format(timestamp=self.timestamp, author=self.author)
+def feed_image_path(instance, filename):
+    return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
+
+
+class Feed(models.Model):
+    membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    nlikes = models.IntegerField(default='0')
+    content = models.TextField(max_length=1000, null=True, blank=True)
+    hashtags = models.ManyToManyField(Hashtag, blank=True)
+    feed_image = models.ImageField(upload_to=feed_image_path)
+
+    def __str__(self):
+        return '{timestamp} {author}'.format(timestamp=self.timestamp, author=self.author)
