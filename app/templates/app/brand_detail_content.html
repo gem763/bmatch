@@ -49,6 +49,12 @@
     transform: translate(-50%, -50%);
   }
 
+  [action="feed_like"] .action-icon[state='add'] {
+    fill: rgba(248,0,0,1);
+    stroke-width: 2;
+    color: black;
+  }
+
   .hashtag.label {
     color: black;
     background: whitesmoke;
@@ -129,7 +135,7 @@
       </div>
 
       <div class="right compact menu">
-        <a class="item" action="post_like" onclick="toggle_action(this)">
+        <a class="item" action="feed_like" onclick="toggle_action(this)">
           {% include "app/action_icon.html" with action_type="like" obj=post %}
         </a>
 

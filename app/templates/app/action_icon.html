@@ -2,9 +2,9 @@
 
 {% if action_type == 'like' %}
   {% if user.is_authenticated and user|like_this:obj %}
-    <i class="action-icon" state="add" data-feather="star"></i>
+    <i class="action-icon" state="add" data-feather="heart"></i>
   {% else %}
-    <i class="action-icon" state="remove" data-feather="star"></i>
+    <i class="action-icon" state="remove" data-feather="heart"></i>
   {% endif %}
 
 {% elif action_type == 'bookmark' %}

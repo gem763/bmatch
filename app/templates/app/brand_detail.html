@@ -97,7 +97,30 @@
   <!-- <script src="{% static 'js/RadarChart.js' %}"></script> -->
   <script src="{% static 'js/radarChart.js' %}"></script>
 
-  
+  <script>
+    function toggle_action(obj) {
+      var action = $(obj).attr("action");
+      var icons = $(obj).children(".action-icon");
+      // var icons = $('[action=' + action + ']').children(".action-icon");
+      var state = icons.attr("state");
+
+      var what = '{{ post.pk }}';
+      var data;
+
+      if (state=="add") {
+        icons.attr("state", "remove");
+        data = { action:action, remove:what };
+
+      } else if (state=='remove') {
+        icons.attr("state", "add");
+        data = { action:action, add:what };
+      };
+
+      // update_actions(data);
+    };
+  </script>
+
+
   <!-- <script>
     load_blocks('#similarity', "{% url 'blocks' %}?type=simbrands&bname={{ brand.name }}");
     $('.bookmark-dropdown').dropdown();
