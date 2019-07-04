@@ -28,6 +28,32 @@
   .metabutton:hover {
     background: rgba(220, 220, 220, .2) !important;
   }
+
+  .feed-menu .item {
+    border-radius: 20px !important;
+    margin: 1px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative;
+  }
+
+  .action-icon {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: 50%;
+    left: 20px;
+    transform: translate(-50%, -50%);
+  }
+
+  .hashtag.label {
+    color: black;
+    background: whitesmoke;
+    font-weight: normal;
+  }
 </style>
 
 <div style="position:fixed;top:50%;z-index:100">
@@ -35,7 +61,6 @@
 </div>
 
 
-<!-- <div class="ui fluid container" style="height:200px;background:white;margin-top:0px;"> -->
 <div style="width:100%;background:none;">
   <div class="ui text container" style="background:none;position:relative;padding:20px;">
     <div class="ui unstackable items" style="background:none;margin:0;">
@@ -81,85 +106,70 @@
     </div>
   </div>
 
-    <!-- <div class="six wide middle aligned column" style="background:none;">
-      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:160px;height:160px;">
-    </div>
-
-    <div class="ten wide middle aligned column" style="background:none;">
-      <div class="content" style="background:none;">
-        <div class="ui huge header" style="text-transform:capitalize;">
-          <div>
-            {{ brand.fullname_en }}
-            <div class="sub header">{{ brand.fullname_kr }}</div>
-          </div>
-        </div>
-
-        <div>
-          <span>{{ brand.origin }}</span>
-          <span>·</span>
-          <span>{{ brand.category }}</span>
-        </div>
-
-        <div>
-          <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
-        </div>
-
-        <div>
-          어쩌고저쩌고...
-        </div>
-      </div>
-    </div> -->
-
-
-  <!-- <div class="ui grid text container" style="background:none;height:100%;position:relative">
-    <div style="background:none;position:absolute;right:5%;top:15%;z-index:100;">
-      <div class="bookmark-dropdown top right pointing ui dropdown">
-        <input type="hidden" name="filters">
-        <i class="bookmark big yellow icon"></i>
-        <div class="menu">
-          <div class="item" data-value="favorite">favorite</div>
-          <div class="item" data-value="interest">interest</div>
-          <div class="item" data-value="collection">collection</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="six wide middle aligned column" style="background:none;">
-      <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="ui centered image" style="object-fit:cover;width:160px;height:160px;">
-    </div>
-
-    <div class="ten wide middle aligned column" style="background:none;">
-      <div class="content" style="background:none;">
-        <div class="ui huge header" style="text-transform:capitalize;">
-          <div>
-            {{ brand.fullname_en }}
-            <div class="sub header">{{ brand.fullname_kr }}</div>
-          </div>
-        </div>
-
-        <div>
-          <span>{{ brand.origin }}</span>
-          <span>·</span>
-          <span>{{ brand.category }}</span>
-        </div>
-
-        <div>
-          <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
-        </div>
-
-        <div>
-          어쩌고저쩌고...
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-
 </div>
 
 
+<div style="width:100%;background:none;">
+  <div class="ui text container">
+    <div class="ui small button">Feeds</div>
+    <div class="ui small button">Identity</div>
+    <div class="ui small button">Similar brands</div>
+    <div class="ui small button">Hashtags</div>
+    <div class="ui small button">Trend</div>
+  </div>
+</div>
+
 
 <div class="ui text container segments" style="border:none;">
+  {% for feed in brand.feeds %}
+  <div class="detailsec ui padded segment">
+    <div class="feed-menu ui secondary icon menu" style="background:none;">
+      <div class="item" style="background:none;padding:5px;">
+        {% include "app/user_avatar.html" with profile=feed.author %}
+      </div>
+
+      <div class="right compact menu">
+        <a class="item" action="post_like" onclick="toggle_action(this)">
+          {% include "app/action_icon.html" with action_type="like" obj=post %}
+        </a>
+
+        <a class="item">
+          <div class="share-dropdown top right pointing ui dropdown">
+            <i class="large share alternate icon"></i>
+            <div class="menu">
+              <div class="item" data-value="kakaotalk">kakaotalk</div>
+              <div class="item" data-value="facebook">facebook</div>
+              <div class="item" data-value="instagram">instagram</div>
+              <div class="item" data-value="linkurl">link url</div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <p>{{ feed.content }}</p>
+
+    {% if feed.feed_image %}
+    <p>
+      <img src='{{ feed.feed_image.url }}' style="max-width:80%;" class="ui centered image">
+    </p>
+    {% endif %}
+
+    <!-- <div class="hashtags ui search dropdown selection multiple" style="border:none;background:none;"> -->
+    <p>
+    {% for hashtag in feed.hashtags.all %}
+      <a class="hashtag ui tiny label" href="#">{{ hashtag }}</a>
+    {% endfor %}
+    </p>
+    <!-- </div> -->
+
+    <p style="font-size:10px;">{{ feed.timestamp }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- <div class="ui text container segments" style="border:none;">
 
   <div class="detailsec ui padded segment" style="border:none;">
     <div class="ui header">Brand identity</div>
@@ -218,7 +228,7 @@
     <div class="content"></div>
   </div>
 
-</div>
+</div> -->
 
 
 
@@ -232,8 +242,6 @@
 
     <div style="padding-bottom:5%;background:transparent;position:absolute;top:10%;bottom:0;left:5%;right:5%;display:flex;align-items:center;justify-content:center">
       <canvas id="bid-compare"></canvas>
-      <!-- <canvas id="bid-compare" style="position:absolute;width:80%;height:80%;"></canvas> -->
-      <!-- <canvas id="bid-compare" style="height:35vh;width:35vh;max-height:300px;max-width:300px;"></canvas> -->
     </div>
 
   </div>

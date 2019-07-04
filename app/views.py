@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 # from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post, CommentPost
+from app.models import Brand, Profile, Option, Post, CommentPost, Feed
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
@@ -230,9 +230,9 @@ def db_update(request, category):
 
 def brand_detail(request, bname):
     brand = Brand.objects.get(name=bname)
-    # brand.simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
-    brand.simwords = _simwords(bname, min=0.5, topn=100, amp=10)
-    brand.identity = _identity(bname=bname)
+    #brand.simwords = _simwords(bname, min=0.5, topn=100, amp=10)
+    #brand.identity = _identity(bname=bname)
+    brand.feeds = list(Feed.objects.filter(membership__name=bname))[:50]
     return render(request, 'app/brand_detail.html', {'brand':brand})
 
 

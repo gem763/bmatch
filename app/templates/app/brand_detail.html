@@ -97,7 +97,8 @@
   <!-- <script src="{% static 'js/RadarChart.js' %}"></script> -->
   <script src="{% static 'js/radarChart.js' %}"></script>
 
-  <script>
+  
+  <!-- <script>
     load_blocks('#similarity', "{% url 'blocks' %}?type=simbrands&bname={{ brand.name }}");
     $('.bookmark-dropdown').dropdown();
 
@@ -110,8 +111,6 @@
 
       var td_query = document.createElement('td');
       td_query.className = "right aligned eight wide";
-      // td_query.addClass("right aligned eight wide");
-      // td_query.classList.add("right aligned eight wide");
       td_query.append(query_data.key);
 
       var td_value = document.createElement('td');
@@ -121,7 +120,6 @@
 
       var tr = document.createElement('tr');
       tr.append(td_query, td_value);
-      // return tr;
       $(id).append(tr);
     };
 
@@ -169,7 +167,6 @@
         options: {
           scale: {
             ticks: {
-              // beginAtZero: true,
               min: 0,
               max: 100,
               stepSize: 100,
@@ -240,11 +237,9 @@
         });
 
         $("#bottom_panel").css({"animation":"bottom_panel_show 0.5s forwards"});
-        // $(".compare.modal").modal("show");
-        // $(".ui.dimmer").dimmer("show");
       });
     };
 
 
-  </script>
+  </script> -->
 {% endblock js %}
