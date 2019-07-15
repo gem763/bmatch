@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'app',
 
     'widget_tweaks',
+    # 'storages',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -139,6 +140,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'main.wsgi.application'
 
 
+# Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'getch-245810.appspot.com'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'getch-245810-89947261e0af.json')
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -162,7 +168,7 @@ if os.getenv('GAE_APPLICATION', None):
             'NAME': 'getchdb_djangomodel',
         }
     }
-    
+
 else:
     # Running locally so connect to either a local MySQL instance or connect to
     # Cloud SQL via the proxy. To start the proxy via command line:
