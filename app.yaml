@@ -1,3 +1,4 @@
+# [START django_app]
 runtime: python37
 
 handlers:
@@ -11,3 +12,4 @@ handlers:
 # the entire handlers section) when there are no static files defined.
 - url: /.*
   script: auto
+# [END django_app]

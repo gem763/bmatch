@@ -25,7 +25,7 @@ SECRET_KEY = 'ity(-p#!n%d4l^53x(!g=jl3-y8$3)7mhh4^r6tbbq8j8s!_i&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com', '.appspot.com']
 
 LOGIN_REDIRECT_URL = 'profiling' #'home'
 LOGOUT_REDIRECT_URL = 'home'
@@ -155,6 +155,9 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'g
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+
+import
 
 
 if os.getenv('GAE_APPLICATION', None):
