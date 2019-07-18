@@ -6,6 +6,7 @@ import json
 import requests
 import numpy as np
 from collections import OrderedDict
+from custom_user.models import AbstractEmailUser
 
 # Create your models here.
 
@@ -31,7 +32,18 @@ class Option(models.Model):
         return self.optname
 
 
-class Hashtag(models.Model):
+class BigIdAbstract(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
+    class Meta:
+        abstract = True
+
+
+class CustomEmailUser(AbstractEmailUser, BigIdAbstract):
+    pass
+
+
+class Hashtag(BigIdAbstract):
     hashtag = models.CharField(max_length=120)
     def __str__(self):
         return self.hashtag
@@ -48,7 +60,7 @@ class Brand(models.Model):
     category = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(default='', blank=True, null=True)
     history = models.TextField(default='', blank=True, null=True)
-    # logo = models.ImageField(default='') # 로고는 필수 (null=True 하면 안됨)
+    logo = models.ImageField(upload_to='brand_logos', default='') # 로고는 필수 (null=True 하면 안됨)
     # identity = models.TextField(default='{}', blank=True, null=True)
     # cluster = models.CharField(max_length=50, blank=True, null=True)
 
@@ -60,7 +72,7 @@ class Brand(models.Model):
         # return {i['key']:i['value'] for i in json.loads(self.identity)}
 
 
-class Post(models.Model):
+class Post(BigIdAbstract):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
     # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
@@ -77,9 +89,9 @@ class Post(models.Model):
         return url
 
 
-class Profile(models.Model):
+class Profile(BigIdAbstract):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    profile_image = models.ImageField(default='')
+    profile_image = models.ImageField(default='', max_length=500)
 
     worldcup = models.TextField(blank=True, null=True, default='{}')
     initial_awared = models.TextField(blank=True, null=True)
@@ -230,9 +242,8 @@ class Profile(models.Model):
 
 
 
-class CommentBrand(models.Model):
+class CommentBrand(BigIdAbstract):
     brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
-    # post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -241,8 +252,7 @@ class CommentBrand(models.Model):
         return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
 
 
-class CommentPost(models.Model):
-    # brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
+class CommentPost(BigIdAbstract):
     post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(max_length=500, null=True, blank=True)
@@ -260,7 +270,7 @@ def feed_image_path(instance, filename):
     return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
 
 
-class Feed(models.Model):
+class Feed(BigIdAbstract):
     membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)

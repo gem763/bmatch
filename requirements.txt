@@ -2,6 +2,8 @@ attrs==19.1.0
 backcall==0.1.0
 beautifulsoup4==4.7.1
 bleach==3.1.0
+botocore==1.12.188
+cachetools==3.1.1
 certifi==2019.6.16
 chardet==3.0.4
 colorama==0.4.1
@@ -14,8 +16,16 @@ django-custom-user==0.7
 django-debug-toolbar==2.0
 django-el-pagination==3.2.4
 django-extensions==2.1.9
+django-storages==1.7.1
 django-widget-tweaks==1.4.5
+docutils==0.14
 entrypoints==0.3
+google-api-core==1.13.0
+google-auth==1.6.3
+google-cloud-core==1.0.2
+google-cloud-storage==1.16.1
+google-resumable-media==0.3.2
+googleapis-common-protos==1.6.0
 idna==2.8
 ipykernel==5.1.1
 ipython==7.6.0
@@ -23,6 +33,7 @@ ipython-genutils==0.2.0
 ipywidgets==7.4.2
 jedi==0.14.0
 Jinja2==2.10.1
+jmespath==0.9.4
 jsonschema==3.0.1
 jupyter==1.0.0
 jupyter-client==5.2.4
@@ -44,6 +55,9 @@ pickleshare==0.7.5
 Pillow==6.0.0
 prometheus-client==0.7.1
 prompt-toolkit==2.0.9
+protobuf==3.9.0
+pyasn1==0.4.5
+pyasn1-modules==0.2.5
 Pygments==2.4.2
 pyrsistent==0.15.2
 python-dateutil==2.8.0
@@ -55,6 +69,8 @@ pyzmq==18.0.2
 qtconsole==4.5.1
 requests==2.22.0
 requests-oauthlib==1.2.0
+rsa==4.0
+s3transfer==0.2.1
 Send2Trash==1.5.0
 six==1.12.0
 soupsieve==1.9.2

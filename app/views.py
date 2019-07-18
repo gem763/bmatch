@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 # from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post, CommentPost, Feed
+from app.models import Brand, Profile, Option, Post, Feed, CommentPost
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
