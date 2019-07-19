@@ -25,7 +25,7 @@ SECRET_KEY = 'ity(-p#!n%d4l^53x(!g=jl3-y8$3)7mhh4^r6tbbq8j8s!_i&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com', '.appspot.com']
+ALLOWED_HOSTS = ['*'] #'localhost', '127.0.0.1', '.pythonanywhere.com', '.appspot.com']
 
 LOGIN_REDIRECT_URL = 'profiling' #'home'
 LOGOUT_REDIRECT_URL = 'home'
@@ -157,20 +157,18 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'g
 # }
 
 
-import
-
 
 if os.getenv('GAE_APPLICATION', None):
     # Running on production App Engine, so connect to Google Cloud SQL using
     # the unix socket at /cloudsql/<your-cloudsql-connection string>
     DATABASES = {
         'default': {
-            # 'ENGINE': 'django.db.backends.mysql',
-            'ENGINE': 'django.db.backends.postgresql',
-            'HOST': '/cloudsql/getch-245810:us-central1:getchdb-postgresql',
-            'USER': 'postgres',
+            'ENGINE': 'django.db.backends.mysql',
+            # 'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '/cloudsql/getch-245810:us-central1:getchdb-001',
+            'USER': 'root',
             'PASSWORD': 'kkangse1',
-            'NAME': 'getchdb_django',
+            'NAME': 'getchdb_mysql',
         }
     }
 
@@ -183,13 +181,13 @@ else:
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
+            'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
-            # 'PORT': '3306',
-            'PORT': '5432',
-            'NAME': 'getchdb_django', # sql 인스턴스에서 실제로 생성된 db 명칭 (인스턴스명 아님)
+            'PORT': '3306',
+            # 'PORT': '5432',
+            'NAME': 'getchdb_mysql', # sql 인스턴스에서 실제로 생성된 db 명칭 (인스턴스명 아님)
                                            # https://console.cloud.google.com/sql/instances/getchdb-001/databases?project=getch-245810
-            'USER': 'postgres',                # sql 사용자계정 (IAM 서비스계정 아님)
+            'USER': 'root',                # sql 사용자계정 (IAM 서비스계정 아님)
                                            # https://console.cloud.google.com/sql/instances/getchdb-001/users?project=getch-245810
             'PASSWORD': 'kkangse1',
         }
