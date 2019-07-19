@@ -156,6 +156,8 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'g
 #     }
 # }
 
+# import pymysql  # noqa: 402
+# pymysql.install_as_MySQLdb()
 
 
 if os.getenv('GAE_APPLICATION', None):
