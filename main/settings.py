@@ -165,12 +165,12 @@ if os.getenv('GAE_APPLICATION', None):
     # the unix socket at /cloudsql/<your-cloudsql-connection string>
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            # 'ENGINE': 'django.db.backends.postgresql',
-            'HOST': '/cloudsql/getch-245810:us-central1:getchdb-001',
-            'USER': 'root',
+            # 'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '/cloudsql/getch-245810:us-central1:getchdb-postgresql',
+            'USER': 'postgres',
             'PASSWORD': 'kkangse1',
-            'NAME': 'getchdb_mysql',
+            'NAME': 'getchdb_django',
         }
     }
 
@@ -183,13 +183,13 @@ else:
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql',
             'HOST': '127.0.0.1',
-            'PORT': '3306',
-            # 'PORT': '5432',
-            'NAME': 'getchdb_mysql', # sql 인스턴스에서 실제로 생성된 db 명칭 (인스턴스명 아님)
+            # 'PORT': '3306',
+            'PORT': '5432',
+            'NAME': 'getchdb_django',      # sql 인스턴스에서 실제로 생성된 db 명칭 (인스턴스명 아님)
                                            # https://console.cloud.google.com/sql/instances/getchdb-001/databases?project=getch-245810
-            'USER': 'root',                # sql 사용자계정 (IAM 서비스계정 아님)
+            'USER': 'postgres',            # sql 사용자계정 (IAM 서비스계정 아님)
                                            # https://console.cloud.google.com/sql/instances/getchdb-001/users?project=getch-245810
             'PASSWORD': 'kkangse1',
         }

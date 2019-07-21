@@ -1,0 +1,117 @@
+.bcard {
+  box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.bcard:hover {
+  box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+}
+
+.bcard_img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bcard_base {
+  background: none;
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
+.bcard_like {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 15%;
+  height: 15%;
+  background: none;
+}
+
+.bcard_like:hover {
+  /* animation: heartbeat 0.7s infinite; */
+  transform: scale( 1.3 );
+}
+
+.bcard_like_icon {
+  background: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.bcard_like_icon[state='like'] {
+  opacity: 1;
+  fill: orange;
+  stroke-width: 1;
+}
+
+.bcard_like_icon[state='dontlike'] {
+  opacity: 0.5;
+  fill: none;
+  color: gainsboro;
+}
+
+.bcard_more_btn:hover {
+  background: rgba(220, 220, 220, .2) !important;
+}
+
+.bcard_more_btn {
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
+  background: transparent !important;
+}
+
+.bcard_more_icon {
+  color: gainsboro;
+  opacity: 0.8;
+}
+
+.bcard_cover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  height: 70%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: whitesmoke;
+  cursor: default;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  opacity: 0;
+  /* pointer-events: none; */
+}
+
+.bcard_cover .row {
+  padding: 5px !important;
+}
+
+.bcard_score {
+  line-height: 100%;
+}
+
+@keyframes heartbeat
+{
+  0%   { transform: scale( 1.3 ); }
+  100% { transform: scale( 1 );   }
+}
+
+@keyframes bcard_more {
+  /* 0% { opacity:0 } */
+  100% { opacity:1; top:30%; }
+}
+
+@keyframes bcard_less {
+  0% { opacity:1; top:30%; }
+  /* 100% { opacity:0; top:100%; } */
+}

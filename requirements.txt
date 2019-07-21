@@ -26,6 +26,7 @@ google-cloud-core==1.0.2
 google-cloud-storage==1.16.1
 google-resumable-media==0.3.2
 googleapis-common-protos==1.6.0
+gunicorn==19.9.0
 idna==2.8
 ipykernel==5.1.1
 ipython==7.6.0
