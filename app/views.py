@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 # from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post, Feed, CommentPost
+from app.models import Brand, Profile, Option, Post, Feed, CommentPost, Hashtag
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
@@ -22,6 +22,8 @@ import requests
 import random
 from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
+from collections import Counter
+
 
 optname = 'init'
 # api = 'http://127.0.0.1:8080/api'
@@ -492,6 +494,19 @@ def discover(request):
     # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
     socialwords = _simwords('crocs', min=0.5, topn=100, amp=10)
     return render(request, 'app/discover.html', {'socialwords':socialwords})
+
+
+def journey(request, hashtag):
+    # feeds = Feed.objects.filter(hashtags__hashtag__icontains=hashtag)
+    # feeds = Hashtag.objects.get(hashtag=hashtag).feed_set.all()
+    # list_hashtags = feeds.values('hashtags__hashtag')
+
+    hashtags = Hashtag.objects.filter(feed__hashtags__hashtag__icontains=hashtag)
+    list_hashtags = hashtags.values_list('hashtag', flat=True)
+
+    freq_hashtags = dict(Counter(list_hashtags).most_common(100))
+    # freq_hashtags = {k:v**0.2 for k,v in freq_hashtags.items()}
+    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags})
 
 
 def library(request):

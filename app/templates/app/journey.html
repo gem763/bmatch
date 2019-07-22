@@ -1,0 +1,78 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with discover_act="active" %}
+{% endblock menu_top %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
+
+
+<div class="body-content ui text container segments">
+
+  <div class="ui segment">
+    <div class="content" style="background:none;">
+      <div class="ui medium header" style="background:none;margin:0;float:left;">
+        <i class="compass outline icon"></i>
+        <div class="content">
+          Discover your fashion style
+          <div class="sub header">내 패션 취향 대모험</div>
+        </div>
+      </div>
+
+      <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;border:none;">
+        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(1)">
+          <i class="large zoom-out icon"></i>
+        </div>
+        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(-1)">
+          <i class="large zoom-in icon"></i>
+        </div>
+      </div>
+
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+
+
+  <div class="ui segment">
+    <div class="ui header">
+      <div class="content">
+        Social keywords
+      </div>
+    </div>
+    <div class="content">
+      <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
+      <div id="wordcloud" style="text-align:center"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="{% static 'js/d3.layout.cloud.js' %}"></script>
+  <script src="{% static 'js/wordcloud.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+
+  <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script>
+
+
+  <script>
+
+    $(document).ready(function(){
+      WordCloud({
+        container: "#wordcloud",
+        data: {{ freq_hashtags | safe }},
+        width: $("#wordcloud").width(),
+        height: 600
+      });
+    });
+
+
+
+  </script>
+{% endblock js %}

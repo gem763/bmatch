@@ -45,6 +45,8 @@ urlpatterns = [
     # path('bnames/', v.bnames, name='bnames'),
     #path('brands/<bname>/identities/', identities, name='identities'),
 
+    path('journey/<str:hashtag>/', v.journey, name='journey'),
+
     path('me/', v.me, name='me'),
 
     path('profiling/', v.profiling, name='profiling'),
@@ -54,7 +56,7 @@ urlpatterns = [
     path('level_test/', v.level_test, name='level_test'),
     path('update_likes/', v.UpdateLikesView.as_view(), name='update_likes'),
     path('update_myfavorite/', v.UpdateMyfavoriteView.as_view(), name='update_myfavorite'),
-    path('actions/', v.ActionsView.as_view(), name='actions'), 
+    path('actions/', v.ActionsView.as_view(), name='actions'),
 
     path('posts/', v.posts, name='posts'),
     # path('posts/sub/', v.posts_sub, name='posts_sub'),
