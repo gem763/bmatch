@@ -45,7 +45,7 @@ urlpatterns = [
     # path('bnames/', v.bnames, name='bnames'),
     #path('brands/<bname>/identities/', identities, name='identities'),
 
-    path('journey/<str:hashtag>/', v.journey, name='journey'),
+    path('journey/<str:keywords>/', v.journey, name='journey'),
 
     path('me/', v.me, name='me'),
 

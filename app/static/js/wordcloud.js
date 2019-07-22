@@ -69,7 +69,8 @@ function WordCloud(options) {
 
   function handleMouseOver(d) {
     tippy(this, {
-      content: "<a target='_blank' href='https://www.google.com/search?q=" + d.key + "'><strong>" + d.key + "</strong> 검색하기</a>",
+      // content: "<a target='_blank' href='https://www.google.com/search?q=" + d.key + "'><strong>" + d.key + "</strong> 검색하기</a>",
+      content: "<a href='/journey/" + d.key + "'><strong>" + d.key + "</strong> 검색하기</a>",
       arrow: true,
       arrowType: 'round',
       theme: 'light',

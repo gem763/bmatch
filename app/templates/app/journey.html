@@ -1,8 +1,19 @@
 {% extends "app/layout.html" %}
 
+{% block style %}
+  {{ block.super }}
+  <style>
+    text:hover {
+      fill: black !important;
+      font-weight: bold;
+    }
+  </style>
+{% endblock style %}
+
 {% block menu_top %}
   {% include "app/menu_top.html" with discover_act="active" %}
 {% endblock menu_top %}
+
 
 {% block content %}
 {% load static %}
@@ -46,6 +57,18 @@
       <div id="wordcloud" style="text-align:center"></div>
     </div>
   </div>
+
+  <div class="ui segment">
+    <div class="ui header">
+      <div class="content">
+        Feeds
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="feeds" style="background:none;"></div>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
@@ -62,6 +85,7 @@
 
 
   <script>
+    load_blocks('#feeds', "{% url 'blocks' %}?type=feeds&keywords={{ keywords }}");
 
     $(document).ready(function(){
       WordCloud({

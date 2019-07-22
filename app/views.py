@@ -96,6 +96,16 @@ def leveltest():
     return random.sample(list(brands), 20)
 
 
+def feeds(keywords):
+    _keywords = [w.strip() for w in keywords.split(',')]
+
+    q = Q()
+    for kw in _keywords:
+        q = q | Q(hashtags__hashtag__icontains=kw)
+
+    return Feed.objects.filter(q).distinct().exclude(feed_image__isnull=True).exclude(feed_image__exact='')
+
+
 def blocks(request):
     template = 'app/baseblocks.html'
     page_template = 'app/baseblocks_page.html'
@@ -106,6 +116,7 @@ def blocks(request):
     screen = request.GET.get('screen', screen_0)
     ncols = request.GET.get('ncols', ncols_0)
     bname = request.GET.get('bname', None)
+    keywords = request.GET.get('keywords', None)
 
     ctx = {'page_template':page_template, 'type':type, 'ncols':ncols}
 
@@ -138,6 +149,9 @@ def blocks(request):
 
         elif type=='hottrendnow':
             ctx['blocks'] = hottrendnow()
+
+        elif type=='feeds':
+            ctx['blocks'] = feeds(keywords)
 
         else:
             pass
@@ -496,17 +510,23 @@ def discover(request):
     return render(request, 'app/discover.html', {'socialwords':socialwords})
 
 
-def journey(request, hashtag):
+def journey(request, keywords):
     # feeds = Feed.objects.filter(hashtags__hashtag__icontains=hashtag)
     # feeds = Hashtag.objects.get(hashtag=hashtag).feed_set.all()
     # list_hashtags = feeds.values('hashtags__hashtag')
 
-    hashtags = Hashtag.objects.filter(feed__hashtags__hashtag__icontains=hashtag)
+    list_keywords = [w.strip() for w in keywords.split(',')]
+
+    q = Q()
+    for kw in list_keywords:
+        q = q | Q(feed__hashtags__hashtag__icontains=kw)
+
+    hashtags = Hashtag.objects.filter(q)
     list_hashtags = hashtags.values_list('hashtag', flat=True)
 
     freq_hashtags = dict(Counter(list_hashtags).most_common(100))
-    # freq_hashtags = {k:v**0.2 for k,v in freq_hashtags.items()}
-    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags})
+    [freq_hashtags.pop(kw, None) for kw in list_keywords]
+    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'keywords':keywords})
 
 
 def library(request):

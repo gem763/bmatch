@@ -77,5 +77,13 @@
 </div>
 {% endif %}
 
+{% if feed %}
+<div class="block ui fluid card" feed-id="{{ feed.pk }}" href="#" onclick="block_click(this)">
+  <div class="block-base">
+    <img class="block-img" src="{{ feed.feed_image.url }}" style="object-fit:cover;" onload="load_block(this)">
+  </div>
+</div>
+{% endif %}
+
 
 </div>

@@ -26,6 +26,11 @@
     {% include "app/block.html" with post=block %}
   {% endfor %}
 
+{% elif type == 'feeds' %}
+  {% for block in blocks %}
+    {% include "app/block.html" with feed=block %}
+  {% endfor %}
+
 {% elif type == 'hottrendnow' %}
   {% for block in blocks %}
     {% include "app/block.html" with post=block %}
