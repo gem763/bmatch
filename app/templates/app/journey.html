@@ -99,10 +99,33 @@
   <script src="https://unpkg.com/tippy.js@4"></script>
 
 
+  {% load ctags %}
   <script>
-    $.get("/feed_blocks/{{ keywords }}", function(blocks) {
+    // $.get("/feed_blocks/{{ keywords }}", function(blocks) {
+    //   for (var i=0; i<15; i++) {
+    //     $('#feedblocks').append(blocks.pop());
+    //   }
+    //
+    //   $('.demo.segment').visibility({
+    //     once: false,
+    //     observeChange: true,
+    //     onBottomVisible: function() {
+    //       for (var i=0; i<9; i++) {
+    //         $('#feedblocks').append(blocks.pop());
+    //       }
+    //     }
+    //   });
+    // });
+
+
+    $(document).ready(function(){
+
+      var feed_ids = {{ feed_ids | safe }};
+
       for (var i=0; i<15; i++) {
-        $('#feedblocks').append(blocks.pop());
+        $.get("/feed_block/" + feed_ids.pop(), function(block) {
+          $('#feedblocks').append(block);
+        });
       }
 
       $('.demo.segment').visibility({
@@ -110,30 +133,12 @@
         observeChange: true,
         onBottomVisible: function() {
           for (var i=0; i<9; i++) {
-            $('#feedblocks').append(blocks.pop());
+            $.get("/feed_block/" + feed_ids.pop(), function(block) {
+              $('#feedblocks').append(block);
+            });
           }
         }
       });
-    });
-
-
-    $(document).ready(function(){
-
-      // var feed_htmls = {{ feed_htmls | safe }};
-      //
-      // for (var i=0; i<15; i++) {
-      //   $('#feedblocks').append(feed_htmls.pop());
-      // }
-      //
-      // $('.demo.segment').visibility({
-      //   once: false,
-      //   observeChange: true,
-      //   onBottomVisible: function() {
-      //     for (var i=0; i<9; i++) {
-      //       $('#feedblocks').append(feed_htmls.pop());
-      //     }
-      //   }
-      // });
 
       // load_blocks('#feeds', "{% url 'blocks' %}?type=feeds&keywords={{ keywords }}");
       //

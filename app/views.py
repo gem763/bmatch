@@ -98,20 +98,6 @@ def leveltest():
     return random.sample(list(brands), 20)
 
 
-def feeds(keywords):
-    _keywords = [w.strip() for w in keywords.split(',')]
-
-    q = Q()
-    for kw in _keywords:
-        q = q | Q(hashtags__hashtag__icontains=kw)
-
-    _feeds = Feed.objects.filter(q)
-    _feeds = _feeds.distinct()
-    _feeds = _feeds.exclude(feed_image__exact='')
-    return _feeds
-
-
-
 def blocks(request):
     template = 'app/baseblocks.html'
     page_template = 'app/baseblocks_page.html'
@@ -516,7 +502,7 @@ def discover(request):
     return render(request, 'app/discover.html', {'socialwords':socialwords})
 
 
-def feed_blocks(request, keywords):
+def get_feeds(keywords):
     _keywords = [w.strip() for w in keywords.split(',')]
 
     q = Q()
@@ -524,13 +510,31 @@ def feed_blocks(request, keywords):
         q = q | Q(hashtags__hashtag__icontains=kw)
 
     _feeds = Feed.objects.filter(q)
-    _feeds = _feeds.distinct()
-    # _feeds = _feeds.exclude(feed_image__isnull=True)
     _feeds = _feeds.exclude(feed_image__exact='')
-    # _feeds = list(_feeds)
+    _feeds = _feeds.distinct().order_by('-timestamp')
+    return _feeds
 
-    blocks = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
-    return JsonResponse(blocks, safe=False)
+
+def feed_block(request, feed_id):
+    feed = Feed.objects.get(pk=feed_id)
+    block = render_to_string('app/block.html', {'feed':feed})
+    return JsonResponse(block, safe=False)
+
+
+# def feed_blocks(request, keywords):
+#     _keywords = [w.strip() for w in keywords.split(',')]
+#
+#     q = Q()
+#     for kw in _keywords:
+#         q = q | Q(hashtags__hashtag__icontains=kw)
+#
+#     _feeds = Feed.objects.filter(q)
+#     _feeds = _feeds.distinct()
+#     _feeds = _feeds.exclude(feed_image__exact='')
+#
+#     blocks = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
+#     return JsonResponse(blocks, safe=False)
+
 
 
 def journey(request, keywords):
@@ -550,12 +554,10 @@ def journey(request, keywords):
     freq_hashtags = dict(Counter(list_hashtags).most_common(100))
     [freq_hashtags.pop(kw, None) for kw in list_keywords]
 
-    # _feeds = list(feeds(keywords))
+    feed_ids = list(get_feeds(keywords).values_list('pk', flat=True))
     # feed_htmls = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
 
-    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'keywords':keywords})
-    # return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'feed_htmls':feed_htmls})
-
+    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'feed_ids':feed_ids})
 
 
 def library(request):

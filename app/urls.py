@@ -46,7 +46,8 @@ urlpatterns = [
     #path('brands/<bname>/identities/', identities, name='identities'),
 
     path('journey/<str:keywords>/', v.journey, name='journey'),
-    path('feed_blocks/<str:keywords>/', v.feed_blocks, name='feed_blocks'),
+    # path('feed_blocks/<str:keywords>/', v.feed_blocks, name='feed_blocks'),
+    path('feed_block/<int:feed_id>/', v.feed_block, name='feed_block'),
 
     path('me/', v.me, name='me'),
 

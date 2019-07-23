@@ -1,6 +1,8 @@
 from django import template
 # from django.core.files.storage import default_storage
 from app.models import Brand, Profile
+# from django.template.loader import render_to_string
+
 register = template.Library()
 
 @register.filter#(name='file_exists')
@@ -45,3 +47,8 @@ def bookmark_this(user, obj):
 def post_likes_howmany(what):
     pass
     # print(what.post_likes_set.all())
+
+
+# @register.filter
+# def as_feedblock(feed):
+#     return render_to_string('app/block.html', {'feed':feed})
