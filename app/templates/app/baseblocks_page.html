@@ -27,9 +27,12 @@
   {% endfor %}
 
 {% elif type == 'feeds' %}
+  {% load el_pagination_tags %}
+  {% lazy_paginate 15,9 blocks %}
   {% for block in blocks %}
     {% include "app/block.html" with feed=block %}
   {% endfor %}
+  {% show_more %}
 
 {% elif type == 'hottrendnow' %}
   {% for block in blocks %}

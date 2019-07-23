@@ -39,14 +39,7 @@
 {% load static %}
 {% block js %}
   {{ block.super }}
-  <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
-
   <script>
-    $.endlessPaginate({
-      paginateOnScroll: true,
-      paginateOnScrollMargin: 100,
-    });
-
     function paginate(btn) {
       url = "{% url 'library' %}?p=" + $(btn).attr("page");
       window.location.assign(url);

@@ -23,6 +23,8 @@ import random
 from itertools import combinations
 from django.contrib.staticfiles.storage import staticfiles_storage
 from collections import Counter
+from django.template.loader import render_to_string
+
 
 
 optname = 'init'
@@ -103,7 +105,11 @@ def feeds(keywords):
     for kw in _keywords:
         q = q | Q(hashtags__hashtag__icontains=kw)
 
-    return Feed.objects.filter(q).distinct().exclude(feed_image__isnull=True).exclude(feed_image__exact='')
+    _feeds = Feed.objects.filter(q)
+    _feeds = _feeds.distinct()
+    _feeds = _feeds.exclude(feed_image__exact='')
+    return _feeds
+
 
 
 def blocks(request):
@@ -151,7 +157,7 @@ def blocks(request):
             ctx['blocks'] = hottrendnow()
 
         elif type=='feeds':
-            ctx['blocks'] = feeds(keywords)
+            ctx['blocks'] = feeds(keywords)[:]
 
         else:
             pass
@@ -510,6 +516,23 @@ def discover(request):
     return render(request, 'app/discover.html', {'socialwords':socialwords})
 
 
+def feed_blocks(request, keywords):
+    _keywords = [w.strip() for w in keywords.split(',')]
+
+    q = Q()
+    for kw in _keywords:
+        q = q | Q(hashtags__hashtag__icontains=kw)
+
+    _feeds = Feed.objects.filter(q)
+    _feeds = _feeds.distinct()
+    # _feeds = _feeds.exclude(feed_image__isnull=True)
+    _feeds = _feeds.exclude(feed_image__exact='')
+    # _feeds = list(_feeds)
+
+    blocks = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
+    return JsonResponse(blocks, safe=False)
+
+
 def journey(request, keywords):
     # feeds = Feed.objects.filter(hashtags__hashtag__icontains=hashtag)
     # feeds = Hashtag.objects.get(hashtag=hashtag).feed_set.all()
@@ -526,7 +549,13 @@ def journey(request, keywords):
 
     freq_hashtags = dict(Counter(list_hashtags).most_common(100))
     [freq_hashtags.pop(kw, None) for kw in list_keywords]
+
+    # _feeds = list(feeds(keywords))
+    # feed_htmls = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
+
     return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'keywords':keywords})
+    # return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'feed_htmls':feed_htmls})
+
 
 
 def library(request):

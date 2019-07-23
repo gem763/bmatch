@@ -73,8 +73,15 @@
 
 
   {% block js %}
+  <script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+
   <script>
     feather.replace();
+
+    $.endlessPaginate({
+      paginateOnScroll: true,
+      paginateOnScrollMargin: 100,
+    });
 
     $("#search-shower").click(function() {
       $("#searcher").css({"animation":"searcher_show 0.2s forwards"});

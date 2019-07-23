@@ -66,9 +66,24 @@
     </div>
 
     <div class="content">
-      <div id="feeds" style="background:none;"></div>
+      <div id="feeds" style="background:none;">
+      </div>
     </div>
   </div>
+
+  <div class="ui demo segment">
+    <div class="ui header">
+      <div class="content">
+        Infinite scroll test
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="feedblocks" class="ui three column grid"></div>
+    </div>
+
+  </div>
+
 </div>
 
 {% endblock content %}
@@ -85,15 +100,49 @@
 
 
   <script>
-    load_blocks('#feeds', "{% url 'blocks' %}?type=feeds&keywords={{ keywords }}");
+    $.get("/feed_blocks/{{ keywords }}", function(blocks) {
+      for (var i=0; i<15; i++) {
+        $('#feedblocks').append(blocks.pop());
+      }
+
+      $('.demo.segment').visibility({
+        once: false,
+        observeChange: true,
+        onBottomVisible: function() {
+          for (var i=0; i<9; i++) {
+            $('#feedblocks').append(blocks.pop());
+          }
+        }
+      });
+    });
+
 
     $(document).ready(function(){
-      WordCloud({
-        container: "#wordcloud",
-        data: {{ freq_hashtags | safe }},
-        width: $("#wordcloud").width(),
-        height: 600
-      });
+
+      // var feed_htmls = {{ feed_htmls | safe }};
+      //
+      // for (var i=0; i<15; i++) {
+      //   $('#feedblocks').append(feed_htmls.pop());
+      // }
+      //
+      // $('.demo.segment').visibility({
+      //   once: false,
+      //   observeChange: true,
+      //   onBottomVisible: function() {
+      //     for (var i=0; i<9; i++) {
+      //       $('#feedblocks').append(feed_htmls.pop());
+      //     }
+      //   }
+      // });
+
+      // load_blocks('#feeds', "{% url 'blocks' %}?type=feeds&keywords={{ keywords }}");
+      //
+      // WordCloud({
+      //   container: "#wordcloud",
+      //   data: {{ freq_hashtags | safe }},
+      //   width: $("#wordcloud").width(),
+      //   height: 600
+      // });
     });
 
 
