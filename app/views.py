@@ -502,62 +502,51 @@ def discover(request):
     return render(request, 'app/discover.html', {'socialwords':socialwords})
 
 
-def get_feeds(keywords):
-    _keywords = [w.strip() for w in keywords.split(',')]
-
-    q = Q()
-    for kw in _keywords:
-        q = q | Q(hashtags__hashtag__icontains=kw)
-
-    _feeds = Feed.objects.filter(q)
-    _feeds = _feeds.exclude(feed_image__exact='')
-    _feeds = _feeds.distinct().order_by('-timestamp')
-    return _feeds
-
-
 def feed_block(request, feed_id):
     feed = Feed.objects.get(pk=feed_id)
     block = render_to_string('app/block.html', {'feed':feed})
     return JsonResponse(block, safe=False)
 
 
-# def feed_blocks(request, keywords):
-#     _keywords = [w.strip() for w in keywords.split(',')]
-#
-#     q = Q()
-#     for kw in _keywords:
-#         q = q | Q(hashtags__hashtag__icontains=kw)
-#
-#     _feeds = Feed.objects.filter(q)
-#     _feeds = _feeds.distinct()
-#     _feeds = _feeds.exclude(feed_image__exact='')
-#
-#     blocks = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
-#     return JsonResponse(blocks, safe=False)
+def get_objects_by_ids(request):
+    if request.method=='GET':
+        model = request.GET.get('model', None)
+        ids = request.GET.get('ids', None)
+
+        
 
 
 
-def journey(request, keywords):
+def get_hashtags_freq(words_list, topn):
+    q = Q()
+    for w in words_list:
+        q = q | Q(feed__hashtags__hashtag__icontains=w)
+
+    hashtags = Hashtag.objects.filter(q).values_list('hashtag', flat=True)
+    freq = dict(Counter(hashtags).most_common(topn))
+    [freq.pop(w, None) for w in words_list]
+    return freq
+
+
+def get_feed_ids(words_list):
+    q = Q()
+    for w in words_list:
+        q = q | Q(hashtags__hashtag__icontains=w)
+
+    _feeds = Feed.objects.filter(q).exclude(feed_image__exact='').distinct()
+    ids = _feeds.order_by('-timestamp').values_list('pk', flat=True)
+    return list(ids)
+
+
+def journey(request, words):
     # feeds = Feed.objects.filter(hashtags__hashtag__icontains=hashtag)
     # feeds = Hashtag.objects.get(hashtag=hashtag).feed_set.all()
     # list_hashtags = feeds.values('hashtags__hashtag')
 
-    list_keywords = [w.strip() for w in keywords.split(',')]
-
-    q = Q()
-    for kw in list_keywords:
-        q = q | Q(feed__hashtags__hashtag__icontains=kw)
-
-    hashtags = Hashtag.objects.filter(q)
-    list_hashtags = hashtags.values_list('hashtag', flat=True)
-
-    freq_hashtags = dict(Counter(list_hashtags).most_common(100))
-    [freq_hashtags.pop(kw, None) for kw in list_keywords]
-
-    feed_ids = list(get_feeds(keywords).values_list('pk', flat=True))
-    # feed_htmls = [render_to_string('app/block.html', {'feed':_feed}) for _feed in _feeds]
-
-    return render(request, 'app/journey.html', {'freq_hashtags':freq_hashtags, 'feed_ids':feed_ids})
+    _words = [w.strip() for w in words.split(',')]
+    hashtags_freq = get_hashtags_freq(_words, 100)
+    feed_ids = get_feed_ids(_words)
+    return render(request, 'app/journey.html', {'hashtags_freq':hashtags_freq, 'feed_ids':feed_ids})
 
 
 def library(request):

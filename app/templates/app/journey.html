@@ -49,7 +49,7 @@
   <div class="ui segment">
     <div class="ui header">
       <div class="content">
-        Social keywords
+        Hashtags
       </div>
     </div>
     <div class="content">
@@ -101,25 +101,22 @@
 
   {% load ctags %}
   <script>
-    // $.get("/feed_blocks/{{ keywords }}", function(blocks) {
-    //   for (var i=0; i<15; i++) {
-    //     $('#feedblocks').append(blocks.pop());
-    //   }
-    //
-    //   $('.demo.segment').visibility({
-    //     once: false,
-    //     observeChange: true,
-    //     onBottomVisible: function() {
-    //       for (var i=0; i<9; i++) {
-    //         $('#feedblocks').append(blocks.pop());
-    //       }
-    //     }
-    //   });
-    // });
-
+    function append_items(where, model, ids) {
+      $.ajax({
+        url: '/get_objects_by_ids/',
+        async: true,
+        type: 'GET',
+        data: { model:model, ids:ids },
+        dataType: 'json',
+        success: function(jqXHR) {
+          if (!jqXHR.success) {
+            alert("데이터를 처리하는데 문제가 발생하였습니다.");
+          };
+        }
+      });
+    }
 
     $(document).ready(function(){
-
       var feed_ids = {{ feed_ids | safe }};
 
       for (var i=0; i<15; i++) {
@@ -132,22 +129,20 @@
         once: false,
         observeChange: true,
         onBottomVisible: function() {
-          for (var i=0; i<9; i++) {
-            $.get("/feed_block/" + feed_ids.pop(), function(block) {
-              $('#feedblocks').append(block);
-            });
-          }
+          // for (var i=0; i<9; i++) {
+          //   $.get("/feed_block/" + feed_ids.pop(), function(block) {
+          //     $('#feedblocks').append(block);
+          //   });
+          // }
         }
       });
 
-      // load_blocks('#feeds', "{% url 'blocks' %}?type=feeds&keywords={{ keywords }}");
-      //
-      // WordCloud({
-      //   container: "#wordcloud",
-      //   data: {{ freq_hashtags | safe }},
-      //   width: $("#wordcloud").width(),
-      //   height: 600
-      // });
+      WordCloud({
+        container: "#wordcloud",
+        data: {{ hashtags_freq | safe }},
+        width: $("#wordcloud").width(),
+        height: 600
+      });
     });
 
 
