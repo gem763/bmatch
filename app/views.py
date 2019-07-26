@@ -508,16 +508,30 @@ def feed_block(request, feed_id):
     return JsonResponse(block, safe=False)
 
 
-def get_objects_by_ids(request):
+def get_rendered(request):
     if request.method=='GET':
-        model = request.GET.get('model', None)
+        what = request.GET.get('what', None)
         ids = request.GET.get('ids', None)
 
-        
+        _ids = ids.split(',')
+
+        if what == 'feedblock':
+            feeds = Feed.objects.filter(pk__in=_ids)
+            template = 'app/block.html'
+            rendered = [render_to_string(template, {'feed':feed}) for feed in feeds]
+
+        elif what == 'feed':
+            objs = Feed.objects.filter(pk__in=_ids)
+            template = None
+            rendered = None
+
+        else:
+            pass
+
+        return JsonResponse(rendered, safe=False)
 
 
-
-def get_hashtags_freq(words_list, topn):
+def _hashtags_freq(words_list, topn):
     q = Q()
     for w in words_list:
         q = q | Q(feed__hashtags__hashtag__icontains=w)
@@ -528,25 +542,50 @@ def get_hashtags_freq(words_list, topn):
     return freq
 
 
-def get_feed_ids(words_list):
+def _feeds(words_list):
     q = Q()
     for w in words_list:
         q = q | Q(hashtags__hashtag__icontains=w)
 
-    _feeds = Feed.objects.filter(q).exclude(feed_image__exact='').distinct()
-    ids = _feeds.order_by('-timestamp').values_list('pk', flat=True)
-    return list(ids)
+    return Feed.objects.filter(q).exclude(feed_image__exact='').distinct().order_by('-timestamp')
 
 
 def journey(request, words):
+    _words = [w.strip() for w in words.split(',')]
+    hashtags_freq = _hashtags_freq(_words, 100)
+    feeds = _feeds(_words)
+
+    ctx = {
+        'hashtags_freq': hashtags_freq,
+        'feeds': list(feeds.values('id','membership_id','feed_image')),
+    }
+
+    return render(request, 'app/journey.html', ctx)
+
+
+def journey2(request, words):
     # feeds = Feed.objects.filter(hashtags__hashtag__icontains=hashtag)
     # feeds = Hashtag.objects.get(hashtag=hashtag).feed_set.all()
     # list_hashtags = feeds.values('hashtags__hashtag')
 
+    template = 'app/journey.html'
+    page_template = 'app/journey_scroll.html'
+
     _words = [w.strip() for w in words.split(',')]
-    hashtags_freq = get_hashtags_freq(_words, 100)
-    feed_ids = get_feed_ids(_words)
-    return render(request, 'app/journey.html', {'hashtags_freq':hashtags_freq, 'feed_ids':feed_ids})
+    hashtags_freq = _hashtags_freq(_words, 100)
+    feeds = _feeds(_words)
+
+    ctx = {
+        'page_template': page_template,
+        'hashtags_freq': hashtags_freq,
+        'feeds': feeds,
+    }
+
+    # 아랫부분이 반드시 필요하다: 스크롤 새로운 페이지 로딩될때의 템플릿을 의미하는듯
+    if request.is_ajax():
+        template = page_template
+
+    return render(request, template, ctx)
 
 
 def library(request):

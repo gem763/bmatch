@@ -48,7 +48,7 @@ urlpatterns = [
     path('journey/<str:words>/', v.journey, name='journey'),
     # path('feed_blocks/<str:keywords>/', v.feed_blocks, name='feed_blocks'),
     path('feed_block/<int:feed_id>/', v.feed_block, name='feed_block'),
-    path('get_objects_by_ids/', v.get_objects_by_ids, name='get_objects_by_ids'), 
+    path('get_rendered/', v.get_rendered, name='get_rendered'), 
 
     path('me/', v.me, name='me'),
 

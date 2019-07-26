@@ -1,0 +1,6 @@
+{% load el_pagination_tags %}
+{% lazy_paginate 30,15 feeds %}
+{% for feed in feeds %}
+  {% include "app/block.html" with feed=feed %}
+{% endfor %}
+{% show_more %}

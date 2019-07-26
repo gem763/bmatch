@@ -79,7 +79,8 @@
     </div>
 
     <div class="content">
-      <div id="feedblocks" class="ui three column grid"></div>
+      <div id="feedblocks" class="ui three column grid">
+      </div>
     </div>
 
   </div>
@@ -101,39 +102,25 @@
 
   {% load ctags %}
   <script>
-    function append_items(where, model, ids) {
-      $.ajax({
-        url: '/get_objects_by_ids/',
-        async: true,
-        type: 'GET',
-        data: { model:model, ids:ids },
-        dataType: 'json',
-        success: function(jqXHR) {
-          if (!jqXHR.success) {
-            alert("데이터를 처리하는데 문제가 발생하였습니다.");
-          };
-        }
-      });
-    }
+    const feedblock = ({id, feed_image}) => `
+      <div class="block-container column">
+        <div class="block ui fluid card" feed-id="${id}" href="${id}" onclick="block_click(this)">
+          <div class="block-base">
+            <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${feed_image}" style="object-fit:cover;" onload="load_block(this)">
+          </div>
+        </div>
+      </div>
+    `;
 
     $(document).ready(function(){
-      var feed_ids = {{ feed_ids | safe }};
-
-      for (var i=0; i<15; i++) {
-        $.get("/feed_block/" + feed_ids.pop(), function(block) {
-          $('#feedblocks').append(block);
-        });
-      }
+      var feeds = {{ feeds | safe }};
+      $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
 
       $('.demo.segment').visibility({
         once: false,
         observeChange: true,
         onBottomVisible: function() {
-          // for (var i=0; i<9; i++) {
-          //   $.get("/feed_block/" + feed_ids.pop(), function(block) {
-          //     $('#feedblocks').append(block);
-          //   });
-          // }
+          $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
         }
       });
 
@@ -143,6 +130,7 @@
         width: $("#wordcloud").width(),
         height: 600
       });
+
     });
 
 
