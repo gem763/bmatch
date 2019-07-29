@@ -102,26 +102,13 @@
 
   {% load ctags %}
   <script>
-    const feedblock = ({id, feed_image}) => `
-      <div class="block-container column">
-        <div class="block ui fluid card" feed-id="${id}" href="${id}" onclick="block_click(this)">
-          <div class="block-base">
-            <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${feed_image}" style="object-fit:cover;" onload="load_block(this)">
-          </div>
-        </div>
-      </div>
-    `;
-
     $(document).ready(function(){
-      var feeds = {{ feeds | safe }};
-      $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
-
-      $('.demo.segment').visibility({
-        once: false,
-        observeChange: true,
-        onBottomVisible: function() {
-          $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
-        }
+      ContentLoader({
+        data: {{ feeds | safe }},
+        where: '#feedblocks',
+        type: 'feedblock',
+        n_init: 9,
+        n_next: 9
       });
 
       WordCloud({
