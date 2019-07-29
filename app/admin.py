@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Brand, Profile, Option, Post, Hashtag, Feed, CommentBrand, CommentPost, CustomEmailUser
+from app.models import Brand, Profile, Option, Post, Hashtag, Feed, CommentBrand, CommentPost, CustomEmailUser#, Page
 from custom_user.admin import EmailUserAdmin
 # from .models import MyUser
 
@@ -33,6 +33,7 @@ admin.site.register(Post)
 admin.site.register(CommentBrand)
 admin.site.register(CommentPost)
 admin.site.register(Hashtag)
+# admin.site.register(Page)
 admin.site.register(Feed, FeedAdmin)
 
 admin.site.register(CustomEmailUser)

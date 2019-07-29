@@ -49,8 +49,16 @@ class Hashtag(BigIdAbstract):
         return self.hashtag
 
 
-class Brand(models.Model):
+class Page(models.Model):
     name = models.CharField(max_length=120)
+    created_at = models.DateTimeField(auto_now_add=True)
+    nlikes = models.IntegerField(default='0')
+
+    class Meta:
+        abstract = True
+
+
+class Brand(Page):#models.Model):
     fullname_kr = models.CharField(max_length=120, blank=True, null=True)
     fullname_en = models.CharField(max_length=120, blank=True, null=True)
     keywords = models.TextField(default='')
@@ -61,10 +69,6 @@ class Brand(models.Model):
     description = models.TextField(default='', blank=True, null=True)
     history = models.TextField(default='', blank=True, null=True)
     logo = models.ImageField(upload_to='brand_logos', default='') # 로고는 필수 (null=True 하면 안됨)
-
-    master = models.ForeignKey('Profile', blank=True, null=True, on_delete=models.SET_NULL) # 요건 유저가 feed를 생성할때마다 업데이트 하면 되겠다
-    created_at = models.DateTimeField(auto_now_add=True)
-    nlikes = models.IntegerField(default='0')
 
     def __str__(self):
         return self.fullname_en.capitalize()
@@ -280,8 +284,7 @@ class Feed(BigIdAbstract):
 
 
 # class Page(models.Model):
-#     brand = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
-#
+#     brand = models.ManyToManyField(Brand, blank=True)
 #     master = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL) # 요건 유저가 feed를 생성할때마다 업데이트 하면 되겠다
 #     created_at = models.DateTimeField(auto_now_add=True)
 #     nlikes = models.IntegerField(default='0')
