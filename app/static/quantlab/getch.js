@@ -8,49 +8,16 @@ const template_feedblock = ({id, feed_image}) => `
   </div>
 `;
 
-const template_feed = ({}) => `
-  <div class="detailsec ui padded segment">
-    <div class="feed-menu ui secondary icon menu" style="background:none;">
-      <div class="item" style="background:none;padding:5px;">
-        {% include "app/user_avatar.html" with profile=feed.author %}
-      </div>
-
-      <div class="right compact menu">
-        <a class="item" action="feed_like" onclick="toggle_action(this)">
-          {% include "app/action_icon.html" with action_type="like" obj=post %}
-        </a>
-
-        <a class="item">
-          <div class="share-dropdown top right pointing ui dropdown">
-            <i class="large share alternate icon"></i>
-            <div class="menu">
-              <div class="item" data-value="kakaotalk">kakaotalk</div>
-              <div class="item" data-value="facebook">facebook</div>
-              <div class="item" data-value="instagram">instagram</div>
-              <div class="item" data-value="linkurl">link url</div>
-            </div>
-          </div>
-        </a>
+const template_pageblock = ({id, logo}) => `
+  <div class="block-container column">
+    <div class="block ui fluid card" page-id="${id}" href="${id}" onclick="block_click(this)">
+      <div class="block-base">
+        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${logo}" style="object-fit:contain;" onload="load_block(this)">
       </div>
     </div>
-
-    <p>{{ feed.content }}</p>
-
-    {% if feed.feed_image %}
-    <p>
-      <img src='{{ feed.feed_image.url }}' style="max-width:80%;" class="ui centered image">
-    </p>
-    {% endif %}
-
-    <p>
-    {% for hashtag in feed.hashtags.all %}
-      <a class="hashtag ui tiny label" href="#">{{ hashtag }}</a>
-    {% endfor %}
-    </p>
-
-    <p style="font-size:10px;">{{ feed.timestamp }}</p>
   </div>
 `;
+
 
 
 function ContentLoader(options) {
@@ -63,6 +30,10 @@ function ContentLoader(options) {
   switch (options.type) {
     case 'feedblock':
       template = template_feedblock;
+      break;
+
+    case 'pageblock':
+      template = template_pageblock;
       break;
   }
 
@@ -86,3 +57,23 @@ function block_click(block) {
   var url = $(block).attr("href");
   window.location.assign(url); //.replace()로 하면 history가 저장 안된다
 }
+
+
+
+// var ncols = 3;
+// var ncols_matcher = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six'};
+// var ncols_keys = Object.keys(ncols_matcher).map(function(key){ return Number(key) });
+// var ncols_max = Math.max.apply(null, ncols_keys);
+// var ncols_min = Math.min.apply(null, ncols_keys);
+// var window_width = $(window).width();
+//
+// function resize_blocks(where, step) {
+//   if (step > 0) {
+//     ncols = Math.min(ncols+step, ncols_max);
+//
+//   } else if (step < 0) {
+//     ncols = Math.max(ncols+step, ncols_min);
+//   }
+//
+//   $(where).attr('class', "ui " + ncols_matcher[ncols] + " column grid");
+// }

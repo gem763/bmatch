@@ -16,66 +16,15 @@
 <div class="body-content ui text container segments">
 
   <div class="ui segment">
-    <div class="content" style="background:none;">
-      <div class="ui medium header" style="background:none;margin:0;float:left;">
-        <i class="compass outline icon"></i>
-        <div class="content">
-          Discover your fashion style
-          <div class="sub header">내 패션 취향 대모험</div>
-        </div>
-      </div>
-
-      <div class="ui icon tiny basic right floated buttons" style="background:none;margin-top:5px;border:none;">
-        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(1)">
-          <i class="large zoom-out icon"></i>
-        </div>
-        <div class="ui icon large compact button" style="border:none;" onclick="resize_blocks(-1)">
-          <i class="large zoom-in icon"></i>
-        </div>
-      </div>
-
-      <div style="clear:both;"></div>
-    </div>
-  </div>
-
-
-  <div class="ui segment">
     <div class="ui header">
       <div class="content">
-        Hashtags
+        Your active pages
       </div>
     </div>
     <div class="content">
       <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
-      <div id="wordcloud" style="text-align:center"></div>
+      <div id="pageblocks" class="ui three column grid"></div>
     </div>
-  </div>
-
-  <div class="ui segment">
-    <div class="ui header">
-      <div class="content">
-        Feeds
-      </div>
-    </div>
-
-    <div class="content">
-      <div id="feeds" style="background:none;">
-      </div>
-    </div>
-  </div>
-
-  <div class="ui demo segment">
-    <div class="ui header">
-      <div class="content">
-        Infinite scroll test
-      </div>
-    </div>
-
-    <div class="content">
-      <div id="feedblocks" class="ui three column grid">
-      </div>
-    </div>
-
   </div>
 
 </div>
@@ -85,36 +34,14 @@
 {% block js %}
   {{ block.super }}
   <script>
-    const feedblock = ({id, feed_image}) => `
-      <div class="block-container column">
-        <div class="block ui fluid card" feed-id="${id}" href="${id}" onclick="block_click(this)">
-          <div class="block-base">
-            <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${feed_image}" style="object-fit:cover;" onload="load_block(this)">
-          </div>
-        </div>
-      </div>
-    `;
-
     $(document).ready(function(){
-      var feeds = {{ feeds | safe }};
-      $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
-
-      $('.demo.segment').visibility({
-        once: false,
-        observeChange: true,
-        onBottomVisible: function() {
-          $('#feedblocks').append(feeds.splice(0, 9).map(feedblock).join(''));
-        }
+      ContentLoader({
+        data: {{ pages | safe }},
+        where: '#pageblocks',
+        type: 'pageblock',
+        n_init: 9,
+        n_next: 9
       });
-
-      WordCloud({
-        container: "#wordcloud",
-        data: {{ hashtags_freq | safe }},
-        width: $("#wordcloud").width(),
-        height: 600
-      });
-
     });
-
   </script>
 {% endblock js %}

@@ -61,24 +61,20 @@ class Brand(models.Model):
     description = models.TextField(default='', blank=True, null=True)
     history = models.TextField(default='', blank=True, null=True)
     logo = models.ImageField(upload_to='brand_logos', default='') # 로고는 필수 (null=True 하면 안됨)
-    # identity = models.TextField(default='{}', blank=True, null=True)
-    # cluster = models.CharField(max_length=50, blank=True, null=True)
+
+    master = models.ForeignKey('Profile', blank=True, null=True, on_delete=models.SET_NULL) # 요건 유저가 feed를 생성할때마다 업데이트 하면 되겠다
+    created_at = models.DateTimeField(auto_now_add=True)
+    nlikes = models.IntegerField(default='0')
 
     def __str__(self):
         return self.fullname_en.capitalize()
-
-    # def get_id(self):
-    #     return json.loads(self.identity)
-        # return {i['key']:i['value'] for i in json.loads(self.identity)}
 
 
 class Post(BigIdAbstract):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
-    # filtered_image = models.ImageField(upload_to='posts/%Y/%m/%d/filtered')
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    # hashtags = models.ManyToManyField(Brand, blank=True)
     brands_related = models.ManyToManyField(Brand, blank=True)
 
     def __str__(self):
@@ -281,3 +277,14 @@ class Feed(BigIdAbstract):
 
     def __str__(self):
         return '{timestamp} {author}'.format(timestamp=self.timestamp, author=self.author)
+
+
+# class Page(models.Model):
+#     brand = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
+#
+#     master = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL) # 요건 유저가 feed를 생성할때마다 업데이트 하면 되겠다
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     nlikes = models.IntegerField(default='0')
+#     page_image = models.ImageField(upload_to='brand_logos', default='')
+#     name = models.CharField(max_length=120)
+#     description = models.TextField(default='', blank=True, null=True)

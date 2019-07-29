@@ -496,7 +496,7 @@ class SaveWorldcupView(View):
 
 
 def pages(request):
-    _pages = Brand.objects.all()
+    _pages = list(Brand.objects.all().values('id', 'logo'))
     return render(request, 'app/pages.html', {'pages':_pages})
 
 
