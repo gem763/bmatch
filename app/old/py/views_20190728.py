@@ -495,16 +495,41 @@ class SaveWorldcupView(View):
             return JsonResponse({'success':False})
 
 
-def pages(request):
-    _pages = Brand.objects.all()
-    return render(request, 'app/pages.html', {'pages':_pages})
-
 
 def discover(request):
     # 현재는 Social keywords 가 특정 브랜드로 들어가 있는데,
     # 향후, 트위터 real-time으로 불러오는 기능이 있어야함
     socialwords = _simwords('crocs', min=0.5, topn=100, amp=10)
     return render(request, 'app/discover.html', {'socialwords':socialwords})
+
+
+def feed_block(request, feed_id):
+    feed = Feed.objects.get(pk=feed_id)
+    block = render_to_string('app/block.html', {'feed':feed})
+    return JsonResponse(block, safe=False)
+
+
+def get_rendered(request):
+    if request.method=='GET':
+        what = request.GET.get('what', None)
+        ids = request.GET.get('ids', None)
+
+        _ids = ids.split(',')
+
+        if what == 'feedblock':
+            feeds = Feed.objects.filter(pk__in=_ids)
+            template = 'app/block.html'
+            rendered = [render_to_string(template, {'feed':feed}) for feed in feeds]
+
+        elif what == 'feed':
+            objs = Feed.objects.filter(pk__in=_ids)
+            template = None
+            rendered = None
+
+        else:
+            pass
+
+        return JsonResponse(rendered, safe=False)
 
 
 def _hashtags_freq(words_list, topn):
@@ -541,6 +566,91 @@ def journey(request, words):
     }
 
     return render(request, 'app/journey.html', ctx)
+
+
+
+def library(request):
+    return render(request, 'app/library.html')
+
+
+class LibraryView(AjaxListView):
+    context_object_name = 'brands'
+    template_name = 'app/library.html'
+    page_template = 'app/library_page.html'
+    qry = None
+    page = None
+
+    def get_queryset(self):
+        brands = Brand.objects
+        indexer = _indexer(brands)
+        # search_helper = _search_helper(brands)
+
+        all = None
+        simbrands = None
+
+        # 쿼리가 없는 경우 (discover 초기 페이지)
+        if self.qry is None:
+            if (self.page is None) | (self.page=='all'):
+                all = brands.order_by('name')
+
+            elif self.page=='like':
+                profile = Profile.objects.get(user__email=self.request.user.email)
+                all = profile.get_likes('brand').order_by('name')
+                # all = brands.filter(name__in=profile.get_likes2()).order_by('name')
+
+            else:
+                _regex = r'^[' + self.page.replace(' ', '') + ']'
+                all = brands.filter(fullname_en__iregex=_regex).order_by('name')
+
+        else:
+            bname = _in_bnames(self.qry, brands)
+            # exact = brands.get(Q(name=self.qry) | Q(fullname_en=self.qry) | Q(fullname_kr=self.qry) | Q(keywords__icontains=self.qry))
+
+            # 브랜드명(name, fullname_en, fullname_kr, keywords)이 입력된 경우
+            if bname is not None:
+                simbrands = _simbrands(bname=bname, top_min=60, bottom_max=10, n_max=20)
+
+            else:
+                simbrands = _simbrands(qry=self.qry, top_min=60, bottom_max=10, n_max=20)
+
+
+        return {
+            'qry': self.qry,
+            'indexer': indexer,
+            # 'search_helper':search_helper,
+            'all': all,
+            'simbrands': simbrands,
+        }
+
+
+    def get(self, request):
+        q = request.GET.get('q', None)
+        if q is not None:
+            self.qry = q.strip()
+
+        p = request.GET.get('p', None)
+        if p is not None:
+            self.page = p.lower()
+
+        return super().get(request)
+
+
+class BrandListView(AjaxListView):
+    context_object_name = 'brand_list'
+    template_name = 'app/brand_list.html'
+    page_template = 'app/brand_list_page.html'
+
+    def get_queryset(self):
+        qs = Brand.objects.exclude(logo_url='')
+        search = self.request.GET.get('search')
+
+        if search:
+            q_objects = Q()
+            for kwd in search.split(' '):
+                if kwd!='': q_objects.add(Q(name__icontains=kwd), Q.OR)
+            qs = qs.filter(q_objects)
+
+        return qs
 
 
 
@@ -591,3 +701,84 @@ def gtrend(request, brand_name):
         'query_top_data':query_top_data,
         'query_rising_data':query_rising_data
     })
+
+
+
+# def _simbrands_old(qry=None, bname=None, top_min=0.5, bottom_max=0):
+#     _top = None
+#     _bottom = None
+#     brands = Brand.objects
+#
+#     url = get_opt().api + '/simbrands'
+#     data = {}
+#
+#     if (qry is None) & (bname is not None):
+#         data['bname'] = bname
+#
+#     elif (qry is not None) & (bname is None):
+#         data['qry'] = qry
+#
+#     else:
+#         return _top, _bottom
+#
+#     res = requests.post(url, data=data).json()
+#
+#     def _put_scores(scores):
+#         simbrands = brands.filter(name__in=scores.keys())
+#
+#         for simbrand in simbrands:
+#             simbrand.score = scores[simbrand.name]
+#
+#         return sorted(simbrands, key=lambda x:-x.score)
+#
+#
+#     if top_min is not None:
+#         _scores = {k:round(100*v) for k,v in res.items() if v > top_min}
+#         _top = _put_scores(_scores)
+#
+#     if bottom_max is not None:
+#         _scores = {k:round(100*v) for k,v in res.items() if v < bottom_max}
+#         _bottom = _put_scores(_scores)
+#
+#     return _top, _bottom
+
+
+
+# def _simbrands_old(qry=None, mybname=None, top_min=0.5, bottom_max=0):
+#     _top = None
+#     _bottom = None
+#     brands = Brand.objects
+#     keywords_dict = _keywords_dict(brands)
+#
+#     url = get_opt().api + '/simbrands'
+#     data = {'brands':json.dumps(keywords_dict)}
+#
+#     if (qry is None) & (mybname is not None):
+#         data['mybname'] = mybname
+#
+#     elif (qry is not None) & (mybname is None):
+#         data['qry'] = qry
+#
+#     else:
+#         return _top, _bottom
+#
+#     res = requests.post(url, data=data).json()
+#
+#     def _put_scores(scores):
+#         simbrands = brands.filter(name__in=scores.keys())
+#
+#         for simbrand in simbrands:
+#             simbrand.score = scores[simbrand.name]
+#
+#         return sorted(simbrands, key=lambda x:-x.score)
+#
+#
+#     if top_min is not None:
+#         _scores = {k:round(100*v) for k,v in res.items() if v > top_min}
+#         _top = _put_scores(_scores)
+#
+#     if bottom_max is not None:
+#         _scores = {k:round(100*v) for k,v in res.items() if v < bottom_max}
+#         _bottom = _put_scores(_scores)
+#
+#     return _top, _bottom

@@ -32,9 +32,9 @@ urlpatterns = [
 
     path('', v.home, name='home'),
     path('discover/', v.discover, name='discover'),
-    path('library/', v.library, name='library'),
-    path('searched/', v.BrandListView.as_view()),
-    path('db_update/<category>/', v.db_update),
+    # path('library/', v.library, name='library'),
+    # path('searched/', v.BrandListView.as_view()),
+    # path('db_update/<category>/', v.db_update),
     path('rating/', v.RatingView.as_view(), name='rating'),
     path('myfavorite/', v.myfavorite, name='myfavorite'),
     path('brands/<bname>/', v.brand_detail, name='brand_detail'),
@@ -46,9 +46,9 @@ urlpatterns = [
     #path('brands/<bname>/identities/', identities, name='identities'),
 
     path('journey/<str:words>/', v.journey, name='journey'),
+    path('pages/', v.pages, name='pages'),
     # path('feed_blocks/<str:keywords>/', v.feed_blocks, name='feed_blocks'),
-    path('feed_block/<int:feed_id>/', v.feed_block, name='feed_block'),
-    path('get_rendered/', v.get_rendered, name='get_rendered'), 
+    # path('feed_block/<int:feed_id>/', v.feed_block, name='feed_block'),
 
     path('me/', v.me, name='me'),
 
