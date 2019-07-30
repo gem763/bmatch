@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 # from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post, Feed, CommentPost, Hashtag
+from app.models import Brand, Profile, Option, Post, Feed, CommentPost, Hashtag, Page
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
@@ -387,7 +387,7 @@ def _identity(bname=None, weights=None):
 
 # 주어진 Brand 객체의 로고 이미지 주소
 def _imgurl(brand):
-    return os.path.join(settings.MEDIA_URL, str(brand.logo))
+    return os.path.join(settings.MEDIA_URL, str(brand.image))
 
 
 def _indexer(brands):
@@ -496,7 +496,8 @@ class SaveWorldcupView(View):
 
 
 def pages(request):
-    _pages = list(Brand.objects.all().values('id', 'logo'))
+    _pages = list(Page.objects.all().values('id', 'page__image', 'master')) 이부분에서 master 에 None 이 들어가면 페이지 출력이 안된다...
+    print(_pages)
     return render(request, 'app/pages.html', {'pages':_pages})
 
 
@@ -523,7 +524,7 @@ def _feeds(words_list):
     for w in words_list:
         q = q | Q(hashtags__hashtag__icontains=w)
 
-    return Feed.objects.filter(q).exclude(feed_image__exact='').distinct().order_by('-timestamp')
+    return Feed.objects.filter(q).exclude(image__exact='').distinct().order_by('-timestamp')
 
 
 def journey(request, words):
@@ -537,7 +538,7 @@ def journey(request, words):
 
     ctx = {
         'hashtags_freq': hashtags_freq,
-        'feeds': list(feeds.values('id','membership_id','feed_image')),
+        'feeds': list(feeds.values('id','image')),
     }
 
     return render(request, 'app/journey.html', ctx)

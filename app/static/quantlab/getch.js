@@ -1,18 +1,18 @@
-const template_feedblock = ({id, feed_image}) => `
+const template_feedblock = ({id, image}) => `
   <div class="block-container column">
     <div class="block ui fluid card" feed-id="${id}" href="${id}" onclick="block_click(this)">
       <div class="block-base">
-        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${feed_image}" style="object-fit:cover;" onload="load_block(this)">
+        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" style="object-fit:cover;" onload="load_block(this)">
       </div>
     </div>
   </div>
 `;
 
-const template_pageblock = ({id, logo}) => `
+const template_pageblock = ({id, page__image}) => `
   <div class="block-container column">
     <div class="block ui fluid card" page-id="${id}" href="${id}" onclick="block_click(this)">
       <div class="block-base">
-        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${logo}" style="object-fit:contain;" onload="load_block(this)">
+        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${page__image}" style="object-fit:contain;" onload="load_block(this)">
       </div>
     </div>
   </div>
