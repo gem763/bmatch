@@ -496,9 +496,48 @@ class SaveWorldcupView(View):
 
 
 def pages(request):
-    _pages = list(Page.objects.all().values('id', 'page__image', 'master')) 이부분에서 master 에 None 이 들어가면 페이지 출력이 안된다...
-    print(_pages)
-    return render(request, 'app/pages.html', {'pages':_pages})
+    _pages = Page.objects.all().values('id', 'page__image', 'master__image').order_by('page__name')
+    [p.pop('master__image',None) for p in _pages if p['master__image'] is None]
+    return render(request, 'app/pages.html', {'pages':list(_pages)})
+
+
+def page(request, pname):
+    _page = Page.objects.get(page__name=pname)
+    # _feeds = _page.feed_set.all().prefetch_related('hashtags').values('id', 'author__image', 'content', 'image', 'hashtags').order_by('-timestamp')
+    # print(_feeds)
+
+    # _feeds = []
+    # for feed in list(_page.feed_set.all().order_by('-timestamp'))[:10]:
+    #     _feed = {
+    #         'id': feed.pk,
+    #         'author_image': feed.author.image.name,
+    #         'content': feed.content,
+    #         'hashtags': list(feed.hashtags.all().values_list('hashtag', flat=True))
+    #     }
+    #
+    #     try:
+    #         _feed['image'] = feed.image.name
+    #
+    #     except: pass
+    #
+    #     _feeds.append(_feed)
+
+    # print(_feeds)
+
+    template='app/page.html',
+    feeds_template='app/page_feeds.html'
+
+    ctx = {
+        'page': _page,
+        'feeds_template': feeds_template,
+    }
+
+    if request.is_ajax():
+        template = feeds_template
+
+    return render(request, template, ctx)
+
+    #return render(request, 'app/page.html', {'page':_page, 'feeds':_feeds})
 
 
 def discover(request):

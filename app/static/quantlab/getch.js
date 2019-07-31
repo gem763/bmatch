@@ -8,19 +8,125 @@ const template_feedblock = ({id, image}) => `
   </div>
 `;
 
-const template_pageblock = ({id, page__image}) => `
-  <div class="block-container column">
-    <div class="block ui fluid card" page-id="${id}" href="${id}" onclick="block_click(this)">
-      <div class="block-base">
-        <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${page__image}" style="object-fit:contain;" onload="load_block(this)">
+const template_feed2 = ({id, author__image, content, image}) => `
+  <div class="detailsec ui padded segment">
+    <div class="feed-menu ui secondary icon menu" style="background:none;">
+      <div class="item" style="background:none;padding:5px;">
+        <img class="ui circular image" src="https://storage.googleapis.com/getch-245810.appspot.com/${author__image}" style="object-fit:cover;width:30px;height:30px">
+      </div>
+
+      <div class="right compact menu">
+        <a class="item" action="feed_like" onclick="toggle_action(this)">
+        </a>
+
+        <a class="item">
+          <div class="share-dropdown top right pointing ui dropdown">
+            <i class="large share alternate icon"></i>
+            <div class="menu">
+              <div class="item" data-value="kakaotalk">kakaotalk</div>
+              <div class="item" data-value="facebook">facebook</div>
+              <div class="item" data-value="instagram">instagram</div>
+              <div class="item" data-value="linkurl">link url</div>
+            </div>
+          </div>
+        </a>
+
       </div>
     </div>
+
+    <p>${content}</p>
+
+    <p>
+      <img src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" style="max-width:80%;" class="ui centered image">
+    </p>
   </div>
 `;
 
+const template_hashtag = (hashtag) => `
+  <a class="hashtag ui tiny label" href="#">${hashtag}</a>
+`;
+
+
+const template_feed = function({id, author_image, content, image}) {
+  // var hashtags =
+
+  // `
+  //   <p>
+  //   {% for hashtag in feed.hashtags.all %}
+  //     <a class="hashtag ui tiny label" href="#">{{ hashtag }}</a>
+  //   {% endfor %}
+  //   </p>
+  // `;
+
+  const feed_base = `
+    <div class="detailsec ui padded segment">
+      <div class="feed-menu ui secondary icon menu" style="background:none;">
+        <div class="item" style="background:none;padding:5px;">
+          <img class="ui circular image" src="https://storage.googleapis.com/getch-245810.appspot.com/${author_image}" style="object-fit:cover;width:30px;height:30px">
+        </div>
+
+        <div class="right compact menu">
+          <a class="item" action="feed_like" onclick="toggle_action(this)">
+          </a>
+
+          <a class="item">
+            <div class="share-dropdown top right pointing ui dropdown">
+              <i class="large share alternate icon"></i>
+              <div class="menu">
+                <div class="item" data-value="kakaotalk">kakaotalk</div>
+                <div class="item" data-value="facebook">facebook</div>
+                <div class="item" data-value="instagram">instagram</div>
+                <div class="item" data-value="linkurl">link url</div>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <p>${content}</p>
+
+      <p>
+        <img src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" style="max-width:80%;" class="ui centered image">
+      </p>
+    </div>
+  `;
+
+  return feed_base;
+}
+
+
+const template_pageblock = function({id, page__image, master__image}) {
+  if (master__image == undefined) {
+    return `
+      <div class="block-container column">
+        <div class="block ui fluid card" page-id="${id}" href="${id}" onclick="block_click(this)">
+          <div class="block-base">
+            <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${page__image}" style="object-fit:contain;" onload="load_block(this)">
+          </div>
+        </div>
+      </div>
+    `;
+
+  } else {
+    return `
+      <div class="block-container column">
+        <div class="block ui fluid card" page-id="${id}" href="${id}" onclick="block_click(this)">
+          <div class="block-base">
+            <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${page__image}" style="object-fit:contain;" onload="load_block(this)">
+            <div class="block-master">
+              <img class="ui circular image" src="https://storage.googleapis.com/getch-245810.appspot.com/${master__image}" style="object-fit:cover;width:30px;height:30px;border:medium solid white">
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
 
 
 function ContentLoader(options) {
+  feather.replace();
   var template;
   var data = options.data;
   var where = options.where;
@@ -30,6 +136,10 @@ function ContentLoader(options) {
   switch (options.type) {
     case 'feedblock':
       template = template_feedblock;
+      break;
+
+    case 'feed':
+      template = template_feed;
       break;
 
     case 'pageblock':
