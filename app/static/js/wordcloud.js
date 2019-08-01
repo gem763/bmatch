@@ -33,6 +33,7 @@ function WordCloud(options) {
                return xScale(+d.value);
              })
              .text(function(d) { return d.key; })
+             // .font("Jost")
              .font("Impact")
              .random(arng)
              .on("end", draw)
@@ -58,6 +59,7 @@ function WordCloud(options) {
          .style("font-size", function(d) {
            return xScale(d.value) + "px";
          })
+         // .style("font-family", "Impact")
          .style("font-family", "Impact")
          .style("fill", function(d, i) { return fill(i); })
          .attr("text-anchor", "middle")
