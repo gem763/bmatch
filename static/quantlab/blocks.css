@@ -26,6 +26,13 @@
   opacity: 1;
 }
 
+.block-base {
+  background: none;
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
 .block-img {
   position: absolute;
   top: 0;
@@ -36,11 +43,10 @@
   height: 100%;
 }
 
-.block-base {
-  background: none;
-  width: 100%;
-  padding-top: 100%;
-  position: relative;
+.block-master {
+  position: absolute;
+  left: 5px;
+  top: 5px;
 }
 
 .block-aware {

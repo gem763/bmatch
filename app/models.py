@@ -8,6 +8,9 @@ import numpy as np
 from collections import OrderedDict
 from custom_user.models import AbstractEmailUser
 
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+
 # Create your models here.
 
 
@@ -49,37 +52,12 @@ class Hashtag(BigIdAbstract):
         return self.hashtag
 
 
-class Page(models.Model):
-    name = models.CharField(max_length=120)
-    created_at = models.DateTimeField(auto_now_add=True)
-    nlikes = models.IntegerField(default='0')
-
-    class Meta:
-        abstract = True
-
-
-class Brand(Page):#models.Model):
-    fullname_kr = models.CharField(max_length=120, blank=True, null=True)
-    fullname_en = models.CharField(max_length=120, blank=True, null=True)
-    keywords = models.TextField(default='')
-    website = models.CharField(max_length=200, blank=True, null=True)
-    origin = models.CharField(max_length=50, blank=True, null=True)
-    awareness = models.FloatField(default=0)
-    category = models.CharField(max_length=120, blank=True, null=True)
-    description = models.TextField(default='', blank=True, null=True)
-    history = models.TextField(default='', blank=True, null=True)
-    logo = models.ImageField(upload_to='brand_logos', default='') # 로고는 필수 (null=True 하면 안됨)
-
-    def __str__(self):
-        return self.fullname_en.capitalize()
-
-
 class Post(BigIdAbstract):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='posts/%Y/%m/%d/origin')
     content = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    brands_related = models.ManyToManyField(Brand, blank=True)
+    brands_related = models.ManyToManyField('Brand', blank=True)
 
     def __str__(self):
         return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
@@ -89,9 +67,85 @@ class Post(BigIdAbstract):
         return url
 
 
+class CommentBrand(BigIdAbstract):
+    brand = models.ForeignKey('Brand', blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
+
+
+class CommentPost(BigIdAbstract):
+    post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{created_at} {email}'.format(created_at=self.created_at, email=self.post.user.email)
+
+    def get_absolute_url(self):
+        url = reverse_lazy('post_detail', kwargs={'pk':self.post.pk})
+        return url
+
+
+def feed_image_path(instance, filename):
+    return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
+
+
+class Page(models.Model):
+    limit = models.Q(app_label='app', model='brand') | models.Q(app_label='app', model='custompage')
+    content_type = models.ForeignKey(ContentType, limit_choices_to=limit, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content = GenericForeignKey('content_type', 'object_id')
+    master = models.ForeignKey('Profile', blank=True, null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    nlikes = models.IntegerField(default='0')
+
+    def __str__(self):
+        return str(self.content)
+        # return str(self.created_at)
+
+    def feeds(self):
+        return self.feed_set.all().prefetch_related('hashtags').select_related('author').order_by('-timestamp')
+
+
+class Custompage(models.Model):
+    name = models.CharField(max_length=120)
+    keywords = models.TextField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='custompage_images', default='') # 로고는 필수 (null=True 하면 안됨)
+
+    pages = GenericRelation(Page, related_query_name='page')
+
+    def __str__(self):
+        return self.name
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=120)
+    fullname_kr = models.CharField(max_length=120, blank=True, null=True)
+    fullname_en = models.CharField(max_length=120, blank=True, null=True)
+    keywords = models.TextField(max_length=500, blank=True, null=True)
+    # website = models.CharField(max_length=200, blank=True, null=True)
+    origin = models.CharField(max_length=50, blank=True, null=True)
+    awareness = models.FloatField(default=0)
+    category = models.CharField(max_length=120, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    # history = models.TextField(default='', blank=True, null=True)
+    image = models.ImageField(upload_to='brand_images', default='') # 로고는 필수 (null=True 하면 안됨)
+
+    pages = GenericRelation(Page, related_query_name='page')
+
+    def __str__(self):
+        return self.fullname_en.capitalize()
+
+
 class Profile(BigIdAbstract):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    profile_image = models.ImageField(default='', max_length=500)
+    image = models.ImageField(default='', max_length=500)
 
     worldcup = models.TextField(blank=True, null=True, default='{}')
     initial_awared = models.TextField(blank=True, null=True)
@@ -107,9 +161,6 @@ class Profile(BigIdAbstract):
 
     def __str__(self):
         return self.user.email
-
-    # def get_likes2(self):
-    #     return [] if (self.likes is None) | (self.likes == '') else [w.strip() for w in self.likes.split(',')]
 
     def update_actions(self, action, add=None, remove=None):
         if action=='brand_like':
@@ -240,54 +291,15 @@ class Profile(BigIdAbstract):
         return {k:int(v) for k,v in zip(keys, x)}
 
 
-
-
-class CommentBrand(BigIdAbstract):
-    brand = models.ForeignKey(Brand, blank=True, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    content = models.TextField(max_length=500, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return '{created_at} {email}'.format(created_at=self.created_at, email=self.user.email)
-
-
-class CommentPost(BigIdAbstract):
-    post = models.ForeignKey(Post, blank=True, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    content = models.TextField(max_length=500, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return '{created_at} {email}'.format(created_at=self.created_at, email=self.post.user.email)
-
-    def get_absolute_url(self):
-        url = reverse_lazy('post_detail', kwargs={'pk':self.post.pk})
-        return url
-
-
-def feed_image_path(instance, filename):
-    return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
-
-
 class Feed(BigIdAbstract):
-    membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
+    # membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
+    pages = models.ManyToManyField(Page, blank=True)
     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
     nlikes = models.IntegerField(default='0')
     content = models.TextField(max_length=1000, null=True, blank=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True)
-    feed_image = models.ImageField(upload_to=feed_image_path)
+    image = models.ImageField(upload_to=feed_image_path)
 
     def __str__(self):
         return '{timestamp} {author}'.format(timestamp=self.timestamp, author=self.author)
-
-
-# class Page(models.Model):
-#     brand = models.ManyToManyField(Brand, blank=True)
-#     master = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL) # 요건 유저가 feed를 생성할때마다 업데이트 하면 되겠다
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     nlikes = models.IntegerField(default='0')
-#     page_image = models.ImageField(upload_to='brand_logos', default='')
-#     name = models.CharField(max_length=120)
-#     description = models.TextField(default='', blank=True, null=True)

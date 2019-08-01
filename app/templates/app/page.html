@@ -1,0 +1,226 @@
+{% extends "app/layout.html" %}
+
+{% load static %}
+{% block style %}
+  {{ block.super }}
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light.css"/>
+
+  <style>
+    .axis {
+    	font: 15px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #D4D8DA;
+      stroke-width: 2px;
+      shape-rendering: crispEdges;
+    }
+
+    #chart {
+    	position: absolute;
+    	top: 50px;
+    	left: 100px;
+    }
+
+    .toolTip {
+      pointer-events: none;
+    	position: absolute;
+        display: none;
+      min-width: 50px;
+      height: auto;
+      background: none repeat scroll 0 0 #ffffff;
+      padding: 9px 14px 6px 14px;
+      border-radius: 2px;
+      text-align: center;
+      line-height: 1.3;
+      color: #5B6770;
+      box-shadow: 0px 3px 9px rgba(0, 0, 0, .15);
+    }
+
+    .toolTip:after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid white;
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      margin-left: -12px;
+    }
+
+    .toolTip span {
+    	font-weight: 500;
+      color: #081F2C;
+    }
+
+    text:hover {
+      fill: black !important;
+      font-weight: bold;
+    }
+
+    .label-background-strong {
+      fill: black;
+      fill-opacity: 1;
+    }
+
+    .metabutton {
+      background: transparent !important;
+    }
+
+    .metabutton:hover {
+      background: rgba(220, 220, 220, .2) !important;
+    }
+
+    .feed-menu .item {
+      border-radius: 20px !important;
+      margin: 1px !important;
+      width: 40px !important;
+      height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      position: relative;
+    }
+
+    .action-icon {
+      position: absolute;
+      width: 60%;
+      height: 60%;
+      top: 50%;
+      left: 20px;
+      transform: translate(-50%, -50%);
+    }
+
+    [action="feed_like"] .action-icon[state='add'] {
+      fill: rgba(248,0,0,1);
+      stroke-width: 2;
+      color: black;
+    }
+
+    .hashtag.label {
+      color: black;
+      background: whitesmoke;
+      font-weight: normal;
+    }
+
+    @keyframes bottom_panel_show {
+      100% { opacity:1; bottom:0; }
+    }
+
+    @keyframes bottom_panel_hide {
+      0% { opacity:1; bottom:0; }
+    }
+  </style>
+{% endblock style %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with discover_act="active" %}
+{% endblock menu_top %}
+
+
+{% block content %}
+<div style="width:100%;background:none;">
+  <div class="ui text container" style="background:none;padding:0px;">
+    <div style="background:none;position:relative;width:100%;padding-top:50%;">
+      <div class="image" style="background:none;position:absolute;left:0;top:0;right:50%;bottom:0;padding:10px;">
+        <img src="{{ page.content.image.url }}" class="ui centered image" style="object-fit:contain;height:100%;">
+      </div>
+
+      <div style="background:none;position:absolute;left:50%;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;padding:10px;">
+        <div style="text-align:center;width:100%;">
+          <div class="ui huge header" style="background:none;text-transform:capitalize;">
+            <div>
+              {{ page.content.fullname_en }}
+              <div class="sub header">
+                <div>{{ page.content.fullname_kr }}</div>
+              </div>
+            </div>
+          </div>
+
+          {% if page.master %}
+          <div style="background:none;display:flex;align-items:center;justify-content:center">
+            <div style="display:inline-block">{% include "app/user_avatar.html" with profile=page.master %}</div>
+            <div style="display:inline-block;margin-left:10px;">Page master</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div style="width:100%;background:none;text-align:center">
+  <div class="ui center-aligned text container">
+    <div class="ui small compact button">정체성</div>
+    <div class="ui small compact button">비슷한</div>
+    <div class="ui small compact button">해시태그</div>
+    <div class="ui small compact button">트랜드</div>
+
+    <div class="ui divider" style="width:60%;margin-left:auto;margin-right:auto;"></div>
+
+    <div class="ui yellow large button" style="width:80%;">이 페이지에 피드하기</div>
+  </div>
+</div>
+
+
+<div id="feeds" class="body-content ui text container segments" style="border:none;">
+</div>
+{% endblock content %}
+
+
+{% block js %}
+  {{ block.super }}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="{% static 'js/d3.layout.cloud.js' %}"></script>
+  <script src="{% static 'js/wordcloud.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+
+  <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
+  <!-- chartjs 바차트의 rounded bar를 만들어주는 플러그인
+  https://github.com/jedtrow/Chart.js-Rounded-Bar-Charts -->
+  <script src="{% static 'js/Chart.roundedBarCharts.min.js' %}"></script>
+  <!-- <script src="{% static 'quantlab/bcard.js' %}"></script> -->
+  <!-- <script src="{% static 'js/d3-components-0.0.5.js' %}"></script> -->
+  <!-- <script src="{% static 'js/RadarChart.js' %}"></script> -->
+  <script src="{% static 'js/radarChart.js' %}"></script>
+
+  <script>
+    $(document).ready(function(){
+      ContentLoader({
+        data: {{ feeds | safe }},
+        where: '#feeds',
+        type: 'feed',
+        n_init: 10,
+        n_next: 5
+      });
+    });
+
+    function toggle_action(obj) {
+      var action = $(obj).attr("action");
+      var icons = $(obj).children(".action-icon");
+      var state = icons.attr("state");
+
+      var what = '{{ post.pk }}';
+      var data;
+
+      if (state=="add") {
+        icons.attr("state", "remove");
+        data = { action:action, remove:what };
+
+      } else if (state=='remove') {
+        icons.attr("state", "add");
+        data = { action:action, add:what };
+      };
+    };
+  </script>
+{% endblock js %}

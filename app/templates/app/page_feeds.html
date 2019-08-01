@@ -1,0 +1,42 @@
+{% load el_pagination_tags %}
+{% lazy_paginate 10,10 page.feeds as feeds %}
+{% for feed in feeds %}
+  <div class="detailsec ui padded segment">
+    <div class="feed-menu ui secondary icon menu" style="background:none;">
+      <div class="item" style="background:none;padding:5px;">
+        {% include "app/user_avatar.html" with profile=feed.author %}
+      </div>
+
+      <div class="right compact menu">
+        <a class="item" action="feed_like" onclick="toggle_action(this)">
+
+        </a>
+
+        <a class="item">
+          <div class="share-dropdown top right pointing ui dropdown">
+            <i class="large share alternate icon"></i>
+            <div class="menu">
+              <div class="item" data-value="kakaotalk">kakaotalk</div>
+              <div class="item" data-value="facebook">facebook</div>
+              <div class="item" data-value="instagram">instagram</div>
+              <div class="item" data-value="linkurl">link url</div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <p>{{ feed.content }}</p>
+
+    {% if feed.image %}
+    <p>
+      <img src='{{ feed.image.url }}' style="max-width:80%;" class="ui centered image">
+    </p>
+    {% endif %}
+
+
+    <p style="font-size:10px;">{{ feed.timestamp }}</p>
+  </div>
+{% endfor %}
+{% show_more %}

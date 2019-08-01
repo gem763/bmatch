@@ -1,6 +1,6 @@
 {% if profile %}
-  {% if profile.profile_image %}
-  <img class="ui circular image" src="{{ profile.profile_image.url }}" style="object-fit:cover;width:30px;height:30px">
+  {% if profile.image %}
+  <img class="ui circular image" src="{{ profile.image.url }}" style="object-fit:cover;width:30px;height:30px">
 
   {% else %}
   <img class="ui circular image" src="{{ profile.user.socialaccount_set.all.0.get_avatar_url }}" style="object-fit:cover;width:30px;height:30px">
