@@ -67,18 +67,6 @@
       fill-opacity: 1;
     }
 
-    .detailsec {
-      padding-bottom:50px !important;
-    }
-
-    .detailsec .header {
-      font-size: 20px !important;
-    }
-
-    .detailsec .content {
-      padding: 20px;
-    }
-
     .metabutton {
       background: transparent !important;
     }
@@ -134,18 +122,17 @@
 {% endblock menu_top %}
 
 
-
 {% block content %}
 <div style="width:100%;background:none;">
-  <div class="ui text container" style="background:none;position:relative;padding:20px;">
-    <div class="ui unstackable items" style="background:none;margin:0;">
-      <div class="item" style="background:none;">
-        <div class="image">
-          <img src="{{ page.content.image.url }}" class="ui centered image" style="object-fit:contain;">
-        </div>
+  <div class="ui text container" style="background:none;padding:0px;">
+    <div style="background:none;position:relative;width:100%;padding-top:50%;">
+      <div class="image" style="background:none;position:absolute;left:0;top:0;right:50%;bottom:0;padding:10px;">
+        <img src="{{ page.content.image.url }}" class="ui centered image" style="object-fit:contain;height:100%;">
+      </div>
 
-        <div class="middle aligned content">
-          <div class="ui huge header" style="text-transform:capitalize;">
+      <div style="background:none;position:absolute;left:50%;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;padding:10px;">
+        <div style="text-align:center;width:100%;">
+          <div class="ui huge header" style="background:none;text-transform:capitalize;">
             <div>
               {{ page.content.fullname_en }}
               <div class="sub header">
@@ -153,99 +140,37 @@
               </div>
             </div>
           </div>
-          <div class="meta" style="font-size:13px;">
-            <span>{{ page.content.origin }}</span>
-            <span>·</span>
-            <span>{{ page.content.category }}</span>
+
+          {% if page.master %}
+          <div style="background:none;display:flex;align-items:center;justify-content:center">
+            <div style="display:inline-block">{% include "app/user_avatar.html" with profile=page.master %}</div>
+            <div style="display:inline-block;margin-left:10px;">Page master</div>
           </div>
-          <div class="description" style="font-size:13px;">
-            <p></p>
-          </div>
-          <!-- <div class="extra" style="font-size:13px;">
-            <a href="//{{ brand.website }}" target="_blank">{{ brand.website }}</a>
-          </div> -->
+          {% endif %}
         </div>
       </div>
     </div>
-
-    <!-- <div style="background:none;position:absolute;transform:translate(-50%,-50%);right:-10px;top:30px;">
-      <div class="bookmark-dropdown top right pointing ui dropdown">
-        <input type="hidden" name="filters">
-        <i class="bookmark big icon" style="color:rgba(248,0,0,1)"></i>
-        <div class="menu">
-          <div class="item" data-value="favorite">favorite</div>
-          <div class="item" data-value="interest">interest</div>
-          <div class="item" data-value="collection">collection</div>
-        </div>
-      </div>
-    </div> -->
   </div>
 
 </div>
 
 
-<div style="width:100%;background:none;">
-  <div class="ui text container">
-    <div class="ui small compact button">Feeds</div>
-    <div class="ui small compact button">Identity</div>
-    <div class="ui small compact button">Similar brands</div>
-    <div class="ui small compact button">Hashtags</div>
-    <div class="ui small compact button">Trend</div>
+<div style="width:100%;background:none;text-align:center">
+  <div class="ui center-aligned text container">
+    <div class="ui small compact button">정체성</div>
+    <div class="ui small compact button">비슷한</div>
+    <div class="ui small compact button">해시태그</div>
+    <div class="ui small compact button">트랜드</div>
+
+    <div class="ui divider" style="width:60%;margin-left:auto;margin-right:auto;"></div>
+
+    <div class="ui yellow large button" style="width:80%;">이 페이지에 피드하기</div>
   </div>
 </div>
 
 
-<div id="feeds" class="ui text container segments" style="border:none;">
-  {% include feeds_template %}
+<div id="feeds" class="body-content ui text container segments" style="border:none;">
 </div>
-
-
-<!-- <div class="ui text container segments" style="border:none;">
-  {% for feed in brand.feeds %}
-  <div class="detailsec ui padded segment">
-    <div class="feed-menu ui secondary icon menu" style="background:none;">
-      <div class="item" style="background:none;padding:5px;">
-        {% include "app/user_avatar.html" with profile=feed.author %}
-      </div>
-
-      <div class="right compact menu">
-        <a class="item" action="feed_like" onclick="toggle_action(this)">
-          {% include "app/action_icon.html" with action_type="like" obj=post %}
-        </a>
-
-        <a class="item">
-          <div class="share-dropdown top right pointing ui dropdown">
-            <i class="large share alternate icon"></i>
-            <div class="menu">
-              <div class="item" data-value="kakaotalk">kakaotalk</div>
-              <div class="item" data-value="facebook">facebook</div>
-              <div class="item" data-value="instagram">instagram</div>
-              <div class="item" data-value="linkurl">link url</div>
-            </div>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <p>{{ feed.content }}</p>
-
-    {% if feed.feed_image %}
-    <p>
-      <img src='{{ feed.feed_image.url }}' style="max-width:80%;" class="ui centered image">
-    </p>
-    {% endif %}
-
-    <p>
-    {% for hashtag in feed.hashtags.all %}
-      <a class="hashtag ui tiny label" href="#">{{ hashtag }}</a>
-    {% endfor %}
-    </p>
-
-    <p style="font-size:10px;">{{ feed.timestamp }}</p>
-  </div>
-  {% endfor %}
-</div> -->
 {% endblock content %}
 
 
@@ -270,15 +195,15 @@
   <script src="{% static 'js/radarChart.js' %}"></script>
 
   <script>
-    // $(document).ready(function(){
-    //   ContentLoader({
-    //     data: {{ feeds | safe }},
-    //     where: '#feeds',
-    //     type: 'feed',
-    //     n_init: 10,
-    //     n_next: 5
-    //   });
-    // });
+    $(document).ready(function(){
+      ContentLoader({
+        data: {{ feeds | safe }},
+        where: '#feeds',
+        type: 'feed',
+        n_init: 10,
+        n_next: 5
+      });
+    });
 
     function toggle_action(obj) {
       var action = $(obj).attr("action");

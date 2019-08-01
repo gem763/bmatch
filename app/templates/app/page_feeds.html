@@ -1,5 +1,5 @@
 {% load el_pagination_tags %}
-{% lazy_paginate 10,10 page.feed_set.all as feeds %}
+{% lazy_paginate 10,10 page.feeds as feeds %}
 {% for feed in feeds %}
   <div class="detailsec ui padded segment">
     <div class="feed-menu ui secondary icon menu" style="background:none;">
@@ -9,7 +9,7 @@
 
       <div class="right compact menu">
         <a class="item" action="feed_like" onclick="toggle_action(this)">
-          
+
         </a>
 
         <a class="item">
@@ -35,11 +35,6 @@
     </p>
     {% endif %}
 
-    <!-- <p>
-    {% for hashtag in feed.hashtags.all %}
-      <a class="hashtag ui tiny label" href="#">{{ hashtag }}</a>
-    {% endfor %}
-    </p> -->
 
     <p style="font-size:10px;">{{ feed.timestamp }}</p>
   </div>

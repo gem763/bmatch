@@ -108,6 +108,9 @@ class Page(models.Model):
         return str(self.content)
         # return str(self.created_at)
 
+    def feeds(self):
+        return self.feed_set.all().prefetch_related('hashtags').select_related('author').order_by('-timestamp')
+
 
 class Custompage(models.Model):
     name = models.CharField(max_length=120)

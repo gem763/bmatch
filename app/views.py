@@ -496,48 +496,44 @@ class SaveWorldcupView(View):
 
 
 def pages(request):
-    _pages = Page.objects.all().values('id', 'page__image', 'master__image').order_by('page__name')
+    _pages = Page.objects.all().values('id', 'page__name', 'page__image', 'master__image').order_by('page__name')
     [p.pop('master__image',None) for p in _pages if p['master__image'] is None]
     return render(request, 'app/pages.html', {'pages':list(_pages)})
 
 
 def page(request, pname):
     _page = Page.objects.get(page__name=pname)
-    # _feeds = _page.feed_set.all().prefetch_related('hashtags').values('id', 'author__image', 'content', 'image', 'hashtags').order_by('-timestamp')
-    # print(_feeds)
+    _page_feeds = _page.feed_set.all().prefetch_related('hashtags', 'pages__content').select_related('author').order_by('-timestamp')[:]
 
-    # _feeds = []
-    # for feed in list(_page.feed_set.all().order_by('-timestamp'))[:10]:
-    #     _feed = {
-    #         'id': feed.pk,
-    #         'author_image': feed.author.image.name,
-    #         'content': feed.content,
-    #         'hashtags': list(feed.hashtags.all().values_list('hashtag', flat=True))
-    #     }
+    _feeds = []
+    for feed in _page_feeds:
+        _feed = {
+            'id': feed.pk,
+            'author_image': feed.author.image.name,
+            'content': feed.content,
+            # 'hashtags': feed.hashtags.all().values_list('hashtag', flat=True),
+            'hashtags': [str(tag) for tag in feed.hashtags.all()],
+            'image' : feed.image.name,
+            'pages_image': [{'name':page.content.name, 'image':page.content.image.name} for page in feed.pages.all()],
+            'timestamp': feed.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+
+        _feeds.append(_feed)
+
+    # template='app/page.html',
+    # feeds_template='app/page_feeds.html'
     #
-    #     try:
-    #         _feed['image'] = feed.image.name
+    # ctx = {
+    #     'page': _page,
+    #     'feeds_template': feeds_template,
+    # }
     #
-    #     except: pass
+    # if request.is_ajax():
+    #     template = feeds_template
     #
-    #     _feeds.append(_feed)
+    # return render(request, template, ctx)
 
-    # print(_feeds)
-
-    template='app/page.html',
-    feeds_template='app/page_feeds.html'
-
-    ctx = {
-        'page': _page,
-        'feeds_template': feeds_template,
-    }
-
-    if request.is_ajax():
-        template = feeds_template
-
-    return render(request, template, ctx)
-
-    #return render(request, 'app/page.html', {'page':_page, 'feeds':_feeds})
+    return render(request, 'app/page.html', {'page':_page, 'feeds':_feeds})
 
 
 def discover(request):
