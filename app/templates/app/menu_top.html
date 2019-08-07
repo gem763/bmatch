@@ -39,20 +39,22 @@
 </style>
 
 
-<div style="background:white;position:fixed;top:0;width:100%;height:none;z-index:100" id="top-header">
+<div style="background:white;position:fixed;top:0;width:100%;height:none;z-index:100;" id="top-header">
+  <div style="background:none;;position:absolute;top:0;left:0;z-index:-1;overflow:hidden;font-style:italic;font-weight:900;font-size:25px;letter-spacing:-2px;color:white;line-height:79%">
+    <span style="-webkit-text-stroke:1px rgba(255,132,9,0.2);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
+    <span style="-webkit-text-stroke:1px rgba(0,0,0,0.2);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
+    <span style="-webkit-text-stroke:1px rgba(144,238,146,0.5);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span>
+  </div>
+
   <!-- ;display:flex;align-items:center;justify-content:center -->
-  <div class="ui text container" style="background:none;position:relative;">
-    <div class="ui secondary icon compact menu" style="background:none;height:60px;width:100%;">
+  <div class="ui text container" style="background:none;">
+    <div class="ui secondary icon compact menu" style="background:none;height:60px;width:100%;position:relative;">
       <a class="item" style="padding:8px;" href="{% url 'home' %}">
-        <!-- <i class="large dot circle icon"></i> -->
-        <i data-feather="aperture"></i>
+        <!-- <i data-feather="aperture"></i> -->
         <!-- <div style="margin-left:5px;font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:25px;letter-spacing:3px;"><i>GET.CH</i></div> -->
         <!-- <div style="margin-left:5px;font-family:'Jost';font-weight:800;font-size:25px;letter-spacing:-2px;-webkit-text-stroke:1px rgba(114,238,146);color:white;"><i>GET.CH</i></div> -->
-        <div style="margin-left:5px;font-family:'Noto Sans KR';font-weight:900;font-size:25px;letter-spacing:-2px;-webkit-text-stroke:1px rgba(114,238,146);color:white;"><i>GET.CH</i></div>
+        <div style="font-weight:900;font-size:25px;letter-spacing:-2px;"><i>GET.CH</i></div>
       </a>
-
-      <!-- <div class="item" style="flex-grow:1;background:none;height:none;">
-      </div> -->
 
       <div class="right menu">
         <a class="item" id="search-shower" style="border-radius:20px;margin:1px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">

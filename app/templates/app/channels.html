@@ -18,12 +18,12 @@
   <div class="ui segment">
     <div class="ui header">
       <div class="content">
-        Your active pages
+        Your active channels
       </div>
     </div>
     <div class="content">
       <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
-      <div id="pageblocks" class="ui three column grid"></div>
+      <div id="channelblocks" class="ui three column grid"></div>
     </div>
   </div>
 
@@ -36,9 +36,9 @@
   <script>
     $(document).ready(function(){
       ContentLoader({
-        data: {{ pages | safe }},
-        where: '#pageblocks',
-        type: 'pageblock',
+        data: {{ channels | safe }},
+        where: '#channelblocks',
+        type: 'channelblock',
         n_init: 30,
         n_next: 9
       });

@@ -127,24 +127,24 @@
   <div class="ui text container" style="background:none;padding:0px;">
     <div style="background:none;position:relative;width:100%;padding-top:50%;">
       <div class="image" style="background:none;position:absolute;left:0;top:0;right:50%;bottom:0;padding:10px;">
-        <img src="{{ page.content.image.url }}" class="ui centered image" style="object-fit:contain;height:100%;">
+        <img src="{{ channel.content.image.url }}" class="ui centered image" style="object-fit:contain;height:100%;">
       </div>
 
       <div style="background:none;position:absolute;left:50%;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;padding:10px;">
         <div style="text-align:center;width:100%;">
           <div class="ui huge header" style="background:none;text-transform:capitalize;">
             <div>
-              {{ page.content.fullname_en }}
+              {{ channel.content.fullname_en }}
               <div class="sub header">
-                <div>{{ page.content.fullname_kr }}</div>
+                <div>{{ channel.content.fullname_kr }}</div>
               </div>
             </div>
           </div>
 
-          {% if page.master %}
+          {% if channel.master %}
           <div style="background:none;display:flex;align-items:center;justify-content:center">
-            <div style="display:inline-block">{% include "app/user_avatar.html" with profile=page.master %}</div>
-            <div style="display:inline-block;margin-left:10px;">Page master</div>
+            <div style="display:inline-block">{% include "app/user_avatar.html" with profile=channel.master %}</div>
+            <div style="display:inline-block;margin-left:10px;">channel master</div>
           </div>
           {% endif %}
         </div>

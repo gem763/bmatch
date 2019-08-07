@@ -95,8 +95,8 @@ def feed_image_path(instance, filename):
     return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
 
 
-class Page(models.Model):
-    limit = models.Q(app_label='app', model='brand') | models.Q(app_label='app', model='custompage')
+class Channel(models.Model):
+    limit = models.Q(app_label='app', model='brand') | models.Q(app_label='app', model='customchannel')
     content_type = models.ForeignKey(ContentType, limit_choices_to=limit, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content = GenericForeignKey('content_type', 'object_id')
@@ -112,13 +112,13 @@ class Page(models.Model):
         return self.feed_set.all().prefetch_related('hashtags').select_related('author').order_by('-timestamp')
 
 
-class Custompage(models.Model):
+class Customchannel(models.Model):
     name = models.CharField(max_length=120)
     keywords = models.TextField(max_length=500, blank=True, null=True)
     description = models.TextField(max_length=500, blank=True, null=True)
-    image = models.ImageField(upload_to='custompage_images', default='') # 로고는 필수 (null=True 하면 안됨)
+    image = models.ImageField(upload_to='customchannel_images', default='') # 로고는 필수 (null=True 하면 안됨)
 
-    pages = GenericRelation(Page, related_query_name='page')
+    channels = GenericRelation(Channel, related_query_name='channel')
 
     def __str__(self):
         return self.name
@@ -137,7 +137,7 @@ class Brand(models.Model):
     # history = models.TextField(default='', blank=True, null=True)
     image = models.ImageField(upload_to='brand_images', default='') # 로고는 필수 (null=True 하면 안됨)
 
-    pages = GenericRelation(Page, related_query_name='page')
+    channels = GenericRelation(Channel, related_query_name='channel')
 
     def __str__(self):
         return self.fullname_en.capitalize()
@@ -293,7 +293,7 @@ class Profile(BigIdAbstract):
 
 class Feed(BigIdAbstract):
     # membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
-    pages = models.ManyToManyField(Page, blank=True)
+    channels = models.ManyToManyField(Channel, blank=True)
     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
     nlikes = models.IntegerField(default='0')

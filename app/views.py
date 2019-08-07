@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 # from el_pagination.decorators import page_template
 from django.views.generic import View
 from .forms import PostForm, CommentPostForm
-from app.models import Brand, Profile, Option, Post, Feed, CommentPost, Hashtag, Page
+from app.models import Brand, Profile, Option, Post, Feed, CommentPost, Hashtag, Channel
 from app.utils import brand_from_wiki, Gtrend, brandinfo, brandinfos
 from django.contrib.auth.decorators import login_required
 import time
@@ -495,18 +495,18 @@ class SaveWorldcupView(View):
             return JsonResponse({'success':False})
 
 
-def pages(request):
-    _pages = Page.objects.all().values('id', 'page__name', 'page__image', 'master__image').order_by('page__name')
-    [p.pop('master__image',None) for p in _pages if p['master__image'] is None]
-    return render(request, 'app/pages.html', {'pages':list(_pages)})
+def channels(request):
+    _channels = Channel.objects.all().values('id', 'channel__name', 'channel__image', 'master__image').order_by('channel__name')
+    [ch.pop('master__image',None) for ch in _channels if ch['master__image'] is None]
+    return render(request, 'app/channels.html', {'channels':list(_channels)})
 
 
-def page(request, pname):
-    _page = Page.objects.get(page__name=pname)
-    _page_feeds = _page.feed_set.all().prefetch_related('hashtags', 'pages__content').select_related('author').order_by('-timestamp')[:]
+def channel(request, chname):
+    _channel = Channel.objects.get(channel__name=chname)
+    _channel_feeds = _channel.feed_set.all().prefetch_related('hashtags', 'channels__content').select_related('author').order_by('-timestamp')[:]
 
     _feeds = []
-    for feed in _page_feeds:
+    for feed in _channel_feeds:
         _feed = {
             'id': feed.pk,
             'author_image': feed.author.image.name,
@@ -514,7 +514,7 @@ def page(request, pname):
             # 'hashtags': feed.hashtags.all().values_list('hashtag', flat=True),
             'hashtags': [str(tag) for tag in feed.hashtags.all()],
             'image' : feed.image.name,
-            'pages_image': [{'name':page.content.name, 'image':page.content.image.name} for page in feed.pages.all()],
+            'channels_image': [{'name':ch.content.name, 'image':ch.content.image.name} for ch in feed.channels.all()],
             'timestamp': feed.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
         }
 
@@ -533,7 +533,7 @@ def page(request, pname):
     #
     # return render(request, template, ctx)
 
-    return render(request, 'app/page.html', {'page':_page, 'feeds':_feeds})
+    return render(request, 'app/channel.html', {'channel':_channel, 'feeds':_feeds})
 
 
 def discover(request):
