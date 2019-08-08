@@ -50,7 +50,6 @@
     border-color: rgba(255,132,9,1);
     padding: 10px;
     position: relative;
-    /* height:90px; */
   }
 
   #feedbox-profile {
@@ -66,12 +65,36 @@
     resize: none;
     background: none;
     padding-left: 50px;
-    padding-top: 10px;
+    /* padding-top: 10px; */
     width: 100%;
     height: 40px;
     overflow-y: hidden;
     border: none;
     line-height: 1.3em;
+  }
+
+  #feedbox-footmenu {
+    background: none;
+  }
+
+  #feedbox-footmenu .item {
+    border-radius: 20px !important;
+    margin: 1px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  #feedbox-footmenu .item .icon {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: 50%;
+    left: 20px;
+    transform: translate(-50%, -50%);
   }
 </style>
 
@@ -150,7 +173,24 @@
 
     <div id="feedbox">
       <img id="feedbox-profile" class="ui circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
-      <textarea placeholder="할까? 공유. 패션에 관한 _________"></textarea>
+      <textarea></textarea>
+      <div id="feedbox-footmenu">
+        <div class="ui divider" style="margin:0;"></div>
+
+
+          <div class="ui secondary icon compact menu" style="background:none;width:100%;">
+            <a class="item">
+              <i class="icon" data-feather="plus-circle"></i>
+            </a>
+
+            <div class="right menu">
+              <a class="item">
+                <i class="icon" data-feather="plus-circle"></i>
+              </a>
+            </div>
+          </div>
+
+      </div>
     </div>
 
   </div>
@@ -199,13 +239,26 @@
       }
     });
 
-    $('#feedbox textarea').focusin(function() {
+    var feedholder = '할까? 공유. 패션에 관한 _________'
+
+    $('#feedbox textarea').each(function() {
+      this.style.paddingTop = '10px';
+      this.placeholder = feedholder;
+      $('#feedbox-footmenu').css('display', 'none');
+
+    }).focusin(function() {
+      this.style.paddingTop = '60px';
       this.style.height = 'auto';
       this.style.height = (this.scrollHeight) + 'px';
+      this.placeholder = '';
+      $('#feedbox-footmenu').css('display', 'block');
 
     }).focusout(function() {
       if (this.value=='') {
         this.style.height = '40px';
+        this.style.paddingTop = '10px';
+        this.placeholder = feedholder;
+        $('#feedbox-footmenu').css('display', 'none');
       };
 
     }).on('input', function() {
