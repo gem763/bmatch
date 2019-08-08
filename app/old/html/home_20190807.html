@@ -1,0 +1,161 @@
+{% extends "app/layout.html" %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" %}
+{% endblock menu_top %}
+
+{% block content %}
+{% load static %}
+<style>
+  #intro {
+    width: 100%;
+    height: 300px;
+    /* margin-top:50px; */
+    /* background:lightblue url('{% static 'layout/intro_background.jpg'  %}') no-repeat fixed center; */
+    background: url("{% static 'layout/intro_background.jpg' %}");
+    background-repeat: repeat;
+    background-size: contain;
+    /* opacity: 0.5; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding-top: 50px; */
+  }
+
+  .home-guide {
+    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
+    cursor: pointer;
+  }
+
+  .home-guide:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+  }
+
+  .home-guide .square {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+  }
+
+  .home-guide .square-sub {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    padding: 10%;
+  }
+
+  .home-guide .square-sub svg {
+    background: none;
+    text-align: center;
+  }
+
+  .home-guide .square-sub svg .icon-header {
+    background: none;
+    padding-top: 5%;
+  }
+
+  .home-guide .square-sub svg .icon-header .content {
+    font-size: 10px;
+  }
+
+  .home-guide .square-sub svg .icon-header .content .header {
+    font-size: 10px;
+  }
+</style>
+
+
+<div id="intro">
+  <h1 class="ui icon header" style="background:rgba(255, 255, 255, .5);padding:20px">
+  <!-- <h1 class="ui icon header" style="text-shadow: 0 0 50px #ffffff"> -->
+    <!-- <i class="dot circle icon"></i> -->
+    <i data-feather="aperture" style="width:70px;height:70px;"></i>
+    <div class="content" style="font-size:40px;">
+      Get:ch
+      <div class="sub header">style yourself</div>
+    </div>
+  </h1>
+</div>
+
+<div class="ui text container" style="background:none;margin-top:20px;">
+  <div class="ui three cards" style="background:none;">
+
+    <div class="home-guide card" href="{% url 'discover' %}">
+      <div class="square">
+        <div class="square-sub">
+          <svg class="square-sub-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <foreignObject width="100%" height="100%">
+              <div class="icon-header ui icon small header">
+                <i class="home-guide-icon road icon"></i>
+                <div class="content">
+                  Style discovery
+                  <div class="sub header">스타일 대모험</div>
+                </div>
+              </div>
+            </foreignObject>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-guide card" href="{% url 'rating' %}">
+      <div class="square">
+        <div class="square-sub">
+          <svg class="square-sub-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <foreignObject width="100%" height="100%">
+              <div class="icon-header ui icon small header">
+                <i class="home-guide-icon heart icon"></i>
+                <div class="content">
+                  Brand fit
+                  <div class="sub header">이상형 월드컵</div>
+                </div>
+              </div>
+            </foreignObject>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-guide card" href="{% url 'me' %}">
+      <div class="square">
+        <div class="square-sub">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <foreignObject width="100%" height="100%">
+              <div class="icon-header ui icon small header">
+                <i class="home-guide-icon user icon"></i>
+                <div class="content">
+                  Tailored recommend
+                  <div class="sub header">맞춤형 제안</div>
+                </div>
+              </div>
+            </foreignObject>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<div class="ui text container">
+  <br>
+  <a href="{% url 'posts' %}">see all posts</a><br>
+  <!-- <a href="{% url 'myfavorite' %}">choose my favorite brand</a><br> -->
+  <a href="{% url 'level_test' %}">check your brand level</a>
+</div>
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script>
+    $('.home-guide').click(function() {
+      var url = $(this).attr("href");
+      window.location.assign(url);
+    })
+  </script>
+{% endblock js %}

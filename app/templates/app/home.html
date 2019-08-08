@@ -7,155 +7,215 @@
 {% block content %}
 {% load static %}
 <style>
+  #top-header {
+    display: none;
+  }
+
   #intro {
     width: 100%;
     height: 300px;
-    /* margin-top:50px; */
-    /* background:lightblue url('{% static 'layout/intro_background.jpg'  %}') no-repeat fixed center; */
     background: url("{% static 'layout/intro_background.jpg' %}");
     background-repeat: repeat;
     background-size: contain;
-    /* opacity: 0.5; */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* padding-top: 50px; */
   }
 
-  .home-guide {
-    box-shadow: 0 0 10px rgba(0,0,0,0.15) !important;
-    cursor: pointer;
+  .intromenu-item {
+    border-radius: 5px !important;
+    width: 80px !important;
+    height: 80px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
   }
 
-  .home-guide:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
-  }
-
-  .home-guide .square {
-    position: relative;
-    width: 100%;
-    padding-top: 100%;
-  }
-
-  .home-guide .square-sub {
+  .intromenu-icon {
     position: absolute;
+    width: 40%;
+    height: 40%;
+    transform: translate(0, -20%);
+  }
+
+  .intromenu-label {
+    position: absolute;
+    bottom: 10%;
+  }
+
+  #feedbox {
+    border-style: solid;
+    border-width: 15px;
+    border-color: rgba(255,132,9,1);
+    padding: 10px;
+    position: relative;
+    /* height:90px; */
+  }
+
+  #feedbox-profile {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  #feedbox textarea {
+    resize: none;
+    background: none;
+    padding-left: 50px;
+    padding-top: 10px;
     width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
-    padding: 10%;
-  }
-
-  .home-guide .square-sub svg {
-    background: none;
-    text-align: center;
-  }
-
-  .home-guide .square-sub svg .icon-header {
-    background: none;
-    padding-top: 5%;
-  }
-
-  .home-guide .square-sub svg .icon-header .content {
-    font-size: 10px;
-  }
-
-  .home-guide .square-sub svg .icon-header .content .header {
-    font-size: 10px;
+    height: 40px;
+    overflow-y: hidden;
+    border: none;
+    line-height: 1.3em;
   }
 </style>
 
-<!-- <div style="width:100%;background:white;height:300px;margin-top:50px;display:flex;align-items:center;justify-content:center;"> -->
-<div id="intro">
-  <h1 class="ui icon header" style="background:rgba(255, 255, 255, .5);padding:20px">
-  <!-- <h1 class="ui icon header" style="text-shadow: 0 0 50px #ffffff"> -->
-    <!-- <i class="dot circle icon"></i> -->
-    <i data-feather="aperture" style="width:70px;height:70px;"></i>
-    <div class="content" style="font-size:40px;">
-      Get:ch
-      <div class="sub header">style yourself</div>
-    </div>
-  </h1>
-</div>
 
-<div class="ui text container" style="background:none;margin-top:20px;">
-  <div class="ui three cards" style="background:none;">
+<div class="ui vertical masthead center aligned segment" style="background:none;border:none;">
 
-    <div class="home-guide card" href="{% url 'discover' %}">
-      <div class="square">
-        <div class="square-sub">
-          <svg class="square-sub-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <foreignObject width="100%" height="100%">
-              <div class="icon-header ui icon small header">
-                <i class="home-guide-icon road icon"></i>
-                <div class="content">
-                  Style discovery
-                  <div class="sub header">스타일 대모험</div>
-                </div>
-              </div>
-            </foreignObject>
-          </svg>
-        </div>
+  <div class="ui text container">
+
+    <table class="ui structured fixed unstackable very basic table">
+      <tbody>
+        <tr style="border:none;">
+          <td class="eight wide" rowspan="2" style="padding:5px;">
+            <div style="background:none;position:relative;width:100%;padding-top:100%;">
+              <img src="{{ feeds_top.0.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+            </div>
+          </td>
+          <td class="four wide" style="padding:5px;">
+            <div style="background:none;position:relative;width:100%;padding-top:100%;">
+              <img src="{{ feeds_top.1.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+            </div>
+          </td>
+          <td class="four wide" style="padding:5px;">
+            <div style="background:none;position:relative;width:100%;padding-top:100%;">
+              <img src="{{ feeds_top.2.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+            </div>
+          </td>
+        </tr>
+        <tr style="border:none;">
+          <td style="padding:5px;border:0 !important">
+            <div style="background:none;position:relative;width:100%;padding-top:100%;">
+              <img src="{{ feeds_top.3.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+            </div>
+          </td>
+          <td style="padding:5px;border:0 !important">
+            <div style="background:none;position:relative;width:100%;padding-top:100%;">
+              <img src="{{ feeds_top.4.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <div style="position:relative;background:none;">
+      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
+        <span style="color:transparent;-webkit-text-stroke:1px rgba(255,132,9,1);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
+        <span>GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
+        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span>
       </div>
     </div>
 
-    <div class="home-guide card" href="{% url 'rating' %}">
-      <div class="square">
-        <div class="square-sub">
-          <svg class="square-sub-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <foreignObject width="100%" height="100%">
-              <div class="icon-header ui icon small header">
-                <i class="home-guide-icon heart icon"></i>
-                <div class="content">
-                  Brand fit
-                  <div class="sub header">이상형 월드컵</div>
-                </div>
-              </div>
-            </foreignObject>
-          </svg>
-        </div>
-      </div>
+    <div class="ui compact labeled icon secondary menu">
+      <a class="intromenu-item item">
+        <i class="intromenu-icon" data-feather="search"></i>
+        <span class="intromenu-label">discover</span>
+      </a>
+
+      <a class="intromenu-item item">
+        <i class="intromenu-icon" data-feather="grid"></i>
+        <span class="intromenu-label">channel</span>
+      </a>
+
+      <a class="intromenu-item item">
+        <i class="intromenu-icon" data-feather="user"></i>
+        <span class="intromenu-label">mymy</span>
+      </a>
     </div>
 
-    <div class="home-guide card" href="{% url 'me' %}">
-      <div class="square">
-        <div class="square-sub">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <foreignObject width="100%" height="100%">
-              <div class="icon-header ui icon small header">
-                <i class="home-guide-icon user icon"></i>
-                <div class="content">
-                  Tailored recommend
-                  <div class="sub header">맞춤형 제안</div>
-                </div>
-              </div>
-            </foreignObject>
-          </svg>
-        </div>
-      </div>
-    </div>
+  </div>
 
 </div>
 
-<div class="ui text container">
-  <br>
-  <a href="{% url 'posts' %}">see all posts</a><br>
-  <!-- <a href="{% url 'myfavorite' %}">choose my favorite brand</a><br> -->
-  <a href="{% url 'level_test' %}">check your brand level</a>
+
+<div class="ui vertical segment" style="background:none;border:none;">
+  <div class="ui text container" style="background:none;">
+
+    <div id="feedbox">
+      <img id="feedbox-profile" class="ui circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
+      <textarea placeholder="할까? 공유. 패션에 관한 _________"></textarea>
+    </div>
+
+  </div>
 </div>
+
+
+<div class="ui vertical segment" style="background:none;border:none;">
+  <div class="ui text container">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+  </div>
+</div>
+
+
 {% endblock content %}
 
 {% block js %}
   {{ block.super }}
   <script>
-    $('.home-guide').click(function() {
-      var url = $(this).attr("href");
-      window.location.assign(url);
-    })
+    $('.masthead').visibility({
+      once: false,
+      onBottomPassed: function() {
+        $('#top-header').transition('fade in');
+      },
+      onBottomPassedReverse: function() {
+        $('#top-header').transition('fade out');
+      }
+    });
+
+    $('#feedbox textarea').focusin(function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+
+    }).focusout(function() {
+      if (this.value=='') {
+        this.style.height = '40px';
+      };
+
+    }).on('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // $('.home-guide').click(function() {
+    //   var url = $(this).attr("href");
+    //   window.location.assign(url);
+    // })
   </script>
 {% endblock js %}

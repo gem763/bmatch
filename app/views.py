@@ -208,7 +208,9 @@ def get_opt():
 
 
 def home(request):
-    return render(request, 'app/home.html')
+    feeds_top = Feed.objects.exclude(image__exact='').distinct().order_by('-nlikes')[:5]
+    # print(feeds_top.values_list('nlikes', flat=True))
+    return render(request, 'app/home.html', {'feeds_top':feeds_top})
 
 
 def intro(request):
