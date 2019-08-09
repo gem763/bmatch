@@ -33,6 +33,8 @@ function WordCloud(options) {
                return xScale(+d.value);
              })
              .text(function(d) { return d.key; })
+             // .font("Jost")
+             // .font("Noto Sans KR")
              .font("Impact")
              .random(arng)
              .on("end", draw)
@@ -59,6 +61,9 @@ function WordCloud(options) {
            return xScale(d.value) + "px";
          })
          .style("font-family", "Impact")
+         // .style("font-family", "Jost")
+         // .style("font-family", "Noto Sans KR")
+         .style("font-weight", "500")
          .style("fill", function(d, i) { return fill(i); })
          .attr("text-anchor", "middle")
          .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })

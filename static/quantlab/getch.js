@@ -9,10 +9,10 @@ const template_feedblock = ({id, image}) => `
 `;
 
 
-const template_feed = function({id, author_image, content, image, hashtags, pages_image, timestamp}) {
+const template_feed = function({id, author_image, content, image, hashtags, channels_image, timestamp}) {
   var template_hashtags;
   var template_image;
-  var template_pages_image;
+  var template_channels_image;
 
   if (hashtags.length == 0) {
     template_hashtags = '';
@@ -33,12 +33,12 @@ const template_feed = function({id, author_image, content, image, hashtags, page
     `;
   }
 
-  if (pages_image.length == 0) {
-    template_pages_image = '';
+  if (channels_image.length == 0) {
+    template_channels_image = '';
 
   } else {
-    template_pages_image = pages_image.map(({name, image}) => `
-      <a class="item" href="/page/${name}" style="background:none;padding:5px;">
+    template_channels_image = channels_image.map(({name, image}) => `
+      <a class="item" href="/channel/${name}" style="background:none;padding:5px;">
         <img class="ui circular image" src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" style="object-fit:contain;width:30px;height:30px">
       </a>
     `).join('');
@@ -51,7 +51,7 @@ const template_feed = function({id, author_image, content, image, hashtags, page
           <img class="ui circular image" src="https://storage.googleapis.com/getch-245810.appspot.com/${author_image}" style="object-fit:cover;width:30px;height:30px">
         </div>
 
-        ${template_pages_image}
+        ${template_channels_image}
 
         <div class="right compact menu">
           <a class="item" action="feed_like" onclick="toggle_action(this)">
@@ -84,7 +84,7 @@ const template_feed = function({id, author_image, content, image, hashtags, page
 }
 
 
-const template_pageblock = function({id, page__name, page__image, master__image}) {
+const template_channelblock = function({id, channel__name, channel__image, master__image}) {
   var template_master;
 
   if (master__image == undefined) {
@@ -100,9 +100,9 @@ const template_pageblock = function({id, page__name, page__image, master__image}
 
   return `
     <div class="block-container column">
-      <div class="block ui fluid card" page-id="${id}" href="/page/${page__name}" onclick="block_click(this)">
+      <div class="block ui fluid card" page-id="${id}" href="/channel/${channel__name}" onclick="block_click(this)">
         <div class="block-base">
-          <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${page__image}" style="object-fit:contain;" onload="load_block(this)">
+          <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${channel__image}" style="object-fit:contain;" onload="load_block(this)">
           ${template_master}
         </div>
       </div>
@@ -128,8 +128,8 @@ function ContentLoader(options) {
       template = template_feed;
       break;
 
-    case 'pageblock':
-      template = template_pageblock;
+    case 'channelblock':
+      template = template_channelblock;
       break;
   }
 

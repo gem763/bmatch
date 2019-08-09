@@ -65,7 +65,7 @@
     resize: none;
     background: none;
     padding-left: 50px;
-    /* padding-top: 10px; */
+    padding-top: 10px;
     width: 100%;
     height: 40px;
     overflow-y: hidden;
@@ -75,9 +75,10 @@
 
   #feedbox-footmenu {
     background: none;
+    padding: 0;
   }
 
-  #feedbox-footmenu .item {
+  .feedbox-footmenu-item {
     border-radius: 20px !important;
     margin: 1px !important;
     width: 40px !important;
@@ -88,13 +89,41 @@
     padding: 0 !important;
   }
 
-  #feedbox-footmenu .item .icon {
+  .feedbox-footmenu-icon {
     position: absolute;
     width: 60%;
     height: 60%;
     top: 50%;
     left: 20px;
     transform: translate(-50%, -50%);
+  }
+
+
+  #feedbox-topmenu {
+    background: none;
+  }
+
+  .feedbox-topmenu-item {
+    border-radius: 5px !important;
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  .feedbox-topmenu-icon {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    transform: translate(0, -20%);
+  }
+
+  .feedbox-topmenu-label {
+    position: absolute;
+    bottom: 10%;
+    font-size: 11px;
   }
 </style>
 
@@ -147,12 +176,12 @@
     </div>
 
     <div class="ui compact labeled icon secondary menu">
-      <a class="intromenu-item item">
+      <a class="intromenu-item item" href="/journey/adidas/">
         <i class="intromenu-icon" data-feather="search"></i>
         <span class="intromenu-label">discover</span>
       </a>
 
-      <a class="intromenu-item item">
+      <a class="intromenu-item item" href="/channels/">
         <i class="intromenu-icon" data-feather="grid"></i>
         <span class="intromenu-label">channel</span>
       </a>
@@ -173,19 +202,42 @@
 
     <div id="feedbox">
       <img id="feedbox-profile" class="ui circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
-      <textarea></textarea>
-      <div id="feedbox-footmenu">
-        <div class="ui divider" style="margin:0;"></div>
 
+      <textarea placeholder="할까? 공유. 패션에 관한 _________"></textarea>
+
+
+      <div id="feedbox-footmenu" class="ui center aligned basic segment">
+
+        <div id="feedbox-topmenu" class="ui compact labeled icon secondary menu">
+          <a class="feedbox-topmenu-item item">
+            <i class="feedbox-topmenu-icon" data-feather="star" style="fill:red;stroke-width:1;"></i>
+            <span class="feedbox-topmenu-label">맘대로 평가·후기</span>
+          </a>
+
+          <a class="feedbox-topmenu-item item">
+            <i class="feedbox-topmenu-icon" data-feather="layers" style="fill:lightblue;stroke-width:1;"></i>
+            <span class="feedbox-topmenu-label">별거 다 물어보기</span>
+          </a>
+
+          <a class="feedbox-topmenu-item item">
+            <i class="feedbox-topmenu-icon" data-feather="image" style="fill:orange;stroke-width:1;"></i>
+            <span class="feedbox-topmenu-label">이미지·영상</span>
+          </a>
+        </div>
+
+        <div class="ui divider" style="margin:5px;"></div>
 
           <div class="ui secondary icon compact menu" style="background:none;width:100%;">
-            <a class="item">
-              <i class="icon" data-feather="plus-circle"></i>
+            <a class="feedbox-footmenu-item item">
+              <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
             </a>
 
             <div class="right menu">
+              <!-- <a class="feedbox-footmenu-item item">
+                <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
+              </a> -->
               <a class="item">
-                <i class="icon" data-feather="plus-circle"></i>
+                submit
               </a>
             </div>
           </div>
@@ -197,31 +249,53 @@
 </div>
 
 
-<div class="ui vertical segment" style="background:none;border:none;">
-  <div class="ui text container">
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+<div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
+  <div class="ui text container" style="background:none;">
+    <div style="position:relative;background:none;">
+      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
+        <span>HOT.CHANNEL.NOW.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.</span><br>
+        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.</span>
+      </div>
+    </div>
+
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </p>
   </div>
 </div>
+
+
+<div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
+  <div class="ui text container" style="background:none;">
+    <div style="position:relative;background:none;">
+      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
+        <span>HOT.KEYWORD.NOW.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.</span><br>
+        <span style="color:transparent;-webkit-text-stroke:1px rgba(255,132,9,1);">HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.</span>
+      </div>
+    </div>
+
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+  </div>
+</div>
+
+
+<div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
+  <div class="ui text container" style="background:none;">
+    <div style="position:relative;background:none;">
+      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
+        <span>TRENDY.FEED.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.</span><br>
+        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.</span>
+      </div>
+    </div>
+
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+  </div>
+</div>
+
 
 
 {% endblock content %}
@@ -239,25 +313,26 @@
       }
     });
 
-    var feedholder = '할까? 공유. 패션에 관한 _________'
+    // var feedholder = '할까? 공유. 패션에 관한 _________'
 
     $('#feedbox textarea').each(function() {
-      this.style.paddingTop = '10px';
-      this.placeholder = feedholder;
+      // this.style.paddingTop = '10px';
+      // this.placeholder = feedholder;
       $('#feedbox-footmenu').css('display', 'none');
 
     }).focusin(function() {
-      this.style.paddingTop = '60px';
+      // this.style.paddingTop = '60px';
       this.style.height = 'auto';
       this.style.height = (this.scrollHeight) + 'px';
-      this.placeholder = '';
+      // this.placeholder = '';
       $('#feedbox-footmenu').css('display', 'block');
+      // $('#feedbox-topmenu').css('background', 'lightblue;');
 
     }).focusout(function() {
       if (this.value=='') {
         this.style.height = '40px';
-        this.style.paddingTop = '10px';
-        this.placeholder = feedholder;
+        // this.style.paddingTop = '10px';
+        // this.placeholder = feedholder;
         $('#feedbox-footmenu').css('display', 'none');
       };
 

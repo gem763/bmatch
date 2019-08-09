@@ -3,6 +3,31 @@
 {% block style %}
   {{ block.super }}
   <style>
+    #top-header {
+      display: none;
+    }
+
+    .intromenu-item {
+      border-radius: 5px !important;
+      width: 80px !important;
+      height: 80px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+    }
+
+    .intromenu-icon {
+      position: absolute;
+      width: 40%;
+      height: 40%;
+      transform: translate(0, -20%);
+    }
+
+    .intromenu-label {
+      position: absolute;
+      bottom: 10%;
+    }
   </style>
 {% endblock style %}
 
@@ -15,12 +40,66 @@
 {% load static %}
 <div class="body-content ui text container segments">
 
+
+  <div class="ui vertical masthead center aligned segment" style="background:none;border:none;">
+
+    <div class="ui text container">
+
+      <table class="ui structured fixed unstackable very basic table">
+        <tbody>
+          <tr style="border:none;">
+            <td class="eight wide" rowspan="2" style="padding:5px;">
+              <div style="background:none;position:relative;width:100%;padding-top:100%;">
+                이부분에서 막힌다. channels.0.content.image.url 안되나??
+                <img src="{{ channels.0.content.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+              </div>
+            </td>
+            <td class="four wide" style="padding:5px;">
+              <div style="background:none;position:relative;width:100%;padding-top:100%;">
+                <img src="{{ feeds_top.1.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+              </div>
+            </td>
+            <td class="four wide" style="padding:5px;">
+              <div style="background:none;position:relative;width:100%;padding-top:100%;">
+                <img src="{{ feeds_top.2.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+              </div>
+            </td>
+          </tr>
+          <tr style="border:none;">
+            <td style="padding:5px;border:0 !important">
+              <div style="background:none;position:relative;width:100%;padding-top:100%;">
+                <img src="{{ feeds_top.3.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+              </div>
+            </td>
+            <td style="padding:5px;border:0 !important">
+              <div style="background:none;position:relative;width:100%;padding-top:100%;">
+                <img src="{{ feeds_top.4.image.url }}" style="object-fit:cover;position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <div style="position:relative;background:none;">
+        <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
+          <span>CHANNEL.BEST.FIT.FOR.YOU.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.</span><br>
+          <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.CHANNEL.BEST.FIT.FOR.YOU.</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
   <div class="ui segment">
-    <div class="ui header">
+    <!-- <div class="ui header">
       <div class="content">
         Your active channels
       </div>
-    </div>
+    </div> -->
+
     <div class="content">
       <!-- header에 설치된 폰트가 적용되려면, content로 싸아야한다.  -->
       <div id="channelblocks" class="ui three column grid"></div>
@@ -34,6 +113,16 @@
 {% block js %}
   {{ block.super }}
   <script>
+    $('.masthead').visibility({
+      once: false,
+      onBottomPassed: function() {
+        $('#top-header').transition('fade in');
+      },
+      onBottomPassedReverse: function() {
+        $('#top-header').transition('fade out');
+      }
+    });
+
     $(document).ready(function(){
       ContentLoader({
         data: {{ channels | safe }},
