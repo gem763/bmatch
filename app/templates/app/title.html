@@ -1,0 +1,72 @@
+<style>
+  .title {
+    position: relative;
+    background: none;
+  }
+
+  .title .sub {
+    background: none;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -2px;
+    line-height: 79%
+  }
+
+  .title .sub.up {
+    top: -30px;
+  }
+
+  .title .sub.mid {
+    top: 0;
+  }
+
+  .title .black-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(0,0.0,0.1);
+  }
+
+  .title .green-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(144,238,146,1);
+  }
+
+  .title .orange-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,132,9,1);
+  }
+</style>
+
+
+<div class="title">
+  {% if type == 0 %}
+  <div class="sub up">
+    <span class="orange-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span><br>
+    <span>{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span><br>
+    <span class="green-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span>
+  </div>
+
+  {% elif type == 1 %}
+  <div class="sub mid">
+    <span>{{ title }}</span><span class="black-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span><br>
+    <span class="green-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span>
+  </div>
+
+  {% elif type == 2 %}
+  <div class="sub mid">
+    <span>{{ title }}</span><span class="black-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span><br>
+    <span class="orange-stroke">{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}{{ title }}</span>
+  </div>
+
+  {% elif type == 3 %}
+  <div class="sub mid">
+    <span class="orange-stroke" style="font-size:40px;">{{ title }}</span><br>
+    <span style="font-size:40px;">{{ title }}</span><br>
+    <span class="green-stroke" style="font-size:40px;">{{ title }}</span>
+  </div>
+
+  {% endif %}
+</div>

@@ -209,8 +209,18 @@ def get_opt():
 
 def home(request):
     feeds_top = Feed.objects.exclude(image__exact='').distinct().order_by('-nlikes')[:5]
-    # print(feeds_top.values_list('nlikes', flat=True))
-    return render(request, 'app/home.html', {'feeds_top':feeds_top})
+
+    channels_all = Channel.objects.all()
+    _topch = list(channels_all.order_by('-nlikes'))[:5]
+
+    # now = pd.Timestamp.now().tz_localize(None)
+    now = pd.Timestamp(Feed.objects.order_by('timestamp').last().timestamp)
+    _from = (now - pd.DateOffset(months=3)).date()
+    _hashtags = Hashtag.objects.filter(feed__timestamp__date__gte=_from).exclude(feed__content__contains='카지노').values_list('hashtag', flat=True)
+    _freq = dict(Counter(_hashtags).most_common(100))
+
+    # print(_freq)
+    return render(request, 'app/home.html', {'feeds_top':feeds_top, 'top_channels':_topch, 'hashtags_freq':_freq})
 
 
 def intro(request):
@@ -498,9 +508,11 @@ class SaveWorldcupView(View):
 
 
 def channels(request):
-    _channels = Channel.objects.all().values('id', 'channel__name', 'channel__image', 'master__image').order_by('channel__name')
+    channels_all = Channel.objects.all()
+    _channels = channels_all.values('id', 'channel__name', 'channel__image', 'master__image').order_by('channel__name')
     [ch.pop('master__image',None) for ch in _channels if ch['master__image'] is None]
-    return render(request, 'app/channels.html', {'channels':list(_channels)})
+    _topch = list(channels_all.order_by('-nlikes'))[:5]
+    return render(request, 'app/channels.html', {'channels':list(_channels), 'top_channels':_topch})
 
 
 def channel(request, chname):

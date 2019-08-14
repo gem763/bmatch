@@ -1,0 +1,84 @@
+<style>
+  .focus-grid {
+    border: none !important;
+    background: none !important;
+  }
+
+  .focus-grid tbody tr {
+    border: none !important;
+  }
+
+  .focus-grid tbody tr td {
+    border: none !important;
+    padding: 5px !important;
+    /* background: whitesmoke; */
+  }
+
+  .focus-grid tbody tr td .outer {
+    /* background: rgba(255,132,9,1) !important; */
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+  }
+
+  .focus-grid tbody tr td .outer .inner {
+    background:white !important;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .focus-grid tbody tr td .outer .inner img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<table class="focus-grid ui structured fixed unstackable table">
+  <tbody>
+    <tr>
+      <td class="eight wide" rowspan="2">
+        <div class="outer">
+          <div class="inner">
+            <img src="{{ top_channels.0.content.image.url }}" onload="color_border(this)">
+          </div>
+        </div>
+      </td>
+      <td class="four wide">
+        <div class="outer">
+          <div class="inner">
+            <img src="{{ top_channels.1.content.image.url }}" onload="color_border(this)">
+          </div>
+        </div>
+      </td>
+      <td class="four wide">
+        <div class="outer">
+          <div class="inner">
+            <img src="{{ top_channels.2.content.image.url }}" onload="color_border(this)">
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <div class="outer">
+          <div class="inner">
+            <img src="{{ top_channels.3.content.image.url }}" onload="color_border(this)">
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="outer">
+          <div class="inner">
+            <img src="{{ top_channels.4.content.image.url }}" onload="color_border(this)">
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+
+</table>

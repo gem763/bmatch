@@ -295,7 +295,7 @@ class Feed(BigIdAbstract):
     # membership = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
     channels = models.ManyToManyField(Channel, blank=True)
     author = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.SET_NULL)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=False, auto_now=False)
     nlikes = models.IntegerField(default='0')
     content = models.TextField(max_length=1000, null=True, blank=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True)

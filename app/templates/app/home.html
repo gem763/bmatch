@@ -11,7 +11,7 @@
     display: none;
   }
 
-  #intro {
+  /* #intro {
     width: 100%;
     height: 300px;
     background: url("{% static 'layout/intro_background.jpg' %}");
@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+  } */
 
   .intromenu-item {
     border-radius: 5px !important;
@@ -167,13 +167,7 @@
 
     </table>
 
-    <div style="position:relative;background:none;">
-      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
-        <span style="color:transparent;-webkit-text-stroke:1px rgba(255,132,9,1);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
-        <span>GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span><br>
-        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.GET.CH.</span>
-      </div>
-    </div>
+    {% include "app/title.html" with title="GET.CH." type=0 %}
 
     <div class="ui compact labeled icon secondary menu">
       <a class="intromenu-item item" href="/journey/adidas/">
@@ -251,44 +245,30 @@
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
   <div class="ui text container" style="background:none;">
-    <div style="position:relative;background:none;">
-      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
-        <span>HOT.CHANNEL.NOW.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.</span><br>
-        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.HOT.CHANNEL.NOW.</span>
-      </div>
-    </div>
-
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+    {% include "app/title.html" with title="HOT.CHANNEL.NOW." type=1 %}
+    {% include "app/focus_grid.html" %}
   </div>
 </div>
 
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
   <div class="ui text container" style="background:none;">
-    <div style="position:relative;background:none;">
-      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
-        <span>HOT.KEYWORD.NOW.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.</span><br>
-        <span style="color:transparent;-webkit-text-stroke:1px rgba(255,132,9,1);">HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.HOT.KEYWORD.NOW.</span>
-      </div>
-    </div>
+    {% include "app/title.html" with title="HOT.KEYWORD.NOW." type=2 %}
 
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+    <br>
+    최근 3개월...
+    <br>
+    
+    <div class="content">
+      <div id="wordcloud" style="text-align:center"></div>
+    </div>
   </div>
 </div>
 
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
   <div class="ui text container" style="background:none;">
-    <div style="position:relative;background:none;">
-      <div style="background:none;;position:relative;top:-30px;z-index:1;overflow:hidden;font-style:italic;font-weight:900;font-size:30px;letter-spacing:-2px;line-height:79%">
-        <span>TRENDY.FEED.</span><span style="color:transparent;-webkit-text-stroke:1px rgba(0,0.0,0.1);">TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.</span><br>
-        <span style="color:transparent;-webkit-text-stroke:1px rgba(144,238,146,1);">TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.TRENDY.FEED.</span>
-      </div>
-    </div>
+    {% include "app/title.html" with title="WHAT.S.NEW." type=1 %}
 
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -302,7 +282,24 @@
 
 {% block js %}
   {{ block.super }}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="{% static 'js/d3.layout.cloud.js' %}"></script>
+  <script src="{% static 'js/wordcloud.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+
+  <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script>
+
+
   <script>
+    WordCloud({
+      container: "#wordcloud",
+      data: {{ hashtags_freq | safe }},
+      width: $("#wordcloud").width(),
+      height: 600
+    });
+
+
     $('.masthead').visibility({
       once: false,
       onBottomPassed: function() {

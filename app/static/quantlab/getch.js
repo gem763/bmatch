@@ -100,7 +100,7 @@ const template_channelblock = function({id, channel__name, channel__image, maste
 
   return `
     <div class="block-container column">
-      <div class="block ui fluid card" page-id="${id}" href="/channel/${channel__name}" onclick="block_click(this)">
+      <div class="block ui fluid" page-id="${id}" href="/channel/${channel__name}" onclick="block_click(this)">
         <div class="block-base">
           <img class="block-img" src="https://storage.googleapis.com/getch-245810.appspot.com/${channel__image}" style="object-fit:contain;" onload="load_block(this)">
           ${template_master}
@@ -145,8 +145,38 @@ function ContentLoader(options) {
 }
 
 
+function getRandLevel() {
+  return Math.floor(Math.random() * 5);
+}
+
+function getRandColor() {
+  lv = getRandLevel();
+
+  if (lv==0) {
+    color = 'rgba(242,242,242,1)';
+  } else if (lv==1) {
+    color = 'rgba(22,187,204,1)';
+  } else if (lv==2) {
+    color = 'rgba(114,238,146,1)';
+  } else if (lv=3) {
+    color = 'rgba(255,132,9,1)';
+  } else if (lv=4) {
+    color = 'rgba(241,20,15,1)'
+  };
+
+  return color
+}
+
+
+function color_border(obj) {
+  $(obj).parents('.outer').css('background', getRandColor());
+}
+
 function load_block(img) {
   $(img).parents('.block').css('opacity', 1);
+
+  rcolor = getRandColor()
+  $(img).parents('.block').css('border', '10px solid ' + rcolor);
 }
 
 function block_click(block) {

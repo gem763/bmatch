@@ -29,6 +29,7 @@ var window_width = $(window).width();
 // }
 
 
+
 function resize_blocks(step) {
   if (step > 0) {
     ncols = Math.min(ncols+step, ncols_max);
@@ -50,9 +51,8 @@ function load_blocks(where, url) {
 
 
 function load_block(img) {
-  feather.replace();
   $(img).parents('.block').css('opacity', 1);
-}
+};
 
 function block_more(event, icon) {
   event.stopPropagation();

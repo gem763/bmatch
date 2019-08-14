@@ -11,11 +11,13 @@
 }
 
 .block {
-  box-shadow: 0 0 5px rgba(0,0,0,0.15) !important;
+  /* box-shadow: 0 0 5px rgba(0,0,0,0.15) !important; */
+  /* border: 10px solid; */
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
   transition: opacity 1s !important;
+  background: none;
 }
 
 .block:hover {
