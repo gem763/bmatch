@@ -1,0 +1,165 @@
+<style>
+  #feedbox {
+    border-style: solid;
+    border-width: 15px;
+    border-color: rgba(255,132,9,1);
+    padding: 10px;
+    position: relative;
+    /* height: auto;
+    transition: height 1s; */
+  }
+
+  #feedbox-profile {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  #feedbox textarea {
+    resize: none;
+    background: none;
+    padding-left: 50px;
+    padding-top: 10px;
+    width: 100%;
+    height: 40px;
+    overflow-y: hidden;
+    border: none;
+    line-height: 1.3em;
+  }
+
+  #feedbox-footmenu {
+    background: none;
+    margin: 0;
+    padding: 0;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s;
+  }
+
+  .feedbox-footmenu-item {
+    border-radius: 20px !important;
+    margin: 1px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  .feedbox-footmenu-icon {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: 50%;
+    left: 20px;
+    transform: translate(-50%, -50%);
+  }
+
+
+  #feedbox-topmenu {
+    background: none;
+    margin-top: 30px;
+  }
+
+  .feedbox-topmenu-item {
+    border-radius: 5px !important;
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  .feedbox-topmenu-icon {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    transform: translate(0, -20%);
+  }
+
+  .feedbox-topmenu-label {
+    position: absolute;
+    bottom: 10%;
+    font-size: 11px;
+  }
+</style>
+
+
+
+<div id="feedbox">
+  <img id="feedbox-profile" class="ui circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
+
+  <textarea placeholder="할까? 공유. 패션에 관한 _________"></textarea>
+
+
+  <div id="feedbox-footmenu" class="ui center aligned basic segment">
+
+    <div id="feedbox-topmenu" class="ui compact labeled icon secondary menu">
+      <a class="feedbox-topmenu-item item">
+        <i class="feedbox-topmenu-icon" data-feather="star" style="fill:red;stroke-width:1;"></i>
+        <span class="feedbox-topmenu-label">맘대로 평가·후기</span>
+      </a>
+
+      <a class="feedbox-topmenu-item item">
+        <i class="feedbox-topmenu-icon" data-feather="layers" style="fill:lightblue;stroke-width:1;"></i>
+        <span class="feedbox-topmenu-label">별거 다 물어보기</span>
+      </a>
+
+      <a class="feedbox-topmenu-item item">
+        <i class="feedbox-topmenu-icon" data-feather="image" style="fill:orange;stroke-width:1;"></i>
+        <span class="feedbox-topmenu-label">이미지·영상</span>
+      </a>
+    </div>
+
+    <div class="ui divider" style="margin:5px;"></div>
+
+      <div class="ui secondary icon compact menu" style="background:none;width:100%;">
+        <a class="feedbox-footmenu-item item">
+          <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
+        </a>
+
+        <div class="right menu">
+          <a class="item" style="border-radius:5px;">
+            submit
+          </a>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+
+<script>
+  var cursor_on_item = false;
+
+  $('#feedbox .item').on({
+    'mouseenter': function() { cursor_on_item = true; },
+    'mouseleave': function() { cursor_on_item = false; },
+    'click': function() { $('#feedbox textarea').focus(); }
+  });
+
+  $('#feedbox textarea').on({
+    'focusin': function() {
+      this.style.height = '40px';
+      this.style.height = (this.scrollHeight) + 'px';
+      $('#feedbox-footmenu').css('height', '145px');
+    },
+
+    'focusout': function() {
+      if (this.value=='' && !cursor_on_item) {
+        this.style.height = '40px';
+        $('#feedbox-footmenu').css('height', '0px');
+      };
+    },
+
+    'input': function() {
+      this.style.height = '40px';
+      this.style.height = (this.scrollHeight) + 'px';
+    }
+  });
+</script>

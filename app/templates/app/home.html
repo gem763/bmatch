@@ -43,88 +43,6 @@
     position: absolute;
     bottom: 10%;
   }
-
-  #feedbox {
-    border-style: solid;
-    border-width: 15px;
-    border-color: rgba(255,132,9,1);
-    padding: 10px;
-    position: relative;
-  }
-
-  #feedbox-profile {
-    object-fit: cover;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-
-  #feedbox textarea {
-    resize: none;
-    background: none;
-    padding-left: 50px;
-    padding-top: 10px;
-    width: 100%;
-    height: 40px;
-    overflow-y: hidden;
-    border: none;
-    line-height: 1.3em;
-  }
-
-  #feedbox-footmenu {
-    background: none;
-    padding: 0;
-  }
-
-  .feedbox-footmenu-item {
-    border-radius: 20px !important;
-    margin: 1px !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-
-  .feedbox-footmenu-icon {
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    top: 50%;
-    left: 20px;
-    transform: translate(-50%, -50%);
-  }
-
-
-  #feedbox-topmenu {
-    background: none;
-  }
-
-  .feedbox-topmenu-item {
-    border-radius: 5px !important;
-    width: 60px !important;
-    height: 60px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-
-  .feedbox-topmenu-icon {
-    position: absolute;
-    width: 40%;
-    height: 40%;
-    transform: translate(0, -20%);
-  }
-
-  .feedbox-topmenu-label {
-    position: absolute;
-    bottom: 10%;
-    font-size: 11px;
-  }
 </style>
 
 
@@ -167,7 +85,9 @@
 
     </table>
 
-    {% include "app/title.html" with title="GET.CH." type=0 %}
+    <div class="title-container" style="position:relative;background:none;height:70px;">
+      {% include "app/title.html" with title="GET.CH." type=0 %}
+    </div>
 
     <div class="ui compact labeled icon secondary menu">
       <a class="intromenu-item item" href="/journey/adidas/">
@@ -193,72 +113,29 @@
 
 <div class="ui vertical segment" style="background:none;border:none;">
   <div class="ui text container" style="background:none;">
-
-    <div id="feedbox">
-      <img id="feedbox-profile" class="ui circular image" src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
-
-      <textarea placeholder="할까? 공유. 패션에 관한 _________"></textarea>
-
-
-      <div id="feedbox-footmenu" class="ui center aligned basic segment">
-
-        <div id="feedbox-topmenu" class="ui compact labeled icon secondary menu">
-          <a class="feedbox-topmenu-item item">
-            <i class="feedbox-topmenu-icon" data-feather="star" style="fill:red;stroke-width:1;"></i>
-            <span class="feedbox-topmenu-label">맘대로 평가·후기</span>
-          </a>
-
-          <a class="feedbox-topmenu-item item">
-            <i class="feedbox-topmenu-icon" data-feather="layers" style="fill:lightblue;stroke-width:1;"></i>
-            <span class="feedbox-topmenu-label">별거 다 물어보기</span>
-          </a>
-
-          <a class="feedbox-topmenu-item item">
-            <i class="feedbox-topmenu-icon" data-feather="image" style="fill:orange;stroke-width:1;"></i>
-            <span class="feedbox-topmenu-label">이미지·영상</span>
-          </a>
-        </div>
-
-        <div class="ui divider" style="margin:5px;"></div>
-
-          <div class="ui secondary icon compact menu" style="background:none;width:100%;">
-            <a class="feedbox-footmenu-item item">
-              <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
-            </a>
-
-            <div class="right menu">
-              <!-- <a class="feedbox-footmenu-item item">
-                <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
-              </a> -->
-              <a class="item">
-                submit
-              </a>
-            </div>
-          </div>
-
-      </div>
-    </div>
-
+    {% include "app/feedbox.html" %}
   </div>
 </div>
 
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
-  <div class="ui text container" style="background:none;">
+  <div class="title-container ui container" style="position:relative;background:none;height:70px;">
     {% include "app/title.html" with title="HOT.CHANNEL.NOW." type=1 %}
+  </div>
+
+  <div class="ui text container">
     {% include "app/focus_grid.html" %}
   </div>
 </div>
 
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
-  <div class="ui text container" style="background:none;">
+  <div class="title-container ui container" style="position:relative;background:none;height:70px;">
     {% include "app/title.html" with title="HOT.KEYWORD.NOW." type=2 %}
+  </div>
 
-    <br>
+  <div class="ui text container">
     최근 3개월...
-    <br>
-    
     <div class="content">
       <div id="wordcloud" style="text-align:center"></div>
     </div>
@@ -267,12 +144,12 @@
 
 
 <div class="ui vertical segment" style="background:none;border:none;margin-top:50px;">
-  <div class="ui text container" style="background:none;">
+  <div class="title-container ui container" style="position:relative;background:none;height:70px;">
     {% include "app/title.html" with title="WHAT.S.NEW." type=1 %}
+  </div>
 
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+  <div class="ui text container">
+    BLANK
   </div>
 </div>
 
@@ -309,38 +186,5 @@
         $('#top-header').transition('fade out');
       }
     });
-
-    // var feedholder = '할까? 공유. 패션에 관한 _________'
-
-    $('#feedbox textarea').each(function() {
-      // this.style.paddingTop = '10px';
-      // this.placeholder = feedholder;
-      $('#feedbox-footmenu').css('display', 'none');
-
-    }).focusin(function() {
-      // this.style.paddingTop = '60px';
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-      // this.placeholder = '';
-      $('#feedbox-footmenu').css('display', 'block');
-      // $('#feedbox-topmenu').css('background', 'lightblue;');
-
-    }).focusout(function() {
-      if (this.value=='') {
-        this.style.height = '40px';
-        // this.style.paddingTop = '10px';
-        // this.placeholder = feedholder;
-        $('#feedbox-footmenu').css('display', 'none');
-      };
-
-    }).on('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-    });
-
-    // $('.home-guide').click(function() {
-    //   var url = $(this).attr("href");
-    //   window.location.assign(url);
-    // })
   </script>
 {% endblock js %}
