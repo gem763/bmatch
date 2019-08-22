@@ -208,9 +208,18 @@ def get_opt():
 
 
 def home(request):
-    feeds_top = Feed.objects.exclude(image__exact='').distinct().order_by('-nlikes')[:5]
-
     channels_all = Channel.objects.all()
+
+    searcher = channels_all.values(
+                    'channel__name',
+                    'channel__image',
+                    'channel__category',
+                    'channel__fullname_kr',
+                    'channel__fullname_en',
+                    'channel__keywords'
+                ).order_by('channel__name')
+
+    feeds_top = Feed.objects.exclude(image__exact='').distinct().order_by('-nlikes')[:5]
     _topch = list(channels_all.order_by('-nlikes'))[:5]
 
     # now = pd.Timestamp.now().tz_localize(None)
@@ -219,8 +228,8 @@ def home(request):
     _hashtags = Hashtag.objects.filter(feed__timestamp__date__gte=_from).exclude(feed__content__contains='카지노').values_list('hashtag', flat=True)
     _freq = dict(Counter(_hashtags).most_common(100))
 
-    # print(_freq)
-    return render(request, 'app/home.html', {'feeds_top':feeds_top, 'top_channels':_topch, 'hashtags_freq':_freq})
+    return render(request, 'app/home.html', {'feeds_top':feeds_top, 'top_channels':_topch, 'hashtags_freq':_freq, 'searcher':searcher})
+    # return render(request, 'app/home.html', {'searcher':searcher})
 
 
 def intro(request):

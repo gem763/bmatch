@@ -8,6 +8,7 @@
   {% load static %}
   {% block style %}
   <link rel="stylesheet" type="text/css" href="/static/semantic/semantic.min.css">
+  <link href="https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css" rel="stylesheet">
   <!-- <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,800" rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,900&display=swap&subset=korean" rel="stylesheet">
   <!-- <link rel="stylesheet" href="https://indestructibletype.com/fonts/Jost.css" type="text/css" charset="utf-8" /> -->
@@ -17,6 +18,8 @@
 
   <!-- onload에서 불러오는 함수가 있기 때문에, 요거는 맨 앞에 위치 -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js"></script>
   <script src="{% static 'semantic/semantic.min.js' %}"></script>
   <script src="{% static 'js/feather.js' %}"></script>
   <!-- <script src="{% static 'quantlab/blocks.js' %}"></script> -->
@@ -143,7 +146,8 @@
         source: helper,
         fullTextSearch: true,
         showNoResults: false,
-        maxResults: 5,
+        maxResults: 500,
+        minCharacters: 0,
         searchFields: ['title', 'description', 'categories'],
         templates: {
           standard: function(response){

@@ -87,6 +87,17 @@
     bottom: 10%;
     font-size: 11px;
   }
+
+  /* .dataTables_scrollBody {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    width: 100%'
+  } */
+  #channel-selector {
+    transition: left 0.5s;
+  }
+
 </style>
 
 
@@ -119,7 +130,7 @@
     <div class="ui divider" style="margin:5px;"></div>
 
       <div class="ui secondary icon compact menu" style="background:none;width:100%;">
-        <a class="feedbox-footmenu-item item">
+        <a class="add-channel feedbox-footmenu-item item">
           <i class="feedbox-footmenu-icon" data-feather="plus-circle"></i>
         </a>
 
@@ -134,13 +145,66 @@
 </div>
 
 
+<div id="channel-selector" style="position:fixed;width:300px;height:100%;top:0;left:-300px;background:transparent;z-index:50;padding:5px;">
+  <div style="position:relative;width:100%;height:100%;background:white;border-radius:10px;box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;text-align:center;padding-top:20px;">
+
+    <table id="example" class="ui unstackable fixed selectable basic table" style="width:100%;border:none;background:none;margin-top:20px;">
+        <thead style="display:none;">
+            <tr>
+                <th>channel</th>
+                <th>keywords</th>
+                <th>category</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for ele in searcher %}
+            <tr name="{{ ele.channel__name }}">
+                <td style="background:none;">
+                  <h4 class="ui image header">
+                    <img class="ui image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{ ele.channel__image }}" style="object-fit:contain;height:80px;width:80px;">
+                    <div class="content">
+                      {{ ele.channel__fullname_en }}
+                      <div class="sub header">
+                        {{ ele.channel__fullname_kr }}
+                      </div>
+                    </div>
+                  </h4>
+                </td>
+
+                <td style="display:none;">{{ ele.channel__keywords }}</td>
+                <td style="display:none;">{{ ele.channel__category }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+
+  </div>
+</div>
+
 <script>
+  $('#example').DataTable({
+    scrollY: '90vh',
+    scrollCollapse: true,
+    paging:   false,
+    ordering: false,
+    dom: '<"top"flp>rt'
+  });
+
   var cursor_on_item = false;
 
+
+  // 아래 두개의 마우스위치를 동시에 판별하는 방법은?
   $('#feedbox .item').on({
     'mouseenter': function() { cursor_on_item = true; },
     'mouseleave': function() { cursor_on_item = false; },
     'click': function() { $('#feedbox textarea').focus(); }
+  });
+
+  $('#channel-selector').on({
+    'mouseenter': function() { cursor_on_item = true; },
+    'mouseleave': function() { cursor_on_item = false; },
   });
 
   $('#feedbox textarea').on({
@@ -162,4 +226,13 @@
       this.style.height = (this.scrollHeight) + 'px';
     }
   });
+
+  $('.add-channel').on({
+    'click': function() { $('#channel-selector').css('left', '0'); }
+  });
+
+  $('#channel-selector #example tr').on({
+    'click': function() { $('#channel-selector').css('left', '-300px') }
+  });
+
 </script>
