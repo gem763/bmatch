@@ -1,4 +1,4 @@
-const template_feedblock = ({id, image}) => `
+const template_feedblock2 = ({id, image}) => `
   <div class="block-container column">
     <div class="block ui fluid card" feed-id="${id}" href="${id}" onclick="block_click(this)">
       <div class="block-base">
@@ -8,6 +8,12 @@ const template_feedblock = ({id, image}) => `
   </div>
 `;
 
+
+const template_feedblock = ({id, image}) => `
+  <div class="grid-item">
+    <img src="https://storage.googleapis.com/getch-245810.appspot.com/${image}"/>
+  </div>
+`;
 
 const template_feed = function({id, author_image, content, image, hashtags, channels_image, timestamp}) {
   var template_hashtags;

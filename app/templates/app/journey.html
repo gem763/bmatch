@@ -7,6 +7,53 @@
       fill: black !important;
       font-weight: bold;
     }
+
+    * { box-sizing: border-box; }
+
+    body { font-family: sans-serif; }
+
+    /* ---- grid ---- */
+
+    .grid {
+      /* background: lightgreen; */
+      /* max-width: 1200px; */
+    }
+
+    /* clearfix */
+    .grid:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    /* ---- grid-item ---- */
+
+    .grid-sizer,
+    .grid-item {
+      /* width: 160px; */
+      width: 25%;
+      /* height: 120px; */
+      float: left;
+      /* background: #D26; */
+      /* border: 1px solid black; */
+      /* border-color: hsla(0, 0%, 0%, 0.5); */
+      padding: 5px;
+      /* border-radius: 5px; */
+      /* margin-bottom: 10px; */
+    }
+
+    .grid-item img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* .grid-item--width2 { width: 320px; }
+    .grid-item--width3 { width: 480px; }
+    .grid-item--width4 { width: 640px; } */
+
+    .grid-item--height2 { height: 200px; }
+    .grid-item--height3 { height: 260px; }
+    .grid-item--height4 { height: 360px; }
   </style>
 {% endblock style %}
 
@@ -18,6 +65,33 @@
 {% block content %}
 {% load static %}
 <div class="main-segments ui text container segments">
+
+  <!-- <div class="grid">
+    <div class="grid-sizer"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--width2 grid-item--height2"></div>
+    <div class="grid-item grid-item--height3"></div>
+    <div class="grid-item grid-item--height2"></div>
+    <div class="grid-item grid-item--width3"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--height2"></div>
+    <div class="grid-item grid-item--width2 grid-item--height3"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--height2"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--width2 grid-item--height2"></div>
+    <div class="grid-item grid-item--width2"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--height2"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--height3"></div>
+    <div class="grid-item grid-item--height2"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item grid-item--height2"></div>
+  </div> -->
 
   <!-- <div class="ui segment">
     <div class="content" style="background:none;">
@@ -43,7 +117,7 @@
   </div> -->
 
 
-  <div class="ui segment">
+  <div class="ui segment" style="background:lightblue !important;">
     <div class="ui header">
       <div class="content">
         Hashtags
@@ -63,12 +137,23 @@
     </div>
 
     <div class="content">
-      <div id="feedblocks" class="ui three column grid">
-      </div>
+      <!-- <div id="feedblocks" class="ui three column grid"> -->
+      <!-- <div id="feedblocks" class="grid">
+        <div class="grid-sizer"></div>
+      </div> -->
     </div>
 
   </div>
 
+</div>
+
+
+<div class="ui vertical masthead center aligned segment" style="background:none;border:none;">
+  <div class="ui container">
+    <div id="feedblocks" class="grid">
+      <div class="grid-sizer"></div>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
@@ -99,6 +184,16 @@
         data: {{ hashtags_freq | safe }},
         width: $("#wordcloud").width(),
         height: 600
+      });
+
+      var $grid = $('.grid').masonry({
+        itemSelector: '.grid-item',
+        percentPosition: true,
+        columnWidth: '.grid-sizer'
+      });
+      // layout Masonry after each image loads
+      $grid.imagesLoaded().progress( function() {
+        $grid.masonry();
       });
 
     });
