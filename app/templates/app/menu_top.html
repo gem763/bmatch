@@ -39,7 +39,7 @@
 
   #top-header .ui.menu a.item:hover {
     color: red !important;
-    background: rgba(255,255,255,0.7);
+    /* background: rgba(255,255,255,0.7); */
   }
 
   #top-header .right.menu .item {
@@ -87,11 +87,15 @@
 
 
 <div id="top-header">
-  <div class="background-title">
+  <!-- <div class="background-title">
     {% include "app/title.html" with title="GET.CH." type="header" %}
-  </div>
+  </div> -->
 
   <div class="ui secondary icon compact menu">
+    <a class="header item" style="font-size:30px;font-weight:900;letter-spacing:-3px;padding:10px;border-radius:10px;" href="{% url 'home' %}">
+      <span>GET</span><span style="color:aqua">.</span><span>CH</span>
+    </a>
+
     <div class="right menu">
       <a class="first item">
         <i class="icon" data-feather="plus-square"></i>

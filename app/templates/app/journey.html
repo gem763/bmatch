@@ -30,16 +30,11 @@
 
     .grid-sizer,
     .grid-item {
-      /* width: 160px; */
       width: 25%;
-      /* height: 120px; */
       float: left;
-      /* background: #D26; */
-      /* border: 1px solid black; */
-      /* border-color: hsla(0, 0%, 0%, 0.5); */
       padding: 5px;
-      /* border-radius: 5px; */
-      /* margin-bottom: 10px; */
+      /* opacity: 0;
+      transition: opacity 0.5s !important; */
     }
 
     .grid-item img {
@@ -47,13 +42,6 @@
       max-width: 100%;
     }
 
-    /* .grid-item--width2 { width: 320px; }
-    .grid-item--width3 { width: 480px; }
-    .grid-item--width4 { width: 640px; } */
-
-    .grid-item--height2 { height: 200px; }
-    .grid-item--height3 { height: 260px; }
-    .grid-item--height4 { height: 360px; }
   </style>
 {% endblock style %}
 
@@ -117,7 +105,7 @@
   </div> -->
 
 
-  <div class="ui segment" style="background:lightblue !important;">
+  <div class="ui segment" style="background:none !important;">
     <div class="ui header">
       <div class="content">
         Hashtags
@@ -129,7 +117,7 @@
     </div>
   </div>
 
-  <div class="ui segment">
+  <!-- <div class="ui segment">
     <div class="ui header">
       <div class="content">
         Feeds
@@ -137,22 +125,22 @@
     </div>
 
     <div class="content">
-      <!-- <div id="feedblocks" class="ui three column grid"> -->
-      <!-- <div id="feedblocks" class="grid">
-        <div class="grid-sizer"></div>
-      </div> -->
+      <div id="feedblocks" class="ui three column grid"></div>
     </div>
 
-  </div>
+  </div> -->
 
 </div>
 
 
 <div class="ui vertical masthead center aligned segment" style="background:none;border:none;">
-  <div class="ui container">
-    <div id="feedblocks" class="grid">
+  <div class="ui masonry container" style="background:none;">
+    <div id="feedblocks" class="grid" style="background:none;">
       <div class="grid-sizer"></div>
     </div>
+    <!-- <div id='reloader'>
+      loading...
+    </div> -->
   </div>
 </div>
 
@@ -171,12 +159,18 @@
 
   <script>
     $(document).ready(function(){
+      var $grid = $('.grid').masonry({
+        itemSelector: '.grid-item',
+        percentPosition: true,
+        columnWidth: '.grid-sizer'
+      });
+
       ContentLoader({
         data: {{ feeds | safe }},
-        where: '#feedblocks',
+        where: $grid,
         type: 'feedblock',
-        n_init: 9,
-        n_next: 9
+        n_init: 16,
+        n_next: 12
       });
 
       WordCloud({
@@ -186,15 +180,10 @@
         height: 600
       });
 
-      var $grid = $('.grid').masonry({
-        itemSelector: '.grid-item',
-        percentPosition: true,
-        columnWidth: '.grid-sizer'
-      });
-      // layout Masonry after each image loads
-      $grid.imagesLoaded().progress( function() {
-        $grid.masonry();
-      });
+      //
+      // $grid.imagesLoaded().progress( function() {
+      //   $grid.masonry('layout');
+      // });
 
     });
 

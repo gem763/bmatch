@@ -11,7 +11,7 @@ const template_feedblock2 = ({id, image}) => `
 
 const template_feedblock = ({id, image}) => `
   <div class="grid-item">
-    <img src="https://storage.googleapis.com/getch-245810.appspot.com/${image}"/>
+    <img class="ui rounded image" src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" onerror="imgerr(this)"/>
   </div>
 `;
 
@@ -117,6 +117,13 @@ const template_channelblock = function({id, channel__name, channel__image, maste
 }
 
 
+function imgerr(image) {
+  $(image).parents('.grid-item').css('display', 'none');
+  // image.onerror = '';
+  // image.src = '';
+  // return true;
+}
+
 function ContentLoader(options) {
   feather.replace();
   var template;
@@ -139,15 +146,28 @@ function ContentLoader(options) {
       break;
   }
 
-  $(where).append(data.splice(0, n_init).map(template).join(''));
 
-  $(where).visibility({
+  var $elems = $(data.splice(0, n_init).map(template).join(''));
+  where.append($elems).masonry('appended', $elems);
+
+  where.imagesLoaded().progress( function() {
+    where.masonry();
+  });
+
+  $('.masonry.container').visibility({
     once: false,
-    observeChange: true,
-    onBottomVisible: function() {
-      $(where).append(data.splice(0, n_next).map(template).join(''));
+    observeChanges: true,
+    onBottomVisible: function(calculations) {
+      $elems = $(data.splice(0, n_next).map(template).join(''));
+      where.append($elems).masonry('appended', $elems);
+
+      where.imagesLoaded().progress( function() {
+        where.masonry();
+      });
+      // $(where).append(data.splice(0, n_next).map(template).join(''));
     }
   });
+
 }
 
 
@@ -179,6 +199,10 @@ function color_border(obj) {
 }
 
 function load_block(img) {
+  $(img).parents('.grid-item').css('opacity', 1);
+}
+
+function load_block2(img) {
   $(img).parents('.block').css('opacity', 1);
 
   rcolor = getRandColor()
