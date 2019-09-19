@@ -198,6 +198,21 @@ def deletepost(request, pk):
         return HttpResponseRedirect(reverse('posts'))
 
 
+def feed(request, pk):
+    _feed = get_object_or_404(Feed, pk=pk)
+
+    channels_all = Channel.objects.all()
+    searcher = channels_all.values(
+                    'channel__name',
+                    'channel__image',
+                    'channel__category',
+                    'channel__fullname_kr',
+                    'channel__fullname_en',
+                    'channel__keywords'
+                ).order_by('channel__name')
+
+    return render(request, 'app/feed.html', {'feed':_feed, 'searcher':searcher})
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'app/post_detail.html', {'post':post})

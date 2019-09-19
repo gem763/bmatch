@@ -1,0 +1,139 @@
+{% extends "app/layout.html" %}
+
+{% block style %}
+  {{ block.super }}
+  <style>
+    .tag {
+      position: absolute;
+      background: white;
+      border-radius: 25px;
+      /* border: 2px solid #ffffff; */
+      visibility: hidden;
+      height: 50px;
+      width: 50px;
+      z-index: 2;
+    }
+
+    .tag span {
+      position: absolute;
+      width: 20px;
+      color: #ffffff;
+      /* font-size: .8rem; */
+      text-align: center;
+      /* margin: 4px 0; */
+    }
+
+    #channel-selector {
+      transition: left 0.5s;
+    }
+  </style>
+{% endblock style %}
+
+{% block menu_top %}
+  {% include "app/menu_top.html" with discover_act="active" %}
+{% endblock menu_top %}
+
+
+{% block content %}
+{% load static %}
+<div class="main-segments ui vertical center aligned segment" style="background:none;border:none;">
+  <div class="ui text container" style="background:none;">
+    <form name="pointform" method="post">
+      <div style="position:relative">
+        <div id="tagged" class="tag">
+          <!-- <span id="span-id">0</span> -->
+          <img id="tagged-channel" class="ui circular image" src="" style="object-fit:contain;width:50px;height:50px;border:2px solid #ffffff;">
+        </div>
+
+        <img id="pointer_div" class="ui centered image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/>
+      </div>
+    </form>
+
+    <div>{{ feed.content }}</div>
+  </div>
+</div>
+
+
+<div id="channel-selector" style="position:fixed;width:300px;height:100%;top:0;left:-300px;background:transparent;z-index:101;padding:5px;">
+  <div style="position:relative;width:100%;height:100%;background:white;border-radius:10px;box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;text-align:center;padding-top:20px;">
+
+    <table id="example" class="ui unstackable fixed selectable basic table" style="width:100%;border:none;background:none;margin-top:20px;">
+        <thead style="display:none;">
+            <tr>
+                <th>channel</th>
+                <th>keywords</th>
+                <th>category</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for ele in searcher %}
+            <tr name="{{ ele.channel__name }}">
+                <td style="background:none;">
+                  <h4 class="ui image header">
+                    <img class="ui image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{ ele.channel__image }}" style="object-fit:contain;height:80px;width:80px;">
+                    <div class="content">
+                      {{ ele.channel__fullname_en }}
+                      <div class="sub header">
+                        {{ ele.channel__fullname_kr }}
+                      </div>
+                    </div>
+                  </h4>
+                </td>
+
+                <td style="display:none;">{{ ele.channel__keywords }}</td>
+                <td style="display:none;">{{ ele.channel__category }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script>
+    $('#example').DataTable({
+      scrollY: '90vh',
+      scrollCollapse: true,
+      paging:   false,
+      ordering: false,
+      dom: '<"top"flp>rt'
+    });
+
+    function clickcoord(event) {
+      // var i = parseInt(document.getElementById("span-id").innerHTML);
+      var image = document.getElementById("pointer_div");
+      var tag = $('#tagged');
+      var channel = $('#tagged-channel');
+
+      var pos_x = event.offsetX ? (event.offsetX) : event.pageX-image.offsetLeft;
+      var pos_y = event.offsetY ? (event.offsetY) : event.pageY-image.offsetTop;
+
+      tag.css({
+        'visibility': 'hidden',
+        'left': (pos_x - 13).toString() + 'px',
+        'top': (pos_y - 13).toString() + 'px'
+      })
+
+      channel.attr('src', '');
+      $('#channel-selector').css('left', '0');
+
+      $('#channel-selector #example tr').on({
+        'click': function() {
+          $('#channel-selector').css('left', '-300px');
+          var imgsrc = $(this).find('img').attr('src');
+          channel.attr('src', imgsrc);
+          tag.css('visibility', 'visible');
+        }
+      });
+
+      // document.getElementById("span-id").innerHTML = i + 1;
+      // document.pointform.form_x.vlaue = pos_x;
+      // document.pointform.form_y.vlaue = pos_y;
+    }
+  </script>
+{% endblock js %}

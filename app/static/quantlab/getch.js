@@ -11,7 +11,9 @@ const template_feedblock2 = ({id, image}) => `
 
 const template_feedblock = ({id, image}) => `
   <div class="grid-item">
-    <img class="ui rounded image" src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" onerror="imgerr(this)"/>
+    <a href="/feed/${id}">
+      <img class="ui image" src="https://storage.googleapis.com/getch-245810.appspot.com/${image}" onerror="imgerr(this)" onload="coloring(this)"/>
+    </a>
   </div>
 `;
 
@@ -193,6 +195,9 @@ function getRandColor() {
   return color
 }
 
+function coloring(obj) {
+  $(obj).css('border-bottom', '10px solid ' + getRandColor());
+}
 
 function color_border(obj) {
   $(obj).parents('.outer').css('background', getRandColor());
