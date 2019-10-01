@@ -2,6 +2,9 @@
 
 {% block style %}
   {{ block.super }}
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@5/themes/light.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@5/dist/svg-arrow.css"/>
+
   <style>
     .tag {
       position: absolute;
@@ -18,14 +21,53 @@
       position: absolute;
       width: 20px;
       color: #ffffff;
-      /* font-size: .8rem; */
       text-align: center;
-      /* margin: 4px 0; */
     }
 
     #channel-selector {
       transition: left 0.5s;
     }
+
+    #pointer_div {
+      cursor: none;
+    }
+
+    #cursor {
+      /* cursor: none; */
+      height: 60px;
+      width: 60px;
+      /* border-radius: 30px; */
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 5px rgba(0,0,0,0.2) !important;
+      position: absolute;
+      opacity: 1;
+      /* font-size: 40px; */
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    /* .tippy-tooltip.tagger-theme {
+      background: white;
+      color: black;
+      height: 50px;
+      width: 50px;
+      left: 0px;
+      border-radius: 25px;
+      font-size: 40px;
+      font-weight: bold;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: width 0.5s;
+    }
+
+    .tippy-tooltip.tagger-theme[data-placement^='top'] .tippy-arrow {
+      border-width: 10px 7px 0;
+      border-top-color: white;
+    } */
   </style>
 {% endblock style %}
 
@@ -39,7 +81,7 @@
 <div class="main-segments ui vertical center aligned segment" style="background:none;border:none;">
   <div class="ui text container" style="background:none;">
     <form name="pointform" method="post">
-      <div style="position:relative">
+      <div id="canvas" style="position:relative;">
         <div id="tagged" class="tag">
           <!-- <span id="span-id">0</span> -->
           <img id="tagged-channel" class="ui circular image" src="" style="object-fit:contain;width:50px;height:50px;border:2px solid #ffffff;">
@@ -53,8 +95,12 @@
   </div>
 </div>
 
+<div id="cursor">
+  <i class="plus icon"></i>
+</div>
 
-<div id="channel-selector" style="position:fixed;width:300px;height:100%;top:0;left:-300px;background:transparent;z-index:101;padding:5px;">
+
+<!-- <div id="channel-selector" style="position:fixed;width:300px;height:100%;top:0;left:-300px;background:transparent;z-index:101;padding:5px;">
   <div style="position:relative;width:100%;height:100%;background:white;border-radius:10px;box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;text-align:center;padding-top:20px;">
 
     <table id="example" class="ui unstackable fixed selectable basic table" style="width:100%;border:none;background:none;margin-top:20px;">
@@ -90,22 +136,78 @@
     </table>
 
   </div>
-</div>
+</div> -->
 {% endblock content %}
 
 {% block js %}
   {{ block.super }}
+  <script src="https://unpkg.com/popper.js@1"></script>
+  <script src="https://unpkg.com/tippy.js@5"></script>
   <script>
-    $('#example').DataTable({
-      scrollY: '90vh',
-      scrollCollapse: true,
-      paging:   false,
-      ordering: false,
-      dom: '<"top"flp>rt'
+    // $('#example').DataTable({
+    //   scrollY: '90vh',
+    //   scrollCollapse: true,
+    //   paging:   false,
+    //   ordering: false,
+    //   dom: '<"top"flp>rt'
+    // });
+
+    // function get_tippy() {
+    //   return tippy('#pointer_div', {
+    //     placement: 'top',
+    //     distance: 20,
+    //     content: '+',
+    //     followCursor: true,
+    //     theme: 'tagger',
+    //     hideOnClick: false,
+    //     // offset: '0, 0',
+    //     flip: false,
+    //     sticky: true, //요렇게 하면, width transition이 중심에서 시작하네...
+    //   })[0];
+    // }
+    //
+    // var tippy_instance = get_tippy();
+    // var mode = 'positioning';
+    //
+    // function tagging_mode() {
+    //   mode = 'tagging';
+    //   $('.tippy-tooltip.tagger-theme').css('width', '300px');
+    //   tippy_instance.setProps({ followCursor: 'initial' });
+    //   tippy_instance.setContent('KKKK')
+    // };
+    //
+    // function positioning_mode() {
+    //   mode = 'positioning';
+    //   tippy_instance = get_tippy();
+    //   $('.tippy-tooltip.tagger-theme').css('width', '50px');
+    // };
+
+
+    $('#pointer_div').off('mousemove').on('mousemove', function(e) {
+      e.stopPropagation();
+      $('#cursor').css({
+        opacity: 1,
+        left: e.pageX,
+        top: e.pageY
+      });
     });
 
+    // $('#pointer_div').off('mouseleave').on('mouseleave', function(e) {
+    //   $('#cursor').css({
+    //     opacity: 0
+    //   });
+    // });
+
+
     function clickcoord(event) {
-      // var i = parseInt(document.getElementById("span-id").innerHTML);
+      // if (mode=='positioning') {
+      //   tagging_mode();
+      //
+      // } else {
+      //   positioning_mode();
+      // }
+
+
       var image = document.getElementById("pointer_div");
       var tag = $('#tagged');
       var channel = $('#tagged-channel');
@@ -120,20 +222,18 @@
       })
 
       channel.attr('src', '');
-      $('#channel-selector').css('left', '0');
 
-      $('#channel-selector #example tr').on({
-        'click': function() {
-          $('#channel-selector').css('left', '-300px');
-          var imgsrc = $(this).find('img').attr('src');
-          channel.attr('src', imgsrc);
-          tag.css('visibility', 'visible');
-        }
-      });
+      // $('#channel-selector').css('left', '0');
+      //
+      // $('#channel-selector #example tr').on({
+      //   'click': function() {
+      //     $('#channel-selector').css('left', '-300px');
+      //     var imgsrc = $(this).find('img').attr('src');
+      //     channel.attr('src', imgsrc);
+      //     tag.css('visibility', 'visible');
+      //   }
+      // });
+    };
 
-      // document.getElementById("span-id").innerHTML = i + 1;
-      // document.pointform.form_x.vlaue = pos_x;
-      // document.pointform.form_y.vlaue = pos_y;
-    }
   </script>
 {% endblock js %}

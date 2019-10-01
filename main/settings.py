@@ -142,9 +142,9 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Storage
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'getch-245810.appspot.com'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'getch-245810-89947261e0af.json')
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# GS_BUCKET_NAME = 'getch-245810.appspot.com'
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(BASE_DIR, 'data', 'getch-245810-89947261e0af.json')
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -234,7 +234,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 
 MEDIA_URL = '/files/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'data', 'uploads')
 
 #Q60jbPX1POJFmqb0dgGl:5RnWiWQnmln
 #1070422112021-th03c2jjibfvdmvt9ab5cbt0m8em0pjo.apps.googleusercontent.com:fbXaoEl90xvwaj4EI6m0bnZug

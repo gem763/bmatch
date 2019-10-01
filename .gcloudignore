@@ -18,5 +18,5 @@ __pycache__/
 # Ignored by the build system
 /setup.cfg
 
-uploads
+data/uploads
 venv
