@@ -10,7 +10,6 @@
       position: absolute;
       background: white;
       border-radius: 25px;
-      /* border: 2px solid #ffffff; */
       visibility: hidden;
       height: 50px;
       width: 50px;
@@ -24,50 +23,55 @@
       text-align: center;
     }
 
-    #channel-selector {
-      transition: left 0.5s;
-    }
-
-    #pointer_div {
-      cursor: none;
-    }
-
-    #cursor {
-      /* cursor: none; */
-      height: 60px;
-      width: 60px;
-      /* border-radius: 30px; */
-      background: rgba(255,255,255,0.8);
+    /* #cursor {
+      --height: 60px;
+      --width: 60px;
+      opacity: 1;
+      height: var(--height);
+      width: var(--width);
+      transform: translate(calc(var(--width) * -0.5), calc(-20px + var(--height) * -1));
+      border-radius: 30px;
+      background: rgba(255,255,255,1);
       box-shadow: 0 0 5px rgba(0,0,0,0.2) !important;
       position: absolute;
-      opacity: 1;
-      /* font-size: 40px; */
       padding: 0 !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-    }
+      transition: width 1s;
+    } */
 
-    /* .tippy-tooltip.tagger-theme {
-      background: white;
-      color: black;
-      height: 50px;
-      width: 50px;
-      left: 0px;
-      border-radius: 25px;
-      font-size: 40px;
-      font-weight: bold;
+    #cursor {
+      position: absolute;
+      opacity: 1;
+      top: -80px;
+      left: -30px;
+      right: -30px;
+      bottom: 20px;
+      border-radius: 30px;
+      background: rgba(255,255,255,1);
       box-shadow: 0 0 5px rgba(0,0,0,0.2) !important;
+      padding: 0 !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      transition: width 0.5s;
+      transition: all 0.1s;
     }
 
-    .tippy-tooltip.tagger-theme[data-placement^='top'] .tippy-arrow {
-      border-width: 10px 7px 0;
-      border-top-color: white;
-    } */
+    #cursor:after {
+      content: '';
+      position: absolute;
+      bottom: 0%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-top: 30px solid white;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -15px;
+    }
   </style>
 {% endblock style %}
 
@@ -81,13 +85,12 @@
 <div class="main-segments ui vertical center aligned segment" style="background:none;border:none;">
   <div class="ui text container" style="background:none;">
     <form name="pointform" method="post">
-      <div id="canvas" style="position:relative;">
+      <div style="position:relative;">
         <div id="tagged" class="tag">
-          <!-- <span id="span-id">0</span> -->
           <img id="tagged-channel" class="ui circular image" src="" style="object-fit:contain;width:50px;height:50px;border:2px solid #ffffff;">
         </div>
 
-        <img id="pointer_div" class="ui centered image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/>
+        <img id="canvas" class="ui centered image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/>
       </div>
     </form>
 
@@ -95,48 +98,17 @@
   </div>
 </div>
 
-<div id="cursor">
-  <i class="plus icon"></i>
-</div>
-
-
-<!-- <div id="channel-selector" style="position:fixed;width:300px;height:100%;top:0;left:-300px;background:transparent;z-index:101;padding:5px;">
-  <div style="position:relative;width:100%;height:100%;background:white;border-radius:10px;box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;text-align:center;padding-top:20px;">
-
-    <table id="example" class="ui unstackable fixed selectable basic table" style="width:100%;border:none;background:none;margin-top:20px;">
-        <thead style="display:none;">
-            <tr>
-                <th>channel</th>
-                <th>keywords</th>
-                <th>category</th>
-            </tr>
-        </thead>
-        <tbody>
-          {% for ele in searcher %}
-            <tr name="{{ ele.channel__name }}">
-                <td style="background:none;">
-                  <h4 class="ui image header">
-                    <img class="ui image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{ ele.channel__image }}" style="object-fit:contain;height:80px;width:80px;">
-                    <div class="content">
-                      {{ ele.channel__fullname_en }}
-                      <div class="sub header">
-                        {{ ele.channel__fullname_kr }}
-                      </div>
-                    </div>
-                  </h4>
-                </td>
-
-                <td style="display:none;">{{ ele.channel__keywords }}</td>
-                <td style="display:none;">{{ ele.channel__category }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-        <tfoot>
-        </tfoot>
-    </table>
-
+<div id="cursor-point" style="background:none;width:0;height:0;position:absolute;">
+  <div id="cursor">
+    <div class="ui fluid search" style="background:lightblue;">
+      <div class="ui fluid transparent left icon input" style="">
+        <i class="large plus icon" style="background:none;margin:0;"></i>
+        <input class="bsearch prompt" type="text" placeholder="Search" name="q" oninput="show_submit(this)">
+      </div>
+      <div class="results"></div>
+    </div>
   </div>
-</div> -->
+</div>
 {% endblock content %}
 
 {% block js %}
@@ -144,76 +116,73 @@
   <script src="https://unpkg.com/popper.js@1"></script>
   <script src="https://unpkg.com/tippy.js@5"></script>
   <script>
-    // $('#example').DataTable({
-    //   scrollY: '90vh',
-    //   scrollCollapse: true,
-    //   paging:   false,
-    //   ordering: false,
-    //   dom: '<"top"flp>rt'
-    // });
+    var mode = 'positioning';
+    var onCanvas = false;
+    var onCursor = false;
 
-    // function get_tippy() {
-    //   return tippy('#pointer_div', {
-    //     placement: 'top',
-    //     distance: 20,
-    //     content: '+',
-    //     followCursor: true,
-    //     theme: 'tagger',
-    //     hideOnClick: false,
-    //     // offset: '0, 0',
-    //     flip: false,
-    //     sticky: true, //요렇게 하면, width transition이 중심에서 시작하네...
-    //   })[0];
-    // }
-    //
-    // var tippy_instance = get_tippy();
-    // var mode = 'positioning';
-    //
-    // function tagging_mode() {
-    //   mode = 'tagging';
-    //   $('.tippy-tooltip.tagger-theme').css('width', '300px');
-    //   tippy_instance.setProps({ followCursor: 'initial' });
-    //   tippy_instance.setContent('KKKK')
-    // };
-    //
-    // function positioning_mode() {
-    //   mode = 'positioning';
-    //   tippy_instance = get_tippy();
-    //   $('.tippy-tooltip.tagger-theme').css('width', '50px');
-    // };
-
-
-    $('#pointer_div').off('mousemove').on('mousemove', function(e) {
-      e.stopPropagation();
+    function tagging_mode(e) {
+      mode = 'tagging';
       $('#cursor').css({
-        opacity: 1,
+        left: '-150px',
+        right: '-150px',
+      });
+    };
+
+    function positioning_mode(e) {
+      mode = 'positioning';
+      $('#cursor').css({
+        left: '-30px',
+        right: '-30px',
+      });
+    };
+
+
+    function show_cursor(e) {
+      $('#cursor-point').css({
         left: e.pageX,
         top: e.pageY
       });
+
+      $('#cursor').css('opacity', 1);
+    }
+
+    function hide_cursor() {
+      $('#cursor').css({ opacity: 0 });
+    }
+
+    $('#canvas').on({
+      'mouseenter': function() { onCanvas = true },
+      'mouseleave': function() { onCanvas = false }
     });
 
-    // $('#pointer_div').off('mouseleave').on('mouseleave', function(e) {
-    //   $('#cursor').css({
-    //     opacity: 0
-    //   });
-    // });
+    $('#cursor').on({
+      'mouseenter': function() { onCursor = true },
+      'mouseleave': function() { onCursor = false }
+    });
+
+    $('body').on('mousemove', function(e) {
+      if (onCanvas || onCursor) {
+        show_cursor(e);
+      } else {
+        hide_cursor();
+      }
+    });
+
+    function clickcoord(e) {
+      if (mode=='positioning') {
+        tagging_mode(e);
+
+      } else {
+        positioning_mode(e);
+      }
 
 
-    function clickcoord(event) {
-      // if (mode=='positioning') {
-      //   tagging_mode();
-      //
-      // } else {
-      //   positioning_mode();
-      // }
-
-
-      var image = document.getElementById("pointer_div");
+      var image = document.getElementById("canvas");
       var tag = $('#tagged');
       var channel = $('#tagged-channel');
 
-      var pos_x = event.offsetX ? (event.offsetX) : event.pageX-image.offsetLeft;
-      var pos_y = event.offsetY ? (event.offsetY) : event.pageY-image.offsetTop;
+      var pos_x = e.offsetX ? (e.offsetX) : e.pageX-image.offsetLeft;
+      var pos_y = e.offsetY ? (e.offsetY) : e.pageY-image.offsetTop;
 
       tag.css({
         'visibility': 'hidden',
@@ -222,17 +191,6 @@
       })
 
       channel.attr('src', '');
-
-      // $('#channel-selector').css('left', '0');
-      //
-      // $('#channel-selector #example tr').on({
-      //   'click': function() {
-      //     $('#channel-selector').css('left', '-300px');
-      //     var imgsrc = $(this).find('img').attr('src');
-      //     channel.attr('src', imgsrc);
-      //     tag.css('visibility', 'visible');
-      //   }
-      // });
     };
 
   </script>
