@@ -210,8 +210,8 @@ def feed(request, pk):
                     'channel__fullname_en',
                     'channel__keywords'
                 ).order_by('channel__name')
-
-    return render(request, 'app/feed.html', {'feed':_feed, 'searcher':searcher})
+    # print(list(searcher))
+    return render(request, 'app/feed.html', {'feed':_feed, 'searcher':list(searcher)})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)

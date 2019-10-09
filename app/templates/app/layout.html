@@ -42,7 +42,7 @@
     .main-segments {
       box-shadow: none !important;
       border: none !important;
-      margin-top: 100px !important;
+      /* margin-top: 0px !important; */
     }
 
     body {
@@ -111,69 +111,71 @@
       paginateOnScrollMargin: 500,
     });
 
-    $("#search-shower").click(function() {
-      $("#searcher").css({"animation":"searcher_show 0.2s forwards"});
-      $("input.bsearch.prompt").focus();
-    });
-
-    $("input.bsearch.prompt").focusout(function() {
-      setTimeout(function() {
-        $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
-      }, 100);
-    });
-
-    $("#search-hider").click(function() {
-      $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
-    });
 
 
-    function show_submit(input) {
-      var bsearch_submit = $(input).siblings(".bsearch-submit")
-
-      if (input.value.length > 0) {
-        bsearch_submit.css({
-          "opacity": 1,
-          "transition": "opacity 1s ease"
-        });
-      } else {
-        bsearch_submit.css({
-          "opacity": 0,
-          "transition": "opacity 1s ease"
-        });
-      }
-    };
-
-    $.get('{% url "search_helper" %}', function(helper){
-      $('.ui.search').search({
-        source: helper,
-        fullTextSearch: true,
-        showNoResults: false,
-        maxResults: 500,
-        minCharacters: 0,
-        searchFields: ['title', 'description', 'categories'],
-        templates: {
-          standard: function(response){
-            htmls = $.map(response.results, function(item) {
-                      var whereto = "/brands/" + item.bname;
-                      var html = '<a class="result" style="height:100px" href="' + whereto + '">';
-                      html += '<div class="image" style="height:80px;width:80px;">'
-                            + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
-                            + '</div>';
-                      html += '<div class="content">';
-                      html += '<div class="ui header">' + item.title;
-                      // html += '<div class="title">' + item.title + '</div>';
-                      html += '<div class="sub header">' + item.description + '</div>';
-                      // html += '<div class="description">' + item.description + '</div>';
-                      html += '</div></div>';
-                      html += '</a>';
-                      return html
-                    });
-
-            return htmls
-          },
-        },
-      });
-    })
+    // $("#search-shower").click(function() {
+    //   $("#searcher").css({"animation":"searcher_show 0.2s forwards"});
+    //   $("input.bsearch.prompt").focus();
+    // });
+    //
+    // $("input.bsearch.prompt").focusout(function() {
+    //   setTimeout(function() {
+    //     $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
+    //   }, 100);
+    // });
+    //
+    // $("#search-hider").click(function() {
+    //   $("#searcher").css({"animation":"searcher_hide 0.2s forwards"});
+    // });
+    //
+    //
+    // function show_submit(input) {
+    //   var bsearch_submit = $(input).siblings(".bsearch-submit")
+    //
+    //   if (input.value.length > 0) {
+    //     bsearch_submit.css({
+    //       "opacity": 1,
+    //       "transition": "opacity 1s ease"
+    //     });
+    //   } else {
+    //     bsearch_submit.css({
+    //       "opacity": 0,
+    //       "transition": "opacity 1s ease"
+    //     });
+    //   }
+    // };
+    //
+    // $.get('{% url "search_helper" %}', function(helper){
+    //   $('.ui.search').search({
+    //     source: helper,
+    //     fullTextSearch: true,
+    //     showNoResults: false,
+    //     maxResults: 10,
+    //     minCharacters: 0,
+    //     searchFields: ['title', 'description', 'categories'],
+    //     templates: {
+    //       standard: function(response){
+    //         htmls = $.map(response.results, function(item) {
+    //                   var whereto = "/brands/" + item.bname;
+    //                   var html = '<a class="result" style="height:100px" href="' + whereto + '">';
+    //                   html += '<div class="image" style="height:80px;width:80px;">'
+    //                         + '<img src="' + item.image + '" style="object-fit:contain;height:80px;width:80px;">'
+    //                         + '</div>';
+    //                   html += '<div class="content">';
+    //                   html += '<div class="ui header">' + item.title;
+    //                   // html += '<div class="title">' + item.title + '</div>';
+    //                   html += '<div class="sub header">' + item.description + '</div>';
+    //                   // html += '<div class="description">' + item.description + '</div>';
+    //                   html += '</div></div>';
+    //                   html += '</a>';
+    //                   return html
+    //                 });
+    //
+    //         return htmls
+    //       },
+    //     },
+    //   });
+    // })
 
 
     $(document).ready(function(){

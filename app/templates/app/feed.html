@@ -23,27 +23,16 @@
       text-align: center;
     }
 
-    /* #cursor {
-      --height: 60px;
-      --width: 60px;
-      opacity: 1;
-      height: var(--height);
-      width: var(--width);
-      transform: translate(calc(var(--width) * -0.5), calc(-20px + var(--height) * -1));
-      border-radius: 30px;
-      background: rgba(255,255,255,1);
-      box-shadow: 0 0 5px rgba(0,0,0,0.2) !important;
+    .spot {
+      background: none;
+      width: 0;
+      height: 0;
       position: absolute;
-      padding: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: width 1s;
-    } */
+    }
 
-    #cursor {
+    .bubble {
       position: absolute;
-      opacity: 1;
+      opacity: 0;
       top: -80px;
       left: -30px;
       right: -30px;
@@ -58,7 +47,7 @@
       transition: all 0.1s;
     }
 
-    #cursor:after {
+    .bubble:before {
       content: '';
       position: absolute;
       bottom: 0%;
@@ -82,28 +71,27 @@
 
 {% block content %}
 {% load static %}
-<div class="main-segments ui vertical center aligned segment" style="background:none;border:none;">
+<div class="main-segments ui vertical center aligned segment" style="background:lightyellow;border:none;padding-top:100px;">
   <div class="ui text container" style="background:none;">
-    <form name="pointform" method="post">
-      <div style="position:relative;">
-        <div id="tagged" class="tag">
-          <img id="tagged-channel" class="ui circular image" src="" style="object-fit:contain;width:50px;height:50px;border:2px solid #ffffff;">
-        </div>
+    <!-- <div style="position:relative;">
+      <div id="tagged" class="tag">
+        <img id="tagged-channel" class="ui circular image" src="" style="object-fit:contain;width:50px;height:50px;border:2px solid #ffffff;">
+      </div> -->
 
-        <img id="canvas" class="ui centered image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/>
-      </div>
-    </form>
+      <img id="canvas" class="ui centered image" src="/files/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/>
+      <!-- <img id="canvas" class="ui centered image" src="https://storage.googleapis.com/getch-245810.appspot.com/{{feed.image}}" onerror="imgerr(this)" onclick="clickcoord(event)"/> -->
+    <!-- </div> -->
 
     <div>{{ feed.content }}</div>
   </div>
 </div>
 
-<div id="cursor-point" style="background:none;width:0;height:0;position:absolute;">
-  <div id="cursor">
-    <div class="ui fluid search" style="background:lightblue;">
-      <div class="ui fluid transparent left icon input" style="">
-        <i class="large plus icon" style="background:none;margin:0;"></i>
-        <input class="bsearch prompt" type="text" placeholder="Search" name="q" oninput="show_submit(this)">
+<div id="cursor" class="spot">
+  <div id="cursor-bubble" class="bubble" style="z-index:100;">
+    <div class="searcher ui fluid search" style="background:none;width:100%;">
+      <div class="ui fluid left icon transparent input" style="height:60px;font-size:20px;">
+        <i class="large plus icon" style="background:none;width:60px;left:0;opacity:1;"></i>
+        <input class="prompt" type="text" placeholder="Search..." oninput="" style="padding-left:50px !important;opacity:0;">
       </div>
       <div class="results"></div>
     </div>
@@ -116,38 +104,63 @@
   <script src="https://unpkg.com/popper.js@1"></script>
   <script src="https://unpkg.com/tippy.js@5"></script>
   <script>
-    var mode = 'positioning';
+    var onTagging = false;
     var onCanvas = false;
-    var onCursor = false;
+    var onBubble = false;
+    var tagX;
+    var tagY;
+
+    const template_channeltag = ({ch, image, top, left}) => `
+      <div class="spot" style="top:${top};left:${left};">
+        <div class="bubble" style="opacity:1;" ch="${ch}">
+          <img class="ui circular image" src="${image}" style="object-fit:contain;width:60px;height:60px;border:2px solid #ffffff;">
+        </div>
+      </div>
+    `;
+
+    function set_tag(ch, image) {
+      hide_cursor();
+      var top = tagY + 'px';
+      var left = tagX + 'px';
+      // var $elems = $([{ch:0,image:'/brand_images/nike.jpg',top:'50%',left:'50%'}].map(template_channeltag).join(''));
+      var elems = template_channeltag({ch:ch, image:image, top:top, left:left})
+      $('.main-segments').append($(elems));
+      positioning_mode();
+    }
 
     function tagging_mode(e) {
-      mode = 'tagging';
-      $('#cursor').css({
+      onTagging = true;
+      $('#cursor-bubble .prompt').css('opacity', '1');
+      $('#cursor-bubble').css({
         left: '-150px',
         right: '-150px',
       });
+      $('#cursor-bubble .prompt').focus();
     };
 
-    function positioning_mode(e) {
-      mode = 'positioning';
-      $('#cursor').css({
+    function positioning_mode() {
+      onTagging = false;
+      $('#cursor-bubble').css({
         left: '-30px',
         right: '-30px',
       });
+      $('#cursor-bubble .prompt').css('opacity', '0');
     };
 
 
     function show_cursor(e) {
-      $('#cursor-point').css({
-        left: e.pageX,
-        top: e.pageY
-      });
+      if (!onTagging) {
+        $('#cursor').css({
+          left: e.pageX,
+          top: e.pageY
+        });
+      };
 
-      $('#cursor').css('opacity', 1);
+      $('#cursor-bubble').css('opacity', 1);
     }
 
     function hide_cursor() {
-      $('#cursor').css({ opacity: 0 });
+      $('#cursor-bubble').css({ opacity: 0 });
     }
 
     $('#canvas').on({
@@ -155,13 +168,13 @@
       'mouseleave': function() { onCanvas = false }
     });
 
-    $('#cursor').on({
-      'mouseenter': function() { onCursor = true },
-      'mouseleave': function() { onCursor = false }
+    $('#cursor-bubble').on({
+      'mouseenter': function() { onBubble = true },
+      'mouseleave': function() { onBubble = false }
     });
 
     $('body').on('mousemove', function(e) {
-      if (onCanvas || onCursor) {
+      if (onCanvas || onBubble || onTagging) {
         show_cursor(e);
       } else {
         hide_cursor();
@@ -169,29 +182,60 @@
     });
 
     function clickcoord(e) {
-      if (mode=='positioning') {
-        tagging_mode(e);
-
+      // console.log(e)
+      if (onTagging) {
+        positioning_mode();
+        show_cursor(e);
       } else {
-        positioning_mode(e);
+        tagging_mode(e);
+        tagX = e.pageX;
+        tagY = e.pageY;
       }
 
-
-      var image = document.getElementById("canvas");
-      var tag = $('#tagged');
-      var channel = $('#tagged-channel');
-
-      var pos_x = e.offsetX ? (e.offsetX) : e.pageX-image.offsetLeft;
-      var pos_y = e.offsetY ? (e.offsetY) : e.pageY-image.offsetTop;
-
-      tag.css({
-        'visibility': 'hidden',
-        'left': (pos_x - 13).toString() + 'px',
-        'top': (pos_y - 13).toString() + 'px'
-      })
-
-      channel.attr('src', '');
+      // var image = document.getElementById("canvas");
+      // var tag = $('#tagged');
+      // var channel = $('#tagged-channel');
+      // var pos_x = e.offsetX ? (e.offsetX) : e.pageX-image.offsetLeft;
+      // var pos_y = e.offsetY ? (e.offsetY) : e.pageY-image.offsetTop;
+      //
+      // tag.css({
+      //   'visibility': 'hidden',
+      //   'left': (pos_x - 13).toString() + 'px',
+      //   'top': (pos_y - 13).toString() + 'px'
+      // })
+      //
+      // channel.attr('src', '');
     };
+
+
+    $('#cursor-bubble .ui.search').search({
+      source: {{ searcher | safe }},
+      fullTextSearch: true,
+      showNoResults: false,
+      maxResults: 5,
+      minCharacters: 1,
+      searchFields: ['channel__name', 'channel__category', 'channel__keywords'],
+      templates: {
+        standard: function(response){
+          htmls = $.map(response.results, function(item) {
+                    var image = item.channel__image.replace('\\', '/');
+                    var onclick = "set_tag(0, '/files/" + image + "')";
+                    var html = '<div class="result" style="height:100px" onclick="' + onclick + '">';
+                    html += '<div class="image" style="height:80px;width:80px;">'
+                          + '<img src="/files/' + item.channel__image + '" style="object-fit:contain;height:80px;width:80px;">'
+                          + '</div>';
+                    html += '<div class="content">';
+                    html += '<div class="ui header">' + item.channel__fullname_en;
+                    html += '<div class="sub header">' + item.channel__fullname_kr + '</div>';
+                    html += '</div></div>';
+                    html += '</div>';
+                    return html
+                  });
+
+          return htmls
+        },
+      },
+    });
 
   </script>
 {% endblock js %}
