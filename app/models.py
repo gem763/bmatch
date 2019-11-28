@@ -91,10 +91,6 @@ class CommentPost(BigIdAbstract):
         return url
 
 
-def feed_image_path(instance, filename):
-    return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
-
-
 class Channel(models.Model):
     limit = models.Q(app_label='app', model='brand') | models.Q(app_label='app', model='customchannel')
     content_type = models.ForeignKey(ContentType, limit_choices_to=limit, on_delete=models.CASCADE)
@@ -289,6 +285,10 @@ class Profile(BigIdAbstract):
         x = np.interp(x, (x.min(), x.max()), (min, max))
 
         return {k:int(v) for k,v in zip(keys, x)}
+
+
+def feed_image_path(instance, filename):
+    return 'feed_images/{memb}/{auth}/{file}'.format(memb=instance.membership, auth=instance.author, file=filename)
 
 
 class Feed(BigIdAbstract):
