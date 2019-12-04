@@ -9,7 +9,7 @@ chardet==3.0.4
 colorama==0.4.1
 decorator==4.4.0
 defusedxml==0.6.0
-Django==2.2.2
+Django==2.2.8
 django-allauth==0.39.1
 django-chartjs==1.4.0
 django-custom-user==0.7
