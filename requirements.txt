@@ -60,7 +60,7 @@ protobuf==3.9.0
 psycopg2==2.8.3
 pyasn1==0.4.5
 pyasn1-modules==0.2.5
-Pygments==2.4.2
+Pygments==2.7.4
 pyrsistent==0.15.2
 python-dateutil==2.8.0
 python3-openid==3.1.0
